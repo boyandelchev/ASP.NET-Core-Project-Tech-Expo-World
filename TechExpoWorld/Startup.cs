@@ -8,6 +8,7 @@ namespace TechExpoWorld
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
     using TechExpoWorld.Data;
+    using TechExpoWorld.Infrastructure;
 
     public class Startup
     {
@@ -40,6 +41,8 @@ namespace TechExpoWorld
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.PrepareDatabase();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
