@@ -17,8 +17,6 @@
 
   <ItemGroup>
     <Folder Include="Models\Home\" />
-    <Folder Include="Models\Authors\" />
-    <Folder Include="Views\Authors\" />
   </ItemGroup>
 
 </Project>
