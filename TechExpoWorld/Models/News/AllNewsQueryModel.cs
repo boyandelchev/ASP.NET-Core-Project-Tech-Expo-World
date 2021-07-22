@@ -1,21 +1,30 @@
 ﻿namespace TechExpoWorld.Models.News
 {
-    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
 
     public class AllNewsQueryModel
     {
-        public int Id { get; init; }
+        public const int NewsArticlesPerPage = 3;
 
-        public string Title { get; set; }
+        public int CurrentPage { get; init; } = 1;
 
-        public string Content { get; set; }
+        public int TotalNewsArticles { get; set; }
 
-        public string ImageUrl { get; set; }
+        public string Category { get; init; }
 
-        public string CreatedOn { get; init; }
+        public string Tag { get; init; }
 
-        public string NewsCategory { get; set; }
+        [Display(Name = "Search by text")]
+        public string SearchTerm { get; init; }
 
-        public string Author { get; init; }
+        [Display(Name = "Sort by date")]
+        public NewsSorting Sorting { get; init; }
+
+        public IEnumerable<string> Categories { get; set; }
+
+        public IEnumerable<string> Tags { get; set; }
+
+        public IEnumerable<NewsArticleListingViewModel> News { get; set; }
     }
 }

@@ -62,7 +62,6 @@
                 new Tag { Name = "Europe" },
                 new Tag { Name = "North America" },
                 new Tag { Name = "agriculture" },
-                new Tag { Name = "agriculture" },
                 new Tag { Name = "AI" },
                 new Tag { Name = "Airlines" },
                 new Tag { Name = "automotive" },

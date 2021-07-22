@@ -20,6 +20,11 @@
         [Authorize]
         public IActionResult Add()
         {
+            if (!this.UserIsAuthor())
+            {
+                return RedirectToAction(nameof(AuthorsController.BecomeAuthor), "Authors");
+            }
+
             return View(new AddNewsFormModel
             {
                 NewsCategories = this.GetNewsCategories(),
@@ -87,24 +92,79 @@
             return RedirectToAction(nameof(All));
         }
 
-        public IActionResult All(List<AllNewsQueryModel> allNews)
+        public IActionResult All([FromQuery] AllNewsQueryModel query)
         {
-            allNews = this.data
-               .NewsArticles
-               .Select(na => new AllNewsQueryModel
-               {
-                   Id = na.Id,
-                   Title = na.Title,
-                   Content = na.Content.Substring(0, 200) + "...",
-                   ImageUrl = na.ImageUrl,
-                   CreatedOn = na.CreatedOn.ToString("dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture),
-                   NewsCategory = na.NewsCategory.Name,
-                   Author = na.Author.Name
-               })
-               .ToList();
+            var newsQuery = this.data.NewsArticles.AsQueryable();
 
-            return View(allNews);
+            if (!string.IsNullOrWhiteSpace(query.Category))
+            {
+                newsQuery = newsQuery
+                    .Where(na => na.NewsCategory.Name == query.Category);
+            }
+
+            if (!string.IsNullOrWhiteSpace(query.Tag))
+            {
+                newsQuery = newsQuery
+                    .Where(na => na.NewsArticleTags
+                        .Select(nat => nat.Tag.Name)
+                        .Contains(query.Tag));
+            }
+
+            if (!string.IsNullOrWhiteSpace(query.SearchTerm))
+            {
+                newsQuery = newsQuery.Where(na =>
+                    na.Author.Name.ToLower().Contains(query.SearchTerm.ToLower()) ||
+                    na.Title.ToLower().Contains(query.SearchTerm.ToLower()) ||
+                    na.Content.ToLower().Contains(query.SearchTerm.ToLower()));
+            }
+
+            newsQuery = query.Sorting switch
+            {
+                NewsSorting.Ascending => newsQuery.OrderBy(na => na.Id),
+                NewsSorting.Descending or _ => newsQuery.OrderByDescending(na => na.Id)
+            };
+
+            var totalNewsArticles = newsQuery.Count();
+
+            var news = newsQuery
+                .Skip((query.CurrentPage - 1) * AllNewsQueryModel.NewsArticlesPerPage)
+                .Take(AllNewsQueryModel.NewsArticlesPerPage)
+                .Select(na => new NewsArticleListingViewModel
+                {
+                    Id = na.Id,
+                    Title = na.Title,
+                    Content = na.Content.Substring(0, 200) + "...",
+                    ImageUrl = na.ImageUrl,
+                    CreatedOn = na.CreatedOn.ToString("dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture),
+                    NewsCategory = na.NewsCategory.Name,
+                    Author = na.Author.Name
+                })
+                .ToList();
+
+            var categories = this.data
+                .NewsCategories
+                .Select(nc => nc.Name)
+                .OrderBy(name => name)
+                .ToList();
+
+            var tags = this.data
+                .Tags
+                .Select(t => t.Name.ToLower())
+                .OrderBy(name => name)
+                .ToList();
+
+            query.TotalNewsArticles = totalNewsArticles;
+            query.News = news;
+            query.Categories = categories;
+            query.Tags = tags;
+
+            return View(query);
         }
+
+        private bool UserIsAuthor()
+            => this.data
+                .Authors
+                .Any(a => a.UserId == this.User.GetId());
 
         private IEnumerable<NewsCategoryViewModel> GetNewsCategories()
             => this.data

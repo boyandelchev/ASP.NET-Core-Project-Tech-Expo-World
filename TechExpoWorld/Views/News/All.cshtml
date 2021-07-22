@@ -1,16 +1,144 @@
-﻿@model List<AllNewsQueryModel>
+﻿@model AllNewsQueryModel
 
 @{ 
     ViewBag.Title = "All News";
 }
 
-@if (!Model.Any())
+<form method="get" class="mb-3">
+    <div class="row">
+        <div class="form-group col-md-2">
+            <div class="form-group">
+                <label asp-for="Category"></label>
+                <select asp-for="Category" class="form-control">
+                    <option value="">All</option>
+                    @foreach (var category in Model.Categories)
+                    {
+                        <option value="@category">@category</option>
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group col-md-2">
+            <div class="form-group">
+                <label asp-for="Tag"></label>
+                <select asp-for="Tag" class="form-control">
+                    <option value="">All</option>
+                    @foreach (var tag in Model.Tags)
+                    {
+                        <option value="@tag">@tag</option>
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group col-md-4">
+            <label asp-for="SearchTerm"></label>
+            <input asp-for="SearchTerm" class="form-control" placeholder="Advanced tech...">
+        </div>
+
+        <div class="form-group col-md-2">
+            <div class="form-group">
+                <label asp-for="Sorting"></label>
+                <select asp-for="Sorting" class="form-control">
+                    <option value="1">Ascending</option>
+                    <option value="2" selected>Descending</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-inline col-md-2">
+            <input class="btn btn-primary btn-outline-secondary" type="submit" value="Search" />
+        </div>
+    </div>
+</form>
+
+@{
+    var previousPage = Model.CurrentPage - 1;
+    if (previousPage < 1)
+    {
+        previousPage = 1;
+    }
+
+    var maxPage = Math.Ceiling((double)Model.TotalNewsArticles / AllNewsQueryModel.NewsArticlesPerPage);
+
+    var shouldButtonBeDisabled = Model.CurrentPage == maxPage || !Model.News.Any();
+}
+
+<div class="row mb-3">
+    <div class="col-md-6">
+        <a class="btn btn-primary @(Model.CurrentPage == 1 ? "disabled" : string.Empty)"
+           asp-controller="News"
+           asp-action="All"
+           asp-route-currentPage="@previousPage"
+           asp-route-category="@Model.Category"
+           asp-route-tag="@Model.Tag"
+           asp-route-searchTerm="@Model.SearchTerm"
+           asp-route-sorting="@((int)Model.Sorting)"><<</a>
+    </div>
+    <div class="col-md-6">
+        <a class="btn btn-primary float-right @(shouldButtonBeDisabled ? "disabled" : string.Empty)"
+           asp-controller="News"
+           asp-action="All"
+           asp-route-currentPage="@(Model.CurrentPage + 1)"
+           asp-route-category="@Model.Category"
+           asp-route-tag="@Model.Tag"
+           asp-route-searchTerm="@Model.SearchTerm"
+           asp-route-sorting="@((int)Model.Sorting)">>></a>
+    </div>
+</div>
+
+<nav aria-label="Page navigation for news articles">
+    <ul class="pagination">
+        <li class="page-item @(Model.CurrentPage == 1 ? "disabled" : string.Empty)">
+            <a class="page-link"
+                asp-controller="News"
+                asp-action="All"
+                asp-route-currentPage="@previousPage"
+                asp-route-category="@Model.Category"
+                asp-route-tag="@Model.Tag"
+                asp-route-searchTerm="@Model.SearchTerm"
+                asp-route-sorting="@((int)Model.Sorting)">
+                Previous
+            </a>
+        </li>
+        @for (int i = 1; i <= maxPage; i++)
+        {
+            <li class="page-item">
+                <a class="page-link"
+                    asp-controller="News"
+                    asp-action="All"
+                    asp-route-currentPage="@i"
+                    asp-route-category="@Model.Category"
+                    asp-route-tag="@Model.Tag"
+                    asp-route-searchTerm="@Model.SearchTerm"
+                    asp-route-sorting="@((int)Model.Sorting)">
+                    @i
+                </a>
+            </li>
+        }
+        <li class="page-item @(shouldButtonBeDisabled ? "disabled" : string.Empty)">
+            <a class="page-link"
+                asp-controller="News"
+                asp-action="All"
+                asp-route-currentPage="@(Model.CurrentPage + 1)"
+                asp-route-category="@Model.Category"
+                asp-route-tag="@Model.Tag"
+                asp-route-searchTerm="@Model.SearchTerm"
+                asp-route-sorting="@((int)Model.Sorting)">
+                Next
+            </a>
+        </li>
+    </ul>
+</nav>
+
+@if (!Model.News.Any())
 {
     <h2 class="text-center">No news articles found by the given criteria!</h2>
 }
 
-<div class="row">
-    @foreach (var news in Model)
+<div class="row mt-3">
+    @foreach (var news in Model.News)
     {
         <div class="col-md-4">
             <div class="card mb-3">
@@ -19,11 +147,11 @@
                     <h5 class="card-title">@news.Title</h5>
                     <div>
                         <span class="text-left text-info">@news.Author - </span>
-                        <span class="text-left text-muted">@news.CreatedOn</span>
+                        <span class="text-left text-dark">@news.CreatedOn</span>
                     </div>
                     <p class="text-muted">@news.Content</p>
                     <p class="text-primary">@news.NewsCategory</p>
-                    <a asp-controller="Cars" asp-action="Details" asp-route-id="@news.Id" class="btn btn-primary">Read More</a>
+                    <a asp-controller="Cars" asp-action="Details" asp-route-id="@news.Id" class="btn btn-primary btn-outline-secondary">Read More</a>
                 </div>
             </div>
         </div>
