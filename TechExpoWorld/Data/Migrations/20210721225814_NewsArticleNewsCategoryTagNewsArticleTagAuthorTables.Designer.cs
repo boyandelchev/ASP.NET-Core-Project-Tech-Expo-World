@@ -10,7 +10,7 @@ using TechExpoWorld.Data;
 namespace TechExpoWorld.Data.Migrations
 {
     [DbContext(typeof(TechExpoDbContext))]
-    [Migration("20210721081442_NewsArticleNewsCategoryTagNewsArticleTagAuthorTables")]
+    [Migration("20210721225814_NewsArticleNewsCategoryTagNewsArticleTagAuthorTables")]
     partial class NewsArticleNewsCategoryTagNewsArticleTagAuthorTables
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

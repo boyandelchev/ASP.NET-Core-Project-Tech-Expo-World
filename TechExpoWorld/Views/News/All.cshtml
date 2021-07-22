@@ -1,1 +1,31 @@
-﻿
+﻿@model List<AllNewsQueryModel>
+
+@{ 
+    ViewBag.Title = "All News";
+}
+
+@if (!Model.Any())
+{
+    <h2 class="text-center">No news articles found by the given criteria!</h2>
+}
+
+<div class="row">
+    @foreach (var news in Model)
+    {
+        <div class="col-md-4">
+            <div class="card mb-3">
+                <img class="card-img-top" src="@news.ImageUrl" alt="@news.Title (@news.NewsCategory)">
+                <div class="card-body text-center">
+                    <h5 class="card-title">@news.Title</h5>
+                    <div>
+                        <span class="text-left text-info">@news.Author - </span>
+                        <span class="text-left text-muted">@news.CreatedOn</span>
+                    </div>
+                    <p class="text-muted">@news.Content</p>
+                    <p class="text-primary">@news.NewsCategory</p>
+                    <a asp-controller="Cars" asp-action="Details" asp-route-id="@news.Id" class="btn btn-primary">Read More</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>

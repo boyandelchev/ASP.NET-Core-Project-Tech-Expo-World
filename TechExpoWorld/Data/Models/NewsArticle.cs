@@ -35,6 +35,6 @@
 
         public Author Author { get; init; }
 
-        public IEnumerable<NewsArticleTag> NewsArticleTags { get; init; } = new List<NewsArticleTag>();
+        public IEnumerable<NewsArticleTag> NewsArticleTags { get; set; } = new List<NewsArticleTag>();
     }
 }

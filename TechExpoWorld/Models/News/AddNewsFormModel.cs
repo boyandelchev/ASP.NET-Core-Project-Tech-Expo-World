@@ -23,6 +23,11 @@
         [Display(Name = "Select Category")]
         public int NewsCategoryId { get; init; }
 
+        [Display(Name = "Select Tags")]
+        public IEnumerable<int> TagIds { get; init; } = new List<int>();
+
         public IEnumerable<NewsCategoryViewModel> NewsCategories { get; set; }
+
+        public IEnumerable<TagViewModel> Tags { get; set; }
     }
 }
