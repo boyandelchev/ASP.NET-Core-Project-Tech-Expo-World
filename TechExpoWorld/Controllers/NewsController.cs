@@ -9,13 +9,18 @@
     using TechExpoWorld.Data.Models;
     using TechExpoWorld.Infrastructure;
     using TechExpoWorld.Models.News;
+    using TechExpoWorld.Services.News;
 
     public class NewsController : Controller
     {
+        private readonly INewsService news;
         private readonly TechExpoDbContext data;
 
-        public NewsController(TechExpoDbContext data)
-            => this.data = data;
+        public NewsController(INewsService news, TechExpoDbContext data)
+        {
+            this.news = news;
+            this.data = data;
+        }
 
         [Authorize]
         public IActionResult Add()
@@ -94,69 +99,22 @@
 
         public IActionResult All([FromQuery] AllNewsQueryModel query)
         {
-            var newsQuery = this.data.NewsArticles.AsQueryable();
+            var newsQueryResult = this.news.All(
+                query.Category,
+                query.Tag,
+                query.SearchTerm,
+                query.Sorting,
+                query.CurrentPage,
+                AllNewsQueryModel.NewsArticlesPerPage);
 
-            if (!string.IsNullOrWhiteSpace(query.Category))
-            {
-                newsQuery = newsQuery
-                    .Where(na => na.NewsCategory.Name == query.Category);
-            }
+            var newsArticlesCategories = this.news.AllNewsCategories();
 
-            if (!string.IsNullOrWhiteSpace(query.Tag))
-            {
-                newsQuery = newsQuery
-                    .Where(na => na.NewsArticleTags
-                        .Select(nat => nat.Tag.Name)
-                        .Contains(query.Tag));
-            }
+            var newsArticlesTags = this.news.AllNewsTags();
 
-            if (!string.IsNullOrWhiteSpace(query.SearchTerm))
-            {
-                newsQuery = newsQuery.Where(na =>
-                    na.Author.Name.ToLower().Contains(query.SearchTerm.ToLower()) ||
-                    na.Title.ToLower().Contains(query.SearchTerm.ToLower()) ||
-                    na.Content.ToLower().Contains(query.SearchTerm.ToLower()));
-            }
-
-            newsQuery = query.Sorting switch
-            {
-                NewsSorting.Ascending => newsQuery.OrderBy(na => na.Id),
-                NewsSorting.Descending or _ => newsQuery.OrderByDescending(na => na.Id)
-            };
-
-            var totalNewsArticles = newsQuery.Count();
-
-            var news = newsQuery
-                .Skip((query.CurrentPage - 1) * AllNewsQueryModel.NewsArticlesPerPage)
-                .Take(AllNewsQueryModel.NewsArticlesPerPage)
-                .Select(na => new NewsArticleListingViewModel
-                {
-                    Id = na.Id,
-                    Title = na.Title,
-                    Content = na.Content.Substring(0, 200) + "...",
-                    ImageUrl = na.ImageUrl,
-                    CreatedOn = na.CreatedOn.ToString("dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture),
-                    NewsCategory = na.NewsCategory.Name,
-                    Author = na.Author.Name
-                })
-                .ToList();
-
-            var categories = this.data
-                .NewsCategories
-                .Select(nc => nc.Name)
-                .OrderBy(name => name)
-                .ToList();
-
-            var tags = this.data
-                .Tags
-                .Select(t => t.Name.ToLower())
-                .OrderBy(name => name)
-                .ToList();
-
-            query.TotalNewsArticles = totalNewsArticles;
-            query.News = news;
-            query.Categories = categories;
-            query.Tags = tags;
+            query.Categories = newsArticlesCategories;
+            query.Tags = newsArticlesTags;
+            query.TotalNewsArticles = newsQueryResult.TotalNewsArticles;
+            query.News = newsQueryResult.News;
 
             return View(query);
         }

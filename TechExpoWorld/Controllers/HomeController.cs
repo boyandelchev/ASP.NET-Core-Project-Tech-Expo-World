@@ -6,18 +6,21 @@
     using TechExpoWorld.Data;
     using TechExpoWorld.Models;
     using TechExpoWorld.Models.Home;
+    using TechExpoWorld.Services.Statistics;
 
     public class HomeController : Controller
     {
+        private readonly IStatisticsService statistics;
         private readonly TechExpoDbContext data;
 
-        public HomeController(TechExpoDbContext data)
-            => this.data = data;
+        public HomeController(IStatisticsService statistics, TechExpoDbContext data)
+        {
+            this.statistics = statistics;
+            this.data = data;
+        }
 
         public IActionResult Index()
         {
-            var totalNewsArticles = this.data.NewsArticles.Count();
-
             var newsArticles = this.data
                 .NewsArticles
                 .OrderByDescending(c => c.Id)
@@ -30,9 +33,13 @@
                 .Take(3)
                 .ToList();
 
+            var totalStatistics = this.statistics.Total();
+
             return View(new IndexViewModel
             {
-                TotalNewsArticles = totalNewsArticles,
+                TotalNewsArticles = totalStatistics.TotalNewsArticles,
+                TotalUsers = totalStatistics.TotalUsers,
+                TotalAuthors = totalStatistics.TotalAuthors,
                 News = newsArticles
             });
         }

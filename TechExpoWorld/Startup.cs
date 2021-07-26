@@ -9,6 +9,8 @@ namespace TechExpoWorld
     using Microsoft.Extensions.Hosting;
     using TechExpoWorld.Data;
     using TechExpoWorld.Infrastructure;
+    using TechExpoWorld.Services.News;
+    using TechExpoWorld.Services.Statistics;
 
     public class Startup
     {
@@ -35,8 +37,10 @@ namespace TechExpoWorld
                 })
                 .AddEntityFrameworkStores<TechExpoDbContext>();
 
-            services
-                .AddControllersWithViews();
+            services.AddControllersWithViews();
+
+            services.AddTransient<IStatisticsService, StatisticsService>();
+            services.AddTransient<INewsService, NewsService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
