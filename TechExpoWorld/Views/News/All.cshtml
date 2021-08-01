@@ -48,7 +48,7 @@
         </div>
 
         <div class="form-inline col-md-2">
-            <input class="btn btn-primary btn-outline-secondary" type="submit" value="Search" />
+            <input class="btn btn-success" type="submit" value="Search" />
         </div>
     </div>
 </form>
@@ -66,7 +66,7 @@
 }
 
 <div class="row mb-3">
-    <div class="col-md-6">
+    <div class="col-3 col-md-6">
         <a class="btn btn-primary @(Model.CurrentPage == 1 ? "disabled" : string.Empty)"
            asp-controller="News"
            asp-action="All"
@@ -76,8 +76,8 @@
            asp-route-searchTerm="@Model.SearchTerm"
            asp-route-sorting="@((int)Model.Sorting)"><<</a>
     </div>
-    <div class="col-md-6">
-        <a class="btn btn-primary float-right @(shouldButtonBeDisabled ? "disabled" : string.Empty)"
+    <div class="col-3 col-md-6">
+        <a class="btn btn-primary float-sm-right @(shouldButtonBeDisabled ? "disabled" : string.Empty)"
            asp-controller="News"
            asp-action="All"
            asp-route-currentPage="@(Model.CurrentPage + 1)"

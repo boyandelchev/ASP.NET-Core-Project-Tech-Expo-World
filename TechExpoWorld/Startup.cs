@@ -3,12 +3,14 @@ namespace TechExpoWorld
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
     using TechExpoWorld.Data;
     using TechExpoWorld.Infrastructure;
+    using TechExpoWorld.Services.Authors;
     using TechExpoWorld.Services.News;
     using TechExpoWorld.Services.Statistics;
 
@@ -35,12 +37,17 @@ namespace TechExpoWorld
                     options.Password.RequireNonAlphanumeric = false;
                     options.Password.RequireUppercase = false;
                 })
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<TechExpoDbContext>();
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews(options =>
+            {
+                options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
+            });
 
-            services.AddTransient<IStatisticsService, StatisticsService>();
+            services.AddTransient<IAuthorService, AuthorService>();
             services.AddTransient<INewsService, NewsService>();
+            services.AddTransient<IStatisticsService, StatisticsService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

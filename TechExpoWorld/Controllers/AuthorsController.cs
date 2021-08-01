@@ -1,19 +1,17 @@
 ﻿namespace TechExpoWorld.Controllers
 {
-    using System.Linq;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-    using TechExpoWorld.Data;
-    using TechExpoWorld.Data.Models;
     using TechExpoWorld.Infrastructure;
     using TechExpoWorld.Models.Authors;
+    using TechExpoWorld.Services.Authors;
 
     public class AuthorsController : Controller
     {
-        private readonly TechExpoDbContext data;
+        private readonly IAuthorService authors;
 
-        public AuthorsController(TechExpoDbContext data)
-            => this.data = data;
+        public AuthorsController(IAuthorService authors)
+            => this.authors = authors;
 
         [Authorize]
         public IActionResult BecomeAuthor() => View();
@@ -22,13 +20,9 @@
         [Authorize]
         public IActionResult BecomeAuthor(BecomeAuthorFormModel author)
         {
-            var userId = this.User.GetId();
+            var userId = this.User.Id();
 
-            var userIsAlreadyAuthor = this.data
-                .Authors
-                .Any(d => d.UserId == userId);
-
-            if (userIsAlreadyAuthor)
+            if (this.authors.IsAuthor(userId))
             {
                 return BadRequest();
             }
@@ -38,17 +32,12 @@
                 return View(author);
             }
 
-            var authorData = new Author
-            {
-                Name = author.Name,
-                PhoneNumber = author.PhoneNumber,
-                Address = author.Address,
-                PhotoUrl = author.PhotoUrl,
-                UserId = userId
-            };
-
-            this.data.Authors.Add(authorData);
-            this.data.SaveChanges();
+            this.authors.Create(
+                author.Name,
+                author.PhoneNumber,
+                author.Address,
+                author.PhotoUrl,
+                userId);
 
             return RedirectToAction(nameof(NewsController.All), "News");
         }

@@ -1,6 +1,7 @@
 ﻿namespace TechExpoWorld.Models.Home
 {
     using System.Collections.Generic;
+    using TechExpoWorld.Services.News;
 
     public class IndexViewModel
     {
@@ -20,6 +21,6 @@
 
         public int TotalLocations { get; init; }
 
-        public List<NewsArticleIndexViewModel> News { get; init; }
+        public List<NewsArticleIndexServiceModel> News { get; init; }
     }
 }

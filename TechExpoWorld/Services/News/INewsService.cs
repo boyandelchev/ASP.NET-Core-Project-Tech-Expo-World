@@ -13,8 +13,26 @@
             int currentPage,
             int newsArticlesPerPage);
 
-        IEnumerable<string> AllNewsCategories();
+        List<NewsArticleIndexServiceModel> LatestNewsArticles();
 
-        IEnumerable<string> AllNewsTags();
+        int Create(
+            string title,
+            string content,
+            string imageUrl,
+            int newsCategoryId,
+            int authorId,
+            IEnumerable<int> tagIds);
+
+        IEnumerable<CategoryServiceModel> Categories();
+
+        IEnumerable<string> CategoryNames();
+
+        bool CategoryExists(int categoryId);
+
+        IEnumerable<TagServiceModel> Tags();
+
+        IEnumerable<string> TagNames();
+
+        bool TagExists(int tagId);
     }
 }

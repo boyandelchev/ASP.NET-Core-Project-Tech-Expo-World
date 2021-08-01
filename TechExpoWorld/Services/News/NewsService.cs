@@ -4,6 +4,7 @@
     using System.Globalization;
     using System.Linq;
     using TechExpoWorld.Data;
+    using TechExpoWorld.Data.Models;
     using TechExpoWorld.Models.News;
 
     public class NewsService : INewsService
@@ -75,18 +76,96 @@
             };
         }
 
-        public IEnumerable<string> AllNewsCategories()
+        public List<NewsArticleIndexServiceModel> LatestNewsArticles()
+            => this.data
+                .NewsArticles
+                .OrderByDescending(c => c.Id)
+                .Select(na => new NewsArticleIndexServiceModel
+                {
+                    Id = na.Id,
+                    Title = na.Title,
+                    ImageUrl = na.ImageUrl
+                })
+                .Take(3)
+                .ToList();
+
+        public int Create(
+            string title,
+            string content,
+            string imageUrl,
+            int newsCategoryId,
+            int authorId,
+            IEnumerable<int> tagIds)
+        {
+            var newsData = new NewsArticle
+            {
+                Title = title,
+                Content = content,
+                ImageUrl = imageUrl,
+                NewsCategoryId = newsCategoryId,
+                AuthorId = authorId
+            };
+
+            if (tagIds.Any())
+            {
+                var newsArticleTags = new List<NewsArticleTag>();
+
+                foreach (var tagId in tagIds)
+                {
+                    newsArticleTags.Add(new NewsArticleTag { TagId = tagId });
+                }
+
+                newsData.NewsArticleTags = newsArticleTags;
+            }
+
+            this.data.NewsArticles.Add(newsData);
+            this.data.SaveChanges();
+
+            return newsData.Id;
+        }
+
+        public IEnumerable<CategoryServiceModel> Categories()
+            => this.data
+                .NewsCategories
+                .Select(c => new CategoryServiceModel
+                {
+                    Id = c.Id,
+                    Name = c.Name
+                })
+                .ToList();
+
+        public IEnumerable<string> CategoryNames()
             => this.data
                 .NewsCategories
                 .Select(nc => nc.Name)
                 .OrderBy(name => name)
                 .ToList();
 
-        public IEnumerable<string> AllNewsTags()
+        public bool CategoryExists(int categoryId)
+            => this.data
+                .NewsCategories
+                .Any(nc => nc.Id == categoryId);
+
+        public IEnumerable<TagServiceModel> Tags()
+            => this.data
+                .Tags
+                .Select(t => new TagServiceModel
+                {
+                    Id = t.Id,
+                    Name = t.Name
+                })
+                .ToList();
+
+        public IEnumerable<string> TagNames()
             => this.data
                 .Tags
                 .Select(t => t.Name.ToLower())
                 .OrderBy(name => name)
                 .ToList();
+
+        public bool TagExists(int tagId)
+            => this.data
+                .Tags
+                .Any(t => t.Id == tagId);
     }
 }

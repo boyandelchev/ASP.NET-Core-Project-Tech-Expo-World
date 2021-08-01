@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using TechExpoWorld.Services.News;
 
     using static Data.DataConstants.NewsArticle;
 
@@ -26,8 +27,8 @@
         [Display(Name = "Select Tags")]
         public IEnumerable<int> TagIds { get; init; } = new List<int>();
 
-        public IEnumerable<NewsCategoryViewModel> NewsCategories { get; set; }
+        public IEnumerable<CategoryServiceModel> Categories { get; set; }
 
-        public IEnumerable<TagViewModel> Tags { get; set; }
+        public IEnumerable<TagServiceModel> Tags { get; set; }
     }
 }
