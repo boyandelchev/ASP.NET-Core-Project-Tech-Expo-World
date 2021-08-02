@@ -2,6 +2,12 @@
 {
     public class DataConstants
     {
+        public class IdentityUser
+        {
+            public const int PasswordMinLength = 6;
+            public const int PasswordMaxLength = 100;
+        }
+
         public class NewsArticle
         {
             public const int TitleMinLength = 2;
