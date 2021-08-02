@@ -1,5 +1,6 @@
 ﻿namespace TechExpoWorld.Services.News
 {
+    using Microsoft.EntityFrameworkCore;
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
@@ -54,20 +55,9 @@
 
             var totalNewsArticles = newsQuery.Count();
 
-            var news = newsQuery
+            var news = GetNewsArticles(newsQuery
                 .Skip((currentPage - 1) * newsArticlesPerPage)
-                .Take(newsArticlesPerPage)
-                .Select(na => new NewsArticleServiceModel
-                {
-                    Id = na.Id,
-                    Title = na.Title,
-                    Content = na.Content.Substring(0, 200) + "...",
-                    ImageUrl = na.ImageUrl,
-                    CreatedOn = na.CreatedOn.ToString("dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture),
-                    NewsCategory = na.NewsCategory.Name,
-                    Author = na.Author.Name
-                })
-                .ToList();
+                .Take(newsArticlesPerPage));
 
             return new NewsArticlesQueryServiceModel
             {
@@ -75,6 +65,11 @@
                 News = news
             };
         }
+
+        public IEnumerable<NewsArticleServiceModel> NewsArticlesByUser(string userId)
+            => GetNewsArticles(this.data
+                .NewsArticles
+                .Where(na => na.Author.UserId == userId));
 
         public List<NewsArticleIndexServiceModel> LatestNewsArticles()
             => this.data
@@ -89,40 +84,86 @@
                 .Take(3)
                 .ToList();
 
+        public NewsArticleDetailsServiceModel Details(int newsArticleId)
+            => this.data
+                .NewsArticles
+                .Where(na => na.Id == newsArticleId)
+                .Select(na => new NewsArticleDetailsServiceModel
+                {
+                    Id = na.Id,
+                    Title = na.Title,
+                    Content = na.Content,
+                    ImageUrl = na.ImageUrl,
+                    CreatedOn = na.CreatedOn.ToString(),
+                    CategoryId = na.NewsCategoryId,
+                    CategoryName = na.NewsCategory.Name,
+                    AuthorId = na.AuthorId,
+                    AuthorName = na.Author.Name,
+                    TagNames = na.NewsArticleTags.Select(nat => nat.Tag.Name),
+                    TagIds = na.NewsArticleTags.Select(nat => nat.TagId),
+                    UserId = na.Author.UserId
+                })
+                .FirstOrDefault();
+
         public int Create(
             string title,
             string content,
             string imageUrl,
-            int newsCategoryId,
-            int authorId,
-            IEnumerable<int> tagIds)
+            int categoryId,
+            IEnumerable<int> tagIds,
+            int authorId)
         {
-            var newsData = new NewsArticle
+            var newsArticle = new NewsArticle
             {
                 Title = title,
                 Content = content,
                 ImageUrl = imageUrl,
-                NewsCategoryId = newsCategoryId,
+                NewsCategoryId = categoryId,
                 AuthorId = authorId
             };
 
-            if (tagIds.Any())
-            {
-                var newsArticleTags = new List<NewsArticleTag>();
+            newsArticle.NewsArticleTags = CreateNewsArticleTags(tagIds);
 
-                foreach (var tagId in tagIds)
-                {
-                    newsArticleTags.Add(new NewsArticleTag { TagId = tagId });
-                }
-
-                newsData.NewsArticleTags = newsArticleTags;
-            }
-
-            this.data.NewsArticles.Add(newsData);
+            this.data.NewsArticles.Add(newsArticle);
             this.data.SaveChanges();
 
-            return newsData.Id;
+            return newsArticle.Id;
         }
+
+        public bool Edit(
+            int newsArticleId,
+            string title,
+            string content,
+            string imageUrl,
+            int categoryId,
+            IEnumerable<int> tagIds)
+        {
+            var newsArticle = this.data
+                .NewsArticles
+                .Include(na => na.NewsArticleTags)
+                .FirstOrDefault(na => na.Id == newsArticleId);
+
+            if (newsArticle == null)
+            {
+                return false;
+            }
+
+            newsArticle.Title = title;
+            newsArticle.Content = content;
+            newsArticle.ImageUrl = imageUrl;
+            newsArticle.NewsCategoryId = categoryId;
+            newsArticle.NewsArticleTags = CreateNewsArticleTags(tagIds);
+
+            this.data.SaveChanges();
+
+            return true;
+        }
+
+        public bool IsByAuthor(int newsArticleId, int authorId)
+            => this.data
+                .NewsArticles
+                .Any(na => na.Id == newsArticleId && na.AuthorId == authorId);
+
 
         public IEnumerable<CategoryServiceModel> Categories()
             => this.data
@@ -163,9 +204,41 @@
                 .OrderBy(name => name)
                 .ToList();
 
-        public bool TagExists(int tagId)
+        public bool TagsExist(IEnumerable<int> tagIds)
+            => tagIds.All(tagId => TagExists(tagId));
+
+        private bool TagExists(int tagId)
             => this.data
                 .Tags
                 .Any(t => t.Id == tagId);
+
+        private static IEnumerable<NewsArticleServiceModel> GetNewsArticles(IQueryable<NewsArticle> newsQuery)
+            => newsQuery
+                .Select(na => new NewsArticleServiceModel
+                {
+                    Id = na.Id,
+                    Title = na.Title,
+                    Content = na.Content.Substring(0, 200) + "...",
+                    ImageUrl = na.ImageUrl,
+                    CreatedOn = na.CreatedOn.ToString("dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture),
+                    CategoryName = na.NewsCategory.Name,
+                    AuthorName = na.Author.Name
+                })
+                .ToList();
+
+        private static IEnumerable<NewsArticleTag> CreateNewsArticleTags(IEnumerable<int> tagIds)
+        {
+            var newsArticleTags = new List<NewsArticleTag>();
+
+            if (tagIds.Any())
+            {
+                foreach (var tagId in tagIds)
+                {
+                    newsArticleTags.Add(new NewsArticleTag { TagId = tagId });
+                }
+            }
+
+            return newsArticleTags;
+        }
     }
 }

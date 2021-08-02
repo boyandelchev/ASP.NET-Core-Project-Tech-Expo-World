@@ -12,8 +12,8 @@
 
         public string CreatedOn { get; init; }
 
-        public string NewsCategory { get; init; }
+        public string CategoryName { get; init; }
 
-        public string Author { get; init; }
+        public string AuthorName { get; init; }
     }
 }

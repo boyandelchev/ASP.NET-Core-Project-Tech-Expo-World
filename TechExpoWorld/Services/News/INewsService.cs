@@ -13,15 +13,29 @@
             int currentPage,
             int newsArticlesPerPage);
 
+        IEnumerable<NewsArticleServiceModel> NewsArticlesByUser(string userId);
+
         List<NewsArticleIndexServiceModel> LatestNewsArticles();
+
+        NewsArticleDetailsServiceModel Details(int newsArticleId);
 
         int Create(
             string title,
             string content,
             string imageUrl,
-            int newsCategoryId,
-            int authorId,
+            int categoryId,
+            IEnumerable<int> tagIds,
+            int authorId);
+
+        bool Edit(
+            int newsArticleId,
+            string title,
+            string content,
+            string imageUrl,
+            int categoryId,
             IEnumerable<int> tagIds);
+
+        bool IsByAuthor(int newsArticleId, int authorId);
 
         IEnumerable<CategoryServiceModel> Categories();
 
@@ -33,6 +47,6 @@
 
         IEnumerable<string> TagNames();
 
-        bool TagExists(int tagId);
+        bool TagsExist(IEnumerable<int> tagIds);
     }
 }

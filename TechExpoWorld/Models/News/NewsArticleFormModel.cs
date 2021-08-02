@@ -6,7 +6,7 @@
 
     using static Data.DataConstants.NewsArticle;
 
-    public class AddNewsFormModel
+    public class NewsArticleFormModel
     {
         [Required]
         [StringLength(TitleMaxLength, MinimumLength = TitleMinLength)]
@@ -22,7 +22,7 @@
         public string ImageUrl { get; init; }
 
         [Display(Name = "Select Category")]
-        public int NewsCategoryId { get; init; }
+        public int CategoryId { get; init; }
 
         [Display(Name = "Select Tags")]
         public IEnumerable<int> TagIds { get; init; } = new List<int>();

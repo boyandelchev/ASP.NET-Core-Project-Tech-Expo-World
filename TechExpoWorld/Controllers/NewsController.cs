@@ -1,6 +1,5 @@
 ﻿namespace TechExpoWorld.Controllers
 {
-    using System.Linq;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using TechExpoWorld.Infrastructure;
@@ -41,6 +40,14 @@
         }
 
         [Authorize]
+        public IActionResult MyNewsArticles()
+        {
+            var myNewsArticles = this.news.NewsArticlesByUser(this.User.Id());
+
+            return View(myNewsArticles);
+        }
+
+        [Authorize]
         public IActionResult Add()
         {
             if (!this.authors.IsAuthor(this.User.Id()))
@@ -48,7 +55,7 @@
                 return RedirectToAction(nameof(AuthorsController.BecomeAuthor), "Authors");
             }
 
-            return View(new AddNewsFormModel
+            return View(new NewsArticleFormModel
             {
                 Categories = this.news.Categories(),
                 Tags = this.news.Tags()
@@ -57,7 +64,7 @@
 
         [HttpPost]
         [Authorize]
-        public IActionResult Add(AddNewsFormModel newsArticle)
+        public IActionResult Add(NewsArticleFormModel newsArticle)
         {
             var authorId = this.authors.AuthorId(this.User.Id());
 
@@ -66,12 +73,12 @@
                 return RedirectToAction(nameof(AuthorsController.BecomeAuthor), "Authors");
             }
 
-            if (!this.news.CategoryExists(newsArticle.NewsCategoryId))
+            if (!this.news.CategoryExists(newsArticle.CategoryId))
             {
-                this.ModelState.AddModelError(nameof(newsArticle.NewsCategoryId), "News category does not exist.");
+                this.ModelState.AddModelError(nameof(newsArticle.CategoryId), "News category does not exist.");
             }
 
-            if (!newsArticle.TagIds.All(tagId => this.news.TagExists(tagId)))
+            if (!this.news.TagsExist(newsArticle.TagIds))
             {
                 this.ModelState.AddModelError(nameof(newsArticle.TagIds), "Tag option does not exist.");
             }
@@ -88,8 +95,87 @@
                 newsArticle.Title,
                 newsArticle.Content,
                 newsArticle.ImageUrl,
-                newsArticle.NewsCategoryId,
-                authorId,
+                newsArticle.CategoryId,
+                newsArticle.TagIds,
+                authorId);
+
+            return RedirectToAction(nameof(All));
+        }
+
+        [Authorize]
+        public IActionResult Edit(int id)
+        {
+            var userId = this.User.Id();
+
+            if (!this.authors.IsAuthor(userId))
+            {
+                return RedirectToAction(nameof(AuthorsController.BecomeAuthor), "Authors");
+            }
+
+            var newsArticle = this.news.Details(id);
+
+            if (newsArticle == null)
+            {
+                return NotFound();
+            }
+
+            if (newsArticle.UserId != userId)
+            {
+                return Unauthorized();
+            }
+
+            return View(new NewsArticleFormModel
+            {
+                Title = newsArticle.Title,
+                Content = newsArticle.Content,
+                ImageUrl = newsArticle.ImageUrl,
+                CategoryId = newsArticle.CategoryId,
+                TagIds = newsArticle.TagIds,
+                Categories = this.news.Categories(),
+                Tags = this.news.Tags()
+            });
+        }
+
+        [HttpPost]
+        [Authorize]
+        public IActionResult Edit(int id, NewsArticleFormModel newsArticle)
+        {
+            var authorId = this.authors.AuthorId(this.User.Id());
+
+            if (authorId == 0)
+            {
+                return RedirectToAction(nameof(AuthorsController.BecomeAuthor), "Authors");
+            }
+
+            if (!this.news.IsByAuthor(id, authorId))
+            {
+                return BadRequest();
+            }
+
+            if (!this.news.CategoryExists(newsArticle.CategoryId))
+            {
+                this.ModelState.AddModelError(nameof(newsArticle.CategoryId), "News category does not exist.");
+            }
+
+            if (!this.news.TagsExist(newsArticle.TagIds))
+            {
+                this.ModelState.AddModelError(nameof(newsArticle.TagIds), "Tag option does not exist.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                newsArticle.Categories = this.news.Categories();
+                newsArticle.Tags = this.news.Tags();
+
+                return View(newsArticle);
+            }
+
+            this.news.Edit(
+                id,
+                newsArticle.Title,
+                newsArticle.Content,
+                newsArticle.ImageUrl,
+                newsArticle.CategoryId,
                 newsArticle.TagIds);
 
             return RedirectToAction(nameof(All));

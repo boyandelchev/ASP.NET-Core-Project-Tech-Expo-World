@@ -1,0 +1,27 @@
+﻿@model IEnumerable<NewsArticleServiceModel>
+
+<div class="row mt-3">
+    @foreach (var news in Model)
+    {
+        <div class="col-md-4">
+            <div class="card mb-3">
+                <img class="card-img-top" src="@news.ImageUrl" alt="@news.Title (@news.CategoryName)">
+                <div class="card-body text-center">
+                    <h5 class="card-title">@news.Title</h5>
+                    <div>
+                        <span class="text-left text-info">@news.AuthorName - </span>
+                        <span class="text-left text-dark">@news.CreatedOn</span>
+                    </div>
+                    <p class="text-muted">@news.Content</p>
+                    <p class="text-primary">@news.CategoryName</p>
+                    <a asp-controller="News" asp-action="Details" asp-route-id="@news.Id" class="btn btn-primary btn-outline-secondary">Read More</a>
+                    @if (ViewBag.EditDelete == true)
+                    {
+                        <a asp-controller="News" asp-action="Edit" asp-route-id="@news.Id" class="btn btn-info btn-outline-warning">Edit</a>
+                        <a asp-controller="News" asp-action="Delete" asp-route-id="@news.Id" class="btn btn-danger btn-outline-dark">Delete</a>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>

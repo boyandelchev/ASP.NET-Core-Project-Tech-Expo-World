@@ -1,10 +1,22 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
+@inject IAuthorService Authors
+
+@{
+    var userId = User.Id();
+    var IsAuthor = Authors.IsAuthor(userId);
+}
 
 <ul class="navbar-nav">
     @if (SignInManager.IsSignedIn(User))
     {
+        if (IsAuthor)
+        {
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="News" asp-action="MyNewsArticles">My News Articles</a>
+            </li>
+        }
         <li class="nav-item">
             <a class="nav-link text-dark" asp-area="" asp-controller="Authors" asp-action="BecomeAuthor">Become Author</a>
         </li>
