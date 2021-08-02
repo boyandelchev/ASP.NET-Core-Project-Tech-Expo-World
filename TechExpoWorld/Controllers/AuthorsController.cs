@@ -14,7 +14,17 @@
             => this.authors = authors;
 
         [Authorize]
-        public IActionResult BecomeAuthor() => View();
+        public IActionResult BecomeAuthor()
+        {
+            var userId = this.User.Id();
+
+            if (this.authors.IsAuthor(userId) || this.User.IsAdmin())
+            {
+                return BadRequest();
+            }
+
+            return View();
+        }
 
         [HttpPost]
         [Authorize]
@@ -22,7 +32,7 @@
         {
             var userId = this.User.Id();
 
-            if (this.authors.IsAuthor(userId))
+            if (this.authors.IsAuthor(userId) || this.User.IsAdmin())
             {
                 return BadRequest();
             }

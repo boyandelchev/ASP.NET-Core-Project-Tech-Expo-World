@@ -1,32 +1,79 @@
 ﻿namespace TechExpoWorld.Infrastructure
 {
+    using System;
     using System.Linq;
+    using System.Threading.Tasks;
     using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.DependencyInjection;
     using TechExpoWorld.Data;
     using TechExpoWorld.Data.Models;
+
+    using static WebConstants;
 
     public static class ApplicationBuilderExtensions
     {
         public static IApplicationBuilder PrepareDatabase(
             this IApplicationBuilder app)
         {
-            using var scopedServices = app.ApplicationServices.CreateScope();
+            using var serviceScope = app.ApplicationServices.CreateScope();
+            var serviceProvider = serviceScope.ServiceProvider;
 
-            var data = scopedServices.ServiceProvider.GetService<TechExpoDbContext>();
+            MigrateDatabase(serviceProvider);
 
-            data.Database.Migrate();
-
-            SeedNewsCategories(data);
-
-            SeedTags(data);
+            SeedAdministrator(serviceProvider);
+            SeedNewsCategories(serviceProvider);
+            SeedTags(serviceProvider);
 
             return app;
         }
 
-        private static void SeedNewsCategories(TechExpoDbContext data)
+        private static void MigrateDatabase(IServiceProvider serviceProvider)
         {
+            var data = serviceProvider.GetRequiredService<TechExpoDbContext>();
+
+            data.Database.Migrate();
+        }
+
+        private static void SeedAdministrator(IServiceProvider serviceProvider)
+        {
+            var userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
+            var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+            Task
+                .Run(async () =>
+                {
+                    if (await roleManager.RoleExistsAsync(AdministratorRoleName))
+                    {
+                        return;
+                    }
+
+                    var role = new IdentityRole { Name = AdministratorRoleName };
+
+                    await roleManager.CreateAsync(role);
+
+                    const string adminEmail = "admin@tew.com";
+                    const string adminPassword = "admin1";
+
+                    var user = new IdentityUser
+                    {
+                        Email = adminEmail,
+                        UserName = adminEmail
+                    };
+
+                    await userManager.CreateAsync(user, adminPassword);
+
+                    await userManager.AddToRoleAsync(user, role.Name);
+                })
+                .GetAwaiter()
+                .GetResult();
+        }
+
+        private static void SeedNewsCategories(IServiceProvider serviceProvider)
+        {
+            var data = serviceProvider.GetRequiredService<TechExpoDbContext>();
+
             if (data.NewsCategories.Any())
             {
                 return;
@@ -49,8 +96,10 @@
             data.SaveChanges();
         }
 
-        private static void SeedTags(TechExpoDbContext data)
+        private static void SeedTags(IServiceProvider serviceProvider)
         {
+            var data = serviceProvider.GetRequiredService<TechExpoDbContext>();
+
             if (data.Tags.Any())
             {
                 return;

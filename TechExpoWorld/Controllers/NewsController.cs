@@ -42,6 +42,11 @@
         [Authorize]
         public IActionResult MyNewsArticles()
         {
+            if (this.User.IsAdmin())
+            {
+                return BadRequest();
+            }
+
             var myNewsArticles = this.news.NewsArticlesByUser(this.User.Id());
 
             return View(myNewsArticles);
@@ -50,6 +55,11 @@
         [Authorize]
         public IActionResult Add()
         {
+            if (this.User.IsAdmin())
+            {
+                return BadRequest();
+            }
+
             if (!this.authors.IsAuthor(this.User.Id()))
             {
                 return RedirectToAction(nameof(AuthorsController.BecomeAuthor), "Authors");
@@ -66,6 +76,11 @@
         [Authorize]
         public IActionResult Add(NewsArticleFormModel newsArticle)
         {
+            if (this.User.IsAdmin())
+            {
+                return BadRequest();
+            }
+
             var authorId = this.authors.AuthorId(this.User.Id());
 
             if (authorId == 0)
@@ -107,7 +122,7 @@
         {
             var userId = this.User.Id();
 
-            if (!this.authors.IsAuthor(userId))
+            if (!this.authors.IsAuthor(userId) && !this.User.IsAdmin())
             {
                 return RedirectToAction(nameof(AuthorsController.BecomeAuthor), "Authors");
             }
@@ -119,7 +134,7 @@
                 return NotFound();
             }
 
-            if (newsArticle.UserId != userId)
+            if (newsArticle.UserId != userId && !this.User.IsAdmin())
             {
                 return Unauthorized();
             }
@@ -142,12 +157,12 @@
         {
             var authorId = this.authors.AuthorId(this.User.Id());
 
-            if (authorId == 0)
+            if (authorId == 0 && !this.User.IsAdmin())
             {
                 return RedirectToAction(nameof(AuthorsController.BecomeAuthor), "Authors");
             }
 
-            if (!this.news.IsByAuthor(id, authorId))
+            if (!this.news.IsByAuthor(id, authorId) && !this.User.IsAdmin())
             {
                 return BadRequest();
             }

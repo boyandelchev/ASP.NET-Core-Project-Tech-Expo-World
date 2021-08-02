@@ -3,23 +3,25 @@
 @inject UserManager<IdentityUser> UserManager
 @inject IAuthorService Authors
 
-@{
-    var userId = User.Id();
-    var IsAuthor = Authors.IsAuthor(userId);
-}
-
 <ul class="navbar-nav">
     @if (SignInManager.IsSignedIn(User))
     {
-        if (IsAuthor)
+        var userId = User.Id();
+        var isAuthor = Authors.IsAuthor(userId);
+        var isAdmin = User.IsAdmin();
+
+        if (isAuthor && !isAdmin)
         {
             <li class="nav-item">
                 <a class="nav-link text-dark" asp-area="" asp-controller="News" asp-action="MyNewsArticles">My News Articles</a>
             </li>
         }
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Authors" asp-action="BecomeAuthor">Become Author</a>
-        </li>
+        else if (!isAdmin)
+        {
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Authors" asp-action="BecomeAuthor">Become Author</a>
+            </li>
+        }
         <li class="nav-item">
             <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Account</a>
         </li>
