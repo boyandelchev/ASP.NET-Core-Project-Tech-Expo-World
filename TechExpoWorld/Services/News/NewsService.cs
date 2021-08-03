@@ -71,7 +71,8 @@
         public IEnumerable<NewsArticleServiceModel> NewsArticlesByUser(string userId)
             => GetNewsArticles(this.data
                 .NewsArticles
-                .Where(na => na.Author.UserId == userId));
+                .Where(na => na.Author.UserId == userId)
+                .OrderByDescending(na => na.Id));
 
         public List<NewsArticleIndexServiceModel> LatestNewsArticles()
             => this.data
@@ -159,6 +160,26 @@
             newsArticle.NewsCategoryId = categoryId;
             newsArticle.NewsArticleTags = CreateNewsArticleTags(tagIds);
 
+            this.data.SaveChanges();
+
+            return true;
+        }
+
+        public bool Delete(int newsArticleId)
+        {
+            var newsArticle = this.data
+                .NewsArticles
+                .Include(na => na.NewsArticleTags)
+                .FirstOrDefault(na => na.Id == newsArticleId);
+
+            if (newsArticle == null)
+            {
+                return false;
+            }
+
+            newsArticle.NewsArticleTags = null;
+
+            this.data.NewsArticles.Remove(newsArticle);
             this.data.SaveChanges();
 
             return true;

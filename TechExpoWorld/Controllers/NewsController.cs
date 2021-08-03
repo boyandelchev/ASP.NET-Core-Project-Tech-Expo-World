@@ -204,5 +204,61 @@
 
             return RedirectToAction(nameof(All));
         }
+
+        [Authorize]
+        public IActionResult DeleteDetails(int id)
+        {
+            var userId = this.User.Id();
+
+            if (!this.authors.IsAuthor(userId) && !this.User.IsAdmin())
+            {
+                return RedirectToAction(nameof(AuthorsController.BecomeAuthor), "Authors");
+            }
+
+            var newsArticle = this.news.Details(id);
+
+            if (newsArticle == null)
+            {
+                return NotFound();
+            }
+
+            if (newsArticle.UserId != userId && !this.User.IsAdmin())
+            {
+                return Unauthorized();
+            }
+
+            return View(new NewsArticleDeleteDetailsViewModel
+            {
+                Id = newsArticle.Id,
+                Title = newsArticle.Title,
+                Content = newsArticle.Content,
+                ImageUrl = newsArticle.ImageUrl,
+                CategoryId = newsArticle.CategoryId,
+                TagIds = newsArticle.TagIds,
+                Categories = this.news.Categories(),
+                Tags = this.news.Tags()
+            });
+        }
+
+        [HttpPost]
+        [Authorize]
+        public IActionResult Delete(int id)
+        {
+            var authorId = this.authors.AuthorId(this.User.Id());
+
+            if (authorId == 0 && !this.User.IsAdmin())
+            {
+                return RedirectToAction(nameof(AuthorsController.BecomeAuthor), "Authors");
+            }
+
+            if (!this.news.IsByAuthor(id, authorId) && !this.User.IsAdmin())
+            {
+                return BadRequest();
+            }
+
+            this.news.Delete(id);
+
+            return RedirectToAction(nameof(All));
+        }
     }
 }

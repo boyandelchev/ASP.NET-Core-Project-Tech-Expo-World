@@ -35,6 +35,8 @@
             int categoryId,
             IEnumerable<int> tagIds);
 
+        bool Delete(int newsArticleId);
+
         bool IsByAuthor(int newsArticleId, int authorId);
 
         bool ViewCountIncrement(int newsArticleId);
