@@ -12,6 +12,7 @@ namespace TechExpoWorld
     using TechExpoWorld.Data.Models;
     using TechExpoWorld.Infrastructure;
     using TechExpoWorld.Services.Authors;
+    using TechExpoWorld.Services.Comments;
     using TechExpoWorld.Services.News;
     using TechExpoWorld.Services.Statistics;
 
@@ -47,6 +48,7 @@ namespace TechExpoWorld
             });
 
             services.AddTransient<IAuthorService, AuthorService>();
+            services.AddTransient<ICommentService, CommentService>();
             services.AddTransient<INewsService, NewsService>();
             services.AddTransient<IStatisticsService, StatisticsService>();
         }

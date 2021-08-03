@@ -3,19 +3,23 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using TechExpoWorld.Infrastructure;
+    using TechExpoWorld.Models.Comments;
     using TechExpoWorld.Models.News;
     using TechExpoWorld.Services.Authors;
+    using TechExpoWorld.Services.Comments;
     using TechExpoWorld.Services.News;
 
     public class NewsController : Controller
     {
         private readonly INewsService news;
         private readonly IAuthorService authors;
+        private readonly ICommentService comments;
 
-        public NewsController(INewsService news, IAuthorService authors)
+        public NewsController(INewsService news, IAuthorService authors, ICommentService comments)
         {
             this.news = news;
             this.authors = authors;
+            this.comments = comments;
         }
 
         public IActionResult All([FromQuery] AllNewsQueryModel query)
@@ -44,8 +48,16 @@
             this.news.ViewCountIncrement(id);
 
             var newsArticle = this.news.Details(id);
+            var comments = this.comments.CommentsOnNewsArticle(id);
+            var totalComments = this.comments.TotalCommentsOnNewsArticle(id);
 
-            return View(newsArticle);
+            return View(new NewsArticleWithCommentsViewModel
+            {
+                NewsArticle = newsArticle,
+                Comment = new CommentFormModel(),
+                Comments = comments,
+                TotalComments = totalComments
+            });
         }
 
         [Authorize]

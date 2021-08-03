@@ -38,6 +38,7 @@
 
         public class Comment
         {
+            public const int ContentMinLength = 2;
             public const int ContentMaxLength = 500;
         }
     }

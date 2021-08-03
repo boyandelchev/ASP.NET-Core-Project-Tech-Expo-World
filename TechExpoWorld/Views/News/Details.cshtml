@@ -1,24 +1,75 @@
-﻿@model NewsArticleDetailsServiceModel
+﻿@model NewsArticleWithCommentsViewModel
 
-<article>
-    <h2>@Model.Title</h2>
-    <div>
-        <span class="text-info">@Model.AuthorName - </span>
-        <span class="text-dark">@Model.CreatedOn</span>
-        <span class="float-right">Views: @Model.ViewCount Comments: 0</span>
-    </div>
-    @if (Model.LastModifiedOn != null)
+@{ 
+    ViewBag.Title = Model.NewsArticle.Title;
+}
+
+<section>
+    <article>
+        <h2>@Model.NewsArticle.Title</h2>
+        <div>
+            <span class="text-info">@Model.NewsArticle.AuthorName - </span>
+            <span class="text-dark">@Model.NewsArticle.CreatedOn</span>
+            <span class="float-right">Views: @Model.NewsArticle.ViewCount Comments: @Model.TotalComments</span>
+        </div>
+        @if (Model.NewsArticle.LastModifiedOn != null)
+        {
+            <div>Last Edit: @Model.NewsArticle.LastModifiedOn</div>
+        }
+        <div class="float-right">
+            Category:
+            <a asp-controller="News" asp-action="All" asp-route-category="@Model.NewsArticle.CategoryName"><span class="font-weight-bold">@Model.NewsArticle.CategoryName</span></a>
+        </div>
+        <img class="img-fluid" src="@Model.NewsArticle.ImageUrl" alt="@Model.NewsArticle.Title (@Model.NewsArticle.CategoryName)" />
+        <p>@Model.NewsArticle.Content</p>
+        <span>Tags: </span>
+        @foreach (var tag in Model.NewsArticle.TagNames)
+        {
+            <a asp-controller="News" asp-action="All" asp-route-tag="@tag"><span class="font-italic">@tag</span></a>
+        }
+    </article>
+</section>
+
+<div class="text-center" id="add-comment-button">
+    <button class="btn btn-primary">Add Comment</button>
+</div>
+
+<div class="d-none text-center" id="add-comment-area">
+    <section class="mt-3">
+        <form asp-controller="Comments" asp-action="Add" asp-route-id="@Model.NewsArticle.Id" method="post">
+            <div class="form-group">
+                <label asp-for="@Model.Comment.Content"></label>
+                <textarea asp-for="@Model.Comment.Content" rows="5" class="form-control" placeholder="Add comment"></textarea>
+                <span asp-validation-for="@Model.Comment.Content" class="small text-danger"></span>
+            </div>
+
+            <input class="btn btn-primary mt-3" type="submit" value="Add" />
+        </form>
+    </section>
+</div>
+
+<section class="mt-5">
+    @foreach (var comment in Model.Comments)
     {
-        <div>Last Edit: @Model.LastModifiedOn</div>
+        <div class="media">
+            <img class="mr-3" src="/profile-image-32x32.png" alt="profile image">
+            <div class="media-body">
+                <h5 class="mt-0">@comment.UserName
+                    <span class="float-right text-secondary">@comment.CreatedOn</span>
+                </h5>
+                @comment.Content
+            </div>
+        </div>
     }
-    <div class="float-right">Category:
-        <a asp-controller="News" asp-action="All" asp-route-category="@Model.CategoryName"><span class="font-weight-bold">@Model.CategoryName</span></a>
-    </div>
-    <img class="img-fluid" src="@Model.ImageUrl" alt="@Model.Title (@Model.CategoryName)" />
-    <p>@Model.Content</p>
-    <span>Tags: </span>
-    @foreach (var tag in Model.TagNames)
-	{
-        <a asp-controller="News" asp-action="All" asp-route-tag="@tag"><span class="font-italic">@tag</span></a>
-	}
-</article>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        $('#add-comment-button').on('click', event => {
+            $('#add-comment-area').removeClass('d-none');
+            $('#add-comment-button').hide();
+        });
+    </script>
+}
