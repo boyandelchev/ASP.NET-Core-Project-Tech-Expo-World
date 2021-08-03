@@ -39,6 +39,15 @@
             return View(query);
         }
 
+        public IActionResult Details(int id)
+        {
+            this.news.ViewCountIncrement(id);
+
+            var newsArticle = this.news.Details(id);
+
+            return View(newsArticle);
+        }
+
         [Authorize]
         public IActionResult MyNewsArticles()
         {

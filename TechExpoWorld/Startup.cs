@@ -9,6 +9,7 @@ namespace TechExpoWorld
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
     using TechExpoWorld.Data;
+    using TechExpoWorld.Data.Models;
     using TechExpoWorld.Infrastructure;
     using TechExpoWorld.Services.Authors;
     using TechExpoWorld.Services.News;
@@ -30,7 +31,7 @@ namespace TechExpoWorld
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services
-                .AddDefaultIdentity<IdentityUser>(options =>
+                .AddDefaultIdentity<User>(options =>
                 {
                     options.Password.RequireDigit = false;
                     options.Password.RequireLowercase = false;

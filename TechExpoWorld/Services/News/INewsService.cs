@@ -37,6 +37,8 @@
 
         bool IsByAuthor(int newsArticleId, int authorId);
 
+        bool ViewCountIncrement(int newsArticleId);
+
         IEnumerable<CategoryServiceModel> Categories();
 
         IEnumerable<string> CategoryNames();

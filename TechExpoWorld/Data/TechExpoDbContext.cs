@@ -5,7 +5,7 @@
     using Microsoft.EntityFrameworkCore;
     using TechExpoWorld.Data.Models;
 
-    public class TechExpoDbContext : IdentityDbContext
+    public class TechExpoDbContext : IdentityDbContext<User>
     {
         public TechExpoDbContext(DbContextOptions<TechExpoDbContext> options)
             : base(options)
@@ -21,6 +21,8 @@
         public DbSet<NewsArticleTag> NewsArticleTags { get; init; }
 
         public DbSet<Author> Authors { get; init; }
+
+        public DbSet<Comment> Comments { get; init; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -58,9 +60,23 @@
 
             builder
                 .Entity<Author>()
-                .HasOne<IdentityUser>()
+                .HasOne<User>()
                 .WithOne()
                 .HasForeignKey<Author>(a => a.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder
+                .Entity<Comment>()
+                .HasOne(c => c.NewsArticle)
+                .WithMany(na => na.Comments)
+                .HasForeignKey(c => c.NewsArticleId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder
+                .Entity<Comment>()
+                .HasOne(c => c.User)
+                .WithMany(u => u.Comments)
+                .HasForeignKey(c => c.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             base.OnModelCreating(builder);

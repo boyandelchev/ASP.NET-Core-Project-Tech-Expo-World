@@ -2,7 +2,7 @@
 {
     public class DataConstants
     {
-        public class IdentityUser
+        public class User
         {
             public const int PasswordMinLength = 6;
             public const int PasswordMaxLength = 100;
@@ -34,6 +34,11 @@
             public const int PhoneNumberMaxLength = 30;
             public const int AddressMinLength = 10;
             public const int AddressMaxLength = 80;
+        }
+
+        public class Comment
+        {
+            public const int ContentMaxLength = 500;
         }
     }
 }

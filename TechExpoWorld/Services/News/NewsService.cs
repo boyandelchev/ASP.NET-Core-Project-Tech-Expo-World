@@ -1,6 +1,7 @@
 ﻿namespace TechExpoWorld.Services.News
 {
     using Microsoft.EntityFrameworkCore;
+    using System;
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
@@ -10,6 +11,7 @@
 
     public class NewsService : INewsService
     {
+        private const string dateFormat = "dd.MM.yyyy HH:mm";
         private readonly TechExpoDbContext data;
 
         public NewsService(TechExpoDbContext data)
@@ -94,7 +96,9 @@
                     Title = na.Title,
                     Content = na.Content,
                     ImageUrl = na.ImageUrl,
-                    CreatedOn = na.CreatedOn.ToString(),
+                    CreatedOn = na.CreatedOn.ToString(dateFormat, CultureInfo.InvariantCulture),
+                    LastModifiedOn = na.LastModifiedOn.Value.ToString(dateFormat, CultureInfo.InvariantCulture),
+                    ViewCount = na.ViewCount,
                     CategoryId = na.NewsCategoryId,
                     CategoryName = na.NewsCategory.Name,
                     AuthorId = na.AuthorId,
@@ -151,6 +155,7 @@
             newsArticle.Title = title;
             newsArticle.Content = content;
             newsArticle.ImageUrl = imageUrl;
+            newsArticle.LastModifiedOn = DateTime.UtcNow;
             newsArticle.NewsCategoryId = categoryId;
             newsArticle.NewsArticleTags = CreateNewsArticleTags(tagIds);
 
@@ -164,6 +169,21 @@
                 .NewsArticles
                 .Any(na => na.Id == newsArticleId && na.AuthorId == authorId);
 
+        public bool ViewCountIncrement(int newsArticleId)
+        {
+            var newsArticle = this.data.NewsArticles.Find(newsArticleId);
+
+            if (newsArticle == null)
+            {
+                return false;
+            }
+
+            newsArticle.ViewCount += 1;
+
+            this.data.SaveChanges();
+
+            return true;
+        }
 
         public IEnumerable<CategoryServiceModel> Categories()
             => this.data
@@ -173,6 +193,7 @@
                     Id = c.Id,
                     Name = c.Name
                 })
+                .OrderBy(c => c.Name)
                 .ToList();
 
         public IEnumerable<string> CategoryNames()
@@ -195,6 +216,7 @@
                     Id = t.Id,
                     Name = t.Name
                 })
+                .OrderBy(t => t.Name)
                 .ToList();
 
         public IEnumerable<string> TagNames()
@@ -220,7 +242,7 @@
                     Title = na.Title,
                     Content = na.Content.Substring(0, 200) + "...",
                     ImageUrl = na.ImageUrl,
-                    CreatedOn = na.CreatedOn.ToString("dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture),
+                    CreatedOn = na.CreatedOn.ToString(dateFormat, CultureInfo.InvariantCulture),
                     CategoryName = na.NewsCategory.Name,
                     AuthorName = na.Author.Name
                 })

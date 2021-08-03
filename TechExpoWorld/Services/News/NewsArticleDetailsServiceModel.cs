@@ -4,6 +4,10 @@
 
     public class NewsArticleDetailsServiceModel : NewsArticleServiceModel
     {
+        public string LastModifiedOn { get; init; }
+
+        public int ViewCount { get; init; }
+
         public int CategoryId { get; init; }
 
         public int AuthorId { get; init; }
