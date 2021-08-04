@@ -1,7 +1,5 @@
 ﻿namespace TechExpoWorld.Services.Comments
 {
-    using System.Collections.Generic;
-
     public class CommentServiceModel
     {
         public string Content { get; init; }

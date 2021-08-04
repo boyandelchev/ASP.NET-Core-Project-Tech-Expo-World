@@ -10,8 +10,8 @@ using TechExpoWorld.Data;
 namespace TechExpoWorld.Data.Migrations
 {
     [DbContext(typeof(TechExpoDbContext))]
-    [Migration("20210803071823_NewsArticleCategoryTagAuthorCommentUserTables")]
-    partial class NewsArticleCategoryTagAuthorCommentUserTables
+    [Migration("20210804194434_NewsEventsTables")]
+    partial class NewsEventsTables
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -156,6 +156,75 @@ namespace TechExpoWorld.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("TechExpoWorld.Data.Models.Attendee", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CompanyName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("CompanySectorId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CompanySizeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CompanyTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Country")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("JobTitle")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("JobTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(60)
+                        .HasColumnType("nvarchar(60)");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("WorkEmail")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanySectorId");
+
+                    b.HasIndex("CompanySizeId");
+
+                    b.HasIndex("CompanyTypeId");
+
+                    b.HasIndex("JobTypeId");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("Attendees");
+                });
+
             modelBuilder.Entity("TechExpoWorld.Data.Models.Author", b =>
                 {
                     b.Property<int>("Id")
@@ -231,6 +300,128 @@ namespace TechExpoWorld.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Comments");
+                });
+
+            modelBuilder.Entity("TechExpoWorld.Data.Models.CompanySector", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .HasColumnType("nvarchar(80)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CompanySectors");
+                });
+
+            modelBuilder.Entity("TechExpoWorld.Data.Models.CompanySize", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CompanySizes");
+                });
+
+            modelBuilder.Entity("TechExpoWorld.Data.Models.CompanyType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CompanyTypes");
+                });
+
+            modelBuilder.Entity("TechExpoWorld.Data.Models.Event", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasMaxLength(50000)
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Events");
+                });
+
+            modelBuilder.Entity("TechExpoWorld.Data.Models.EventAttendee", b =>
+                {
+                    b.Property<int>("EventId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AttendeeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("EventId", "AttendeeId");
+
+                    b.HasIndex("AttendeeId");
+
+                    b.ToTable("EventAttendees");
+                });
+
+            modelBuilder.Entity("TechExpoWorld.Data.Models.JobType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("JobTypes");
                 });
 
             modelBuilder.Entity("TechExpoWorld.Data.Models.NewsArticle", b =>
@@ -325,6 +516,54 @@ namespace TechExpoWorld.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Tags");
+                });
+
+            modelBuilder.Entity("TechExpoWorld.Data.Models.Ticket", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("AttendeeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EventId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Price")
+                        .HasPrecision(8, 2)
+                        .HasColumnType("decimal(8,2)");
+
+                    b.Property<int>("TicketTypeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AttendeeId");
+
+                    b.HasIndex("EventId");
+
+                    b.HasIndex("TicketTypeId");
+
+                    b.ToTable("Tickets");
+                });
+
+            modelBuilder.Entity("TechExpoWorld.Data.Models.TicketType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TicketTypes");
                 });
 
             modelBuilder.Entity("TechExpoWorld.Data.Models.User", b =>
@@ -443,6 +682,47 @@ namespace TechExpoWorld.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("TechExpoWorld.Data.Models.Attendee", b =>
+                {
+                    b.HasOne("TechExpoWorld.Data.Models.CompanySector", "CompanySector")
+                        .WithMany("Attendees")
+                        .HasForeignKey("CompanySectorId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("TechExpoWorld.Data.Models.CompanySize", "CompanySize")
+                        .WithMany("Attendees")
+                        .HasForeignKey("CompanySizeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("TechExpoWorld.Data.Models.CompanyType", "CompanyType")
+                        .WithMany("Attendees")
+                        .HasForeignKey("CompanyTypeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("TechExpoWorld.Data.Models.JobType", "JobType")
+                        .WithMany("Attendees")
+                        .HasForeignKey("JobTypeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("TechExpoWorld.Data.Models.User", null)
+                        .WithOne()
+                        .HasForeignKey("TechExpoWorld.Data.Models.Attendee", "UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("CompanySector");
+
+                    b.Navigation("CompanySize");
+
+                    b.Navigation("CompanyType");
+
+                    b.Navigation("JobType");
+                });
+
             modelBuilder.Entity("TechExpoWorld.Data.Models.Author", b =>
                 {
                     b.HasOne("TechExpoWorld.Data.Models.User", null)
@@ -475,6 +755,36 @@ namespace TechExpoWorld.Data.Migrations
                     b.Navigation("ParentComment");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("TechExpoWorld.Data.Models.Event", b =>
+                {
+                    b.HasOne("TechExpoWorld.Data.Models.User", "User")
+                        .WithMany("Events")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("TechExpoWorld.Data.Models.EventAttendee", b =>
+                {
+                    b.HasOne("TechExpoWorld.Data.Models.Attendee", "Attendee")
+                        .WithMany("EventAttendees")
+                        .HasForeignKey("AttendeeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("TechExpoWorld.Data.Models.Event", "Event")
+                        .WithMany("EventAttendees")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Attendee");
+
+                    b.Navigation("Event");
                 });
 
             modelBuilder.Entity("TechExpoWorld.Data.Models.NewsArticle", b =>
@@ -515,6 +825,38 @@ namespace TechExpoWorld.Data.Migrations
                     b.Navigation("Tag");
                 });
 
+            modelBuilder.Entity("TechExpoWorld.Data.Models.Ticket", b =>
+                {
+                    b.HasOne("TechExpoWorld.Data.Models.Attendee", "Attendee")
+                        .WithMany("Tickets")
+                        .HasForeignKey("AttendeeId");
+
+                    b.HasOne("TechExpoWorld.Data.Models.Event", "Event")
+                        .WithMany("Tickets")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("TechExpoWorld.Data.Models.TicketType", "TicketType")
+                        .WithMany("Tickets")
+                        .HasForeignKey("TicketTypeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Attendee");
+
+                    b.Navigation("Event");
+
+                    b.Navigation("TicketType");
+                });
+
+            modelBuilder.Entity("TechExpoWorld.Data.Models.Attendee", b =>
+                {
+                    b.Navigation("EventAttendees");
+
+                    b.Navigation("Tickets");
+                });
+
             modelBuilder.Entity("TechExpoWorld.Data.Models.Author", b =>
                 {
                     b.Navigation("NewsArticles");
@@ -523,6 +865,33 @@ namespace TechExpoWorld.Data.Migrations
             modelBuilder.Entity("TechExpoWorld.Data.Models.Comment", b =>
                 {
                     b.Navigation("ChildrenComments");
+                });
+
+            modelBuilder.Entity("TechExpoWorld.Data.Models.CompanySector", b =>
+                {
+                    b.Navigation("Attendees");
+                });
+
+            modelBuilder.Entity("TechExpoWorld.Data.Models.CompanySize", b =>
+                {
+                    b.Navigation("Attendees");
+                });
+
+            modelBuilder.Entity("TechExpoWorld.Data.Models.CompanyType", b =>
+                {
+                    b.Navigation("Attendees");
+                });
+
+            modelBuilder.Entity("TechExpoWorld.Data.Models.Event", b =>
+                {
+                    b.Navigation("EventAttendees");
+
+                    b.Navigation("Tickets");
+                });
+
+            modelBuilder.Entity("TechExpoWorld.Data.Models.JobType", b =>
+                {
+                    b.Navigation("Attendees");
                 });
 
             modelBuilder.Entity("TechExpoWorld.Data.Models.NewsArticle", b =>
@@ -542,9 +911,16 @@ namespace TechExpoWorld.Data.Migrations
                     b.Navigation("NewsArticleTags");
                 });
 
+            modelBuilder.Entity("TechExpoWorld.Data.Models.TicketType", b =>
+                {
+                    b.Navigation("Tickets");
+                });
+
             modelBuilder.Entity("TechExpoWorld.Data.Models.User", b =>
                 {
                     b.Navigation("Comments");
+
+                    b.Navigation("Events");
                 });
 #pragma warning restore 612, 618
         }

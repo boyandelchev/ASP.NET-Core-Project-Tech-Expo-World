@@ -25,6 +25,11 @@
             SeedAdministrator(serviceProvider);
             SeedNewsCategories(serviceProvider);
             SeedTags(serviceProvider);
+            SeedTicketTypes(serviceProvider);
+            SeedJobTypes(serviceProvider);
+            SeedCompanyTypes(serviceProvider);
+            SeedCompanySectors(serviceProvider);
+            SeedCompanySizes(serviceProvider);
 
             return app;
         }
@@ -163,6 +168,124 @@
                 new Tag { Name = "Utilities" },
                 new Tag { Name = "Wearables" },
                 new Tag { Name = "Workshop" },
+            });
+
+            data.SaveChanges();
+        }
+
+        private static void SeedTicketTypes(IServiceProvider serviceProvider)
+        {
+            var data = serviceProvider.GetRequiredService<TechExpoDbContext>();
+
+            if (data.TicketTypes.Any())
+            {
+                return;
+            }
+
+            data.TicketTypes.AddRange(new[]
+            {
+                new TicketType { Name = "Day One" },
+                new TicketType { Name = "Virtual" },
+            });
+
+            data.SaveChanges();
+        }
+
+        private static void SeedJobTypes(IServiceProvider serviceProvider)
+        {
+            var data = serviceProvider.GetRequiredService<TechExpoDbContext>();
+
+            if (data.JobTypes.Any())
+            {
+                return;
+            }
+
+            data.JobTypes.AddRange(new[]
+            {
+                new JobType { Name = "Founder/Partner" },
+                new JobType { Name = "CxO" },
+                new JobType { Name = "Director" },
+                new JobType { Name = "VP" },
+                new JobType { Name = "Senior Manager" },
+                new JobType { Name = "Other" },
+            });
+
+            data.SaveChanges();
+        }
+
+        private static void SeedCompanyTypes(IServiceProvider serviceProvider)
+        {
+            var data = serviceProvider.GetRequiredService<TechExpoDbContext>();
+
+            if (data.CompanyTypes.Any())
+            {
+                return;
+            }
+
+            data.CompanyTypes.AddRange(new[]
+            {
+                new CompanyType { Name = "Enterprise/SME" },
+                new CompanyType { Name = "Start-up" },
+                new CompanyType { Name = "Investor / VC" },
+                new CompanyType { Name = "Public Sector" },
+                new CompanyType { Name = "Consultancy / Advisor / Research" },
+                new CompanyType { Name = "Press / Media" },
+                new CompanyType { Name = "System Integrator" },
+                new CompanyType { Name = "Technology Solution Provider" },
+                new CompanyType { Name = "Service Provider" },
+            });
+
+            data.SaveChanges();
+        }
+
+        private static void SeedCompanySectors(IServiceProvider serviceProvider)
+        {
+            var data = serviceProvider.GetRequiredService<TechExpoDbContext>();
+
+            if (data.CompanySectors.Any())
+            {
+                return;
+            }
+
+            data.CompanySectors.AddRange(new[]
+            {
+                new CompanySector { Name = "Automotive/Transport/Logistics" },
+                new CompanySector { Name = "Built Environment (Inc Real Estate, Construction, Facilities, and Cities)" },
+                new CompanySector { Name = "Business Functions (Inc Marketing, HR)" },
+                new CompanySector { Name = "Communications (Inc Telcos, 5G)" },
+                new CompanySector { Name = "Consultancy/Advisor/Research" },
+                new CompanySector { Name = "Consumer Goods/Retail" },
+                new CompanySector { Name = "Financial Services (Inc Banking, Insurance)" },
+                new CompanySector { Name = "Healthcare (Inc Pharma)" },
+                new CompanySector { Name = "Investment (Inc VC/Crypto Asset/STOs/ICOs)" },
+                new CompanySector { Name = "IT Services" },
+                new CompanySector { Name = "Manufacturing/Supply Chain" },
+                new CompanySector { Name = "Media/PR (Inc Entertainment, Tourism, Events)" },
+                new CompanySector { Name = "Platforms (Inc Software, Hardware, Web, Cloud)" },
+                new CompanySector { Name = "Public Sector (Inc Government, NfP, Education, Defense)" },
+                new CompanySector { Name = "Regulations/Compliance/Law" },
+                new CompanySector { Name = "Utilities/Energy" },
+            });
+
+            data.SaveChanges();
+        }
+
+        private static void SeedCompanySizes(IServiceProvider serviceProvider)
+        {
+            var data = serviceProvider.GetRequiredService<TechExpoDbContext>();
+
+            if (data.CompanySizes.Any())
+            {
+                return;
+            }
+
+            data.CompanySizes.AddRange(new[]
+            {
+                new CompanySize { Name = "1-10" },
+                new CompanySize { Name = "11-200" },
+                new CompanySize { Name = "201-1000" },
+                new CompanySize { Name = "1001-5000" },
+                new CompanySize { Name = "5000+" },
             });
 
             data.SaveChanges();

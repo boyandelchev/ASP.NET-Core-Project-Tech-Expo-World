@@ -41,5 +41,56 @@
             public const int ContentMinLength = 2;
             public const int ContentMaxLength = 500;
         }
+
+        public class Event
+        {
+            public const int TitleMinLength = 2;
+            public const int TitleMaxLength = 100;
+            public const int ContentMinLength = 10;
+            public const int ContentMaxLength = 50000;
+            public const int LocationMinLength = 2;
+            public const int LocationMaxLength = 100;
+        }
+
+        public class Attendee
+        {
+            public const int NameMinLength = 2;
+            public const int NameMaxLength = 60;
+            public const int PhoneNumberMinLength = 6;
+            public const int PhoneNumberMaxLength = 30;
+            public const int WorkEmailMinLength = 6;
+            public const int WorkEmailMaxLength = 40;
+            public const int JobTitleMinLength = 2;
+            public const int JobTitleMaxLength = 50;
+            public const int CompanyNameMinLength = 2;
+            public const int CompanyNameMaxLength = 50;
+            public const int CountryMinLength = 2;
+            public const int CountryMaxLength = 50;
+        }
+
+        public class TicketType
+        {
+            public const int NameMaxLength = 20;
+        }
+
+        public class JobType
+        {
+            public const int NameMaxLength = 50;
+        }
+
+        public class CompanyType
+        {
+            public const int NameMaxLength = 50;
+        }
+
+        public class CompanySector
+        {
+            public const int NameMaxLength = 80;
+        }
+
+        public class CompanySize
+        {
+            public const int NameMaxLength = 50;
+        }
     }
 }

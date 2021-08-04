@@ -10,7 +10,7 @@
         <div>
             <span class="text-info">@Model.NewsArticle.AuthorName - </span>
             <span class="text-dark">@Model.NewsArticle.CreatedOn</span>
-            <span class="float-right">Views: @Model.NewsArticle.ViewCount Comments: @Model.TotalComments</span>
+            <span class="float-right">Views: @Model.NewsArticle.ViewCount <a href="#comments">Comments: @Model.TotalComments</a></span>
         </div>
         @if (Model.NewsArticle.LastModifiedOn != null)
         {
@@ -30,6 +30,7 @@
     </article>
 </section>
 
+<div id="comments"></div>
 <div class="text-center" id="add-comment-button">
     <button class="btn btn-primary">Add Comment</button>
 </div>
