@@ -31,8 +31,6 @@
 
         public DbSet<Ticket> Tickets { get; init; }
 
-        public DbSet<TicketType> TicketTypes { get; init; }
-
         public DbSet<JobType> JobTypes { get; init; }
 
         public DbSet<CompanyType> CompanyTypes { get; init; }
@@ -166,13 +164,6 @@
                 .HasOne(t => t.Event)
                 .WithMany(e => e.Tickets)
                 .HasForeignKey(t => t.EventId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            builder
-                .Entity<Ticket>()
-                .HasOne(t => t.TicketType)
-                .WithMany(tt => tt.Tickets)
-                .HasForeignKey(t => t.TicketTypeId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             base.OnModelCreating(builder);

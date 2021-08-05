@@ -379,6 +379,12 @@ namespace TechExpoWorld.Data.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<int>("TotalPhysicalTickets")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalVirtualTickets")
+                        .HasColumnType("int");
+
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -529,12 +535,17 @@ namespace TechExpoWorld.Data.Migrations
                     b.Property<int>("EventId")
                         .HasColumnType("int");
 
+                    b.Property<bool>("IsSold")
+                        .HasColumnType("bit");
+
                     b.Property<decimal>("Price")
                         .HasPrecision(8, 2)
                         .HasColumnType("decimal(8,2)");
 
-                    b.Property<int>("TicketTypeId")
-                        .HasColumnType("int");
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.HasKey("Id");
 
@@ -542,26 +553,7 @@ namespace TechExpoWorld.Data.Migrations
 
                     b.HasIndex("EventId");
 
-                    b.HasIndex("TicketTypeId");
-
                     b.ToTable("Tickets");
-                });
-
-            modelBuilder.Entity("TechExpoWorld.Data.Models.TicketType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("TicketTypes");
                 });
 
             modelBuilder.Entity("TechExpoWorld.Data.Models.User", b =>
@@ -835,17 +827,9 @@ namespace TechExpoWorld.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("TechExpoWorld.Data.Models.TicketType", "TicketType")
-                        .WithMany("Tickets")
-                        .HasForeignKey("TicketTypeId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.Navigation("Attendee");
 
                     b.Navigation("Event");
-
-                    b.Navigation("TicketType");
                 });
 
             modelBuilder.Entity("TechExpoWorld.Data.Models.Attendee", b =>
@@ -907,11 +891,6 @@ namespace TechExpoWorld.Data.Migrations
             modelBuilder.Entity("TechExpoWorld.Data.Models.Tag", b =>
                 {
                     b.Navigation("NewsArticleTags");
-                });
-
-            modelBuilder.Entity("TechExpoWorld.Data.Models.TicketType", b =>
-                {
-                    b.Navigation("Tickets");
                 });
 
             modelBuilder.Entity("TechExpoWorld.Data.Models.User", b =>

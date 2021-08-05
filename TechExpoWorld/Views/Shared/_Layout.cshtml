@@ -22,10 +22,19 @@
                         <li class="nav-item">
                             <a class="nav-link text-light" asp-area="" asp-controller="News" asp-action="All">News</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" asp-area="" asp-controller="Events" asp-action="All">Events</a>
+                        </li>
                         @if (User.Identity.IsAuthenticated && !User.IsAdmin())
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-light" asp-area="" asp-controller="News" asp-action="Add">Add a News Article</a>
+                            </li>
+                        }
+                        @if (User.IsAdmin())
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-area="" asp-controller="Events" asp-action="Add">Add an Event</a>
                             </li>
                         }
                     </ul>

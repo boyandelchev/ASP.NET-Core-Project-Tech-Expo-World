@@ -27,6 +27,8 @@
                 TotalNewsArticles = totalStatistics.TotalNewsArticles,
                 TotalUsers = totalStatistics.TotalUsers,
                 TotalAuthors = totalStatistics.TotalAuthors,
+                TotalEvents = totalStatistics.TotalEvents,
+                TotalLocations = totalStatistics.TotalLocations,
                 News = newsArticles
             });
         }

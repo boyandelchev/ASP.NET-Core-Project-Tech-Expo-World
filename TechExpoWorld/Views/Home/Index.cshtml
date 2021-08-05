@@ -11,7 +11,10 @@
         <p class="lead">You can register as an author and write a news article.</p>
         <hr class="my-4">
         <p class="lead">
-            <a asp-controller="News" asp-action="Add" class="btn btn-primary btn-lg" role="button">Add a News Article</a>
+            @if (User.Identity.IsAuthenticated && !User.IsAdmin())
+            {
+                <a asp-controller="News" asp-action="Add" class="btn btn-primary btn-lg" role="button">Add a News Article</a>
+            }
         </p>
     </div>
 }

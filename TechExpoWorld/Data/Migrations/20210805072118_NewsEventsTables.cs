@@ -80,6 +80,8 @@ namespace TechExpoWorld.Data.Migrations
                     Location = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    TotalPhysicalTickets = table.Column<int>(type: "int", nullable: false),
+                    TotalVirtualTickets = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
@@ -130,19 +132,6 @@ namespace TechExpoWorld.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Tags", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "TicketTypes",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TicketTypes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -260,10 +249,11 @@ namespace TechExpoWorld.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Type = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     Price = table.Column<decimal>(type: "decimal(8,2)", precision: 8, scale: 2, nullable: false),
+                    IsSold = table.Column<bool>(type: "bit", nullable: false),
                     EventId = table.Column<int>(type: "int", nullable: false),
-                    AttendeeId = table.Column<int>(type: "int", nullable: true),
-                    TicketTypeId = table.Column<int>(type: "int", nullable: false)
+                    AttendeeId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -278,12 +268,6 @@ namespace TechExpoWorld.Data.Migrations
                         name: "FK_Tickets_Events_EventId",
                         column: x => x.EventId,
                         principalTable: "Events",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Tickets_TicketTypes_TicketTypeId",
-                        column: x => x.TicketTypeId,
-                        principalTable: "TicketTypes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -429,11 +413,6 @@ namespace TechExpoWorld.Data.Migrations
                 name: "IX_Tickets_EventId",
                 table: "Tickets",
                 column: "EventId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Tickets_TicketTypeId",
-                table: "Tickets",
-                column: "TicketTypeId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -461,9 +440,6 @@ namespace TechExpoWorld.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Events");
-
-            migrationBuilder.DropTable(
-                name: "TicketTypes");
 
             migrationBuilder.DropTable(
                 name: "Authors");

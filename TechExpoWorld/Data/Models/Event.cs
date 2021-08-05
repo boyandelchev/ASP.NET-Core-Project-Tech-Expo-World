@@ -26,6 +26,10 @@
 
         public DateTime EndDate { get; set; }
 
+        public int TotalPhysicalTickets { get; set; }
+
+        public int TotalVirtualTickets { get; set; }
+
         [Required]
         public string UserId { get; set; }
 

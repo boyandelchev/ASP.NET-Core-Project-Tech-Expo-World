@@ -25,7 +25,6 @@
             SeedAdministrator(serviceProvider);
             SeedNewsCategories(serviceProvider);
             SeedTags(serviceProvider);
-            SeedTicketTypes(serviceProvider);
             SeedJobTypes(serviceProvider);
             SeedCompanyTypes(serviceProvider);
             SeedCompanySectors(serviceProvider);
@@ -168,24 +167,6 @@
                 new Tag { Name = "Utilities" },
                 new Tag { Name = "Wearables" },
                 new Tag { Name = "Workshop" },
-            });
-
-            data.SaveChanges();
-        }
-
-        private static void SeedTicketTypes(IServiceProvider serviceProvider)
-        {
-            var data = serviceProvider.GetRequiredService<TechExpoDbContext>();
-
-            if (data.TicketTypes.Any())
-            {
-                return;
-            }
-
-            data.TicketTypes.AddRange(new[]
-            {
-                new TicketType { Name = "Day One" },
-                new TicketType { Name = "Virtual" },
             });
 
             data.SaveChanges();

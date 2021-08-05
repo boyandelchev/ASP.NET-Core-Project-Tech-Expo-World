@@ -1,0 +1,31 @@
+﻿@model IEnumerable<EventServiceModel>
+
+@{
+    ViewBag.Title = "All Events";
+}
+
+@if (!Model.Any())
+{
+    <h2 class="text-center">No events announcements!</h2>
+}
+
+<div class="row text-center">
+    @foreach (var eventData in Model)
+    {
+        <div class="col-md-3 mt-3">
+            <div class="card">
+                <img class="card-img-top" src="/event-image.jpg" alt="image">
+                <div class="card-body">
+                    <h5 class="card-title">@eventData.Title</h5>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">@eventData.Location</li>
+                    <li class="list-group-item">@eventData.StartDate - @eventData.EndDate</li>
+                </ul>
+                <div class="card-body">
+                    <a asp-controller="Events" asp-action="Details" asp-route-id="@eventData.Id" class="card-link">See available tickets and information about the event</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
