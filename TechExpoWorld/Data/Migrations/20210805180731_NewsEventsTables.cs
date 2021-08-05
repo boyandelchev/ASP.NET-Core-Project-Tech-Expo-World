@@ -269,7 +269,7 @@ namespace TechExpoWorld.Data.Migrations
                         column: x => x.EventId,
                         principalTable: "Events",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -305,7 +305,7 @@ namespace TechExpoWorld.Data.Migrations
                         column: x => x.NewsArticleId,
                         principalTable: "NewsArticles",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(

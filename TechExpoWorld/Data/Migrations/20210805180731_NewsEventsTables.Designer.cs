@@ -10,7 +10,7 @@ using TechExpoWorld.Data;
 namespace TechExpoWorld.Data.Migrations
 {
     [DbContext(typeof(TechExpoDbContext))]
-    [Migration("20210805072118_NewsEventsTables")]
+    [Migration("20210805180731_NewsEventsTables")]
     partial class NewsEventsTables
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -729,7 +729,7 @@ namespace TechExpoWorld.Data.Migrations
                     b.HasOne("TechExpoWorld.Data.Models.NewsArticle", "NewsArticle")
                         .WithMany("Comments")
                         .HasForeignKey("NewsArticleId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("TechExpoWorld.Data.Models.Comment", "ParentComment")
@@ -826,7 +826,7 @@ namespace TechExpoWorld.Data.Migrations
                     b.HasOne("TechExpoWorld.Data.Models.Event", "Event")
                         .WithMany("Tickets")
                         .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Attendee");

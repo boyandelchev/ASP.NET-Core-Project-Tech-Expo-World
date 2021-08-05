@@ -82,13 +82,6 @@
 
             builder
                 .Entity<Comment>()
-                .HasOne(c => c.NewsArticle)
-                .WithMany(na => na.Comments)
-                .HasForeignKey(c => c.NewsArticleId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            builder
-                .Entity<Comment>()
                 .HasOne(c => c.User)
                 .WithMany(u => u.Comments)
                 .HasForeignKey(c => c.UserId)
@@ -158,13 +151,6 @@
                 .Entity<Ticket>()
                 .Property(t => t.Price)
                 .HasPrecision(8, 2);
-
-            builder
-                .Entity<Ticket>()
-                .HasOne(t => t.Event)
-                .WithMany(e => e.Tickets)
-                .HasForeignKey(t => t.EventId)
-                .OnDelete(DeleteBehavior.Restrict);
 
             base.OnModelCreating(builder);
         }

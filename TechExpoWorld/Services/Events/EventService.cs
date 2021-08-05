@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
+    using Microsoft.EntityFrameworkCore;
     using TechExpoWorld.Data;
     using TechExpoWorld.Data.Models;
 
@@ -31,6 +32,24 @@
                 .OrderByDescending(e => e.Id)
                 .ToList();
 
+        public EventDetailsServiceModel Details(int eventId)
+            => this.data
+                .Events
+                .Where(e => e.Id == eventId)
+                .Select(e => new EventDetailsServiceModel
+                {
+                    Id = e.Id,
+                    Title = e.Title,
+                    Content = e.Content,
+                    Location = e.Location,
+                    StartDate = e.StartDate.ToString(dateFormat, CultureInfo.InvariantCulture),
+                    EndDate = e.EndDate.ToString(dateFormat, CultureInfo.InvariantCulture),
+                    TotalPhysicalTickets = e.TotalPhysicalTickets,
+                    TotalVirtualTickets = e.TotalVirtualTickets,
+                    PhysicalTicketPrice = TicketPrice(eventId, physicalTicketType),
+                    VirtualTicketPrice = TicketPrice(eventId, virtualTicketType)
+                })
+                .FirstOrDefault();
 
         public int CreateEventWithTickets(
             string title,
@@ -44,8 +63,8 @@
             decimal virtualTicketPrice,
             string userId)
         {
-            var dateStart = ValidDate(startDate);
-            var dateEnd = ValidDate(endDate);
+            var (isStartDate, dateStart) = ValidDate(startDate);
+            var (isEndDate, dateEnd) = ValidDate(endDate);
 
             var eventData = new Event
             {
@@ -73,6 +92,72 @@
             return eventData.Id;
         }
 
+        public bool Edit(
+            int eventId,
+            string title,
+            string content,
+            string location,
+            string startDate,
+            string endDate,
+            int totalPhysicalTickets,
+            decimal physicalTicketPrice,
+            int totalVirtualTickets,
+            decimal virtualTicketPrice)
+        {
+            var eventData = this.data
+                .Events
+                .Include(e => e.Tickets)
+                .FirstOrDefault(e => e.Id == eventId);
+
+            if (eventData == null)
+            {
+                return false;
+            }
+
+            eventData.Title = title;
+            eventData.Content = content;
+            eventData.Location = location;
+
+            var (isStartDate, dateStart) = ValidDate(startDate);
+            var (isEndDate, dateEnd) = ValidDate(endDate);
+
+            if (!isStartDate || !isEndDate)
+            {
+                return false;
+            }
+
+            eventData.StartDate = dateStart;
+            eventData.EndDate = dateEnd;
+
+            eventData.TotalPhysicalTickets = totalPhysicalTickets;
+            eventData.TotalVirtualTickets = totalVirtualTickets;
+
+            eventData.Tickets = CreateTickets(
+                totalPhysicalTickets,
+                physicalTicketPrice,
+                totalVirtualTickets,
+                virtualTicketPrice);
+
+            this.data.SaveChanges();
+
+            return true;
+        }
+
+        public bool Delete(int eventId)
+        {
+            var eventData = this.data.Events.Find(eventId);
+
+            if (eventData == null)
+            {
+                return false;
+            }
+
+            this.data.Events.Remove(eventData);
+            this.data.SaveChanges();
+
+            return true;
+        }
+
         public bool IsValidDate(string date)
         {
             var isDate = DateTime.TryParseExact(
@@ -85,7 +170,17 @@
             return isDate;
         }
 
-        private static DateTime ValidDate(string date)
+        public bool EventExists(int eventId)
+            => this.data.Events.Any(e => e.Id == eventId);
+
+        private decimal TicketPrice(int eventId, string ticketType)
+            => this.data
+                .Tickets
+                .Where(t => t.EventId == eventId && t.Type == ticketType)
+                .Select(t => t.Price)
+                .FirstOrDefault();
+
+        private static (bool, DateTime) ValidDate(string date)
         {
             var isDate = DateTime.TryParseExact(
                 date,
@@ -94,7 +189,7 @@
                 DateTimeStyles.None,
                 out var dateTime);
 
-            return dateTime;
+            return (isDate, dateTime);
         }
 
         private static IEnumerable<Ticket> CreateTickets(

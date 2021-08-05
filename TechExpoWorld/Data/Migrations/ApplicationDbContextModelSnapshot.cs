@@ -727,7 +727,7 @@ namespace TechExpoWorld.Data.Migrations
                     b.HasOne("TechExpoWorld.Data.Models.NewsArticle", "NewsArticle")
                         .WithMany("Comments")
                         .HasForeignKey("NewsArticleId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("TechExpoWorld.Data.Models.Comment", "ParentComment")
@@ -824,7 +824,7 @@ namespace TechExpoWorld.Data.Migrations
                     b.HasOne("TechExpoWorld.Data.Models.Event", "Event")
                         .WithMany("Tickets")
                         .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Attendee");

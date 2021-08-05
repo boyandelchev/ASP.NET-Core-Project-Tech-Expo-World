@@ -63,5 +63,89 @@
 
             return RedirectToAction(nameof(All));
         }
+
+        [Authorize(Roles = AdministratorRoleName)]
+        public IActionResult Edit(int id)
+        {
+            var eventData = this.events.Details(id);
+
+            if (eventData == null)
+            {
+                return NotFound();
+            }
+
+            return View(new EventFormModel
+            {
+                Title = eventData.Title,
+                Content = eventData.Content,
+                Location = eventData.Location,
+                StartDate = eventData.StartDate,
+                EndDate = eventData.EndDate,
+                TotalPhysicalTickets = eventData.TotalPhysicalTickets,
+                TotalVirtualTickets = eventData.TotalVirtualTickets,
+                PhysicalTicketPrice = eventData.PhysicalTicketPrice,
+                VirtualTicketPrice = eventData.VirtualTicketPrice
+            });
+        }
+
+        [HttpPost]
+        [Authorize(Roles = AdministratorRoleName)]
+        public IActionResult Edit(int id, EventFormModel eventData)
+        {
+            var eventExists = this.events.EventExists(id);
+
+            if (!eventExists)
+            {
+                return NotFound();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(eventData);
+            }
+
+            this.events.Edit(
+                id,
+                eventData.Title,
+                eventData.Content,
+                eventData.Location,
+                eventData.StartDate,
+                eventData.EndDate,
+                eventData.TotalPhysicalTickets,
+                eventData.PhysicalTicketPrice,
+                eventData.TotalVirtualTickets,
+                eventData.VirtualTicketPrice);
+
+            return RedirectToAction(nameof(All));
+        }
+
+        [Authorize(Roles = AdministratorRoleName)]
+        public IActionResult DeleteDetails(int id)
+        {
+            var eventData = this.events.Details(id);
+
+            if (eventData == null)
+            {
+                return NotFound();
+            }
+
+            return View(eventData);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = AdministratorRoleName)]
+        public IActionResult Delete(int id)
+        {
+            var eventExists = this.events.EventExists(id);
+
+            if (!eventExists)
+            {
+                return NotFound();
+            }
+
+            this.events.Delete(id);
+
+            return RedirectToAction(nameof(All));
+        }
     }
 }

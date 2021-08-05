@@ -6,7 +6,7 @@
 
 @if (!Model.Any())
 {
-    <h2 class="text-center">No events announcements!</h2>
+    <h2 class="text-center">No event announcements!</h2>
 }
 
 <div class="row text-center">
@@ -24,6 +24,11 @@
                 </ul>
                 <div class="card-body">
                     <a asp-controller="Events" asp-action="Details" asp-route-id="@eventData.Id" class="card-link">See available tickets and information about the event</a>
+                    @if (User.IsAdmin())
+                    {
+                        <a asp-controller="Events" asp-action="Edit" asp-route-id="@eventData.Id" class="btn btn-info btn-outline-warning">Edit</a>
+                        <a asp-controller="Events" asp-action="DeleteDetails" asp-route-id="@eventData.Id" class="btn btn-danger btn-outline-dark">Delete</a>
+                    }
                 </div>
             </div>
         </div>
