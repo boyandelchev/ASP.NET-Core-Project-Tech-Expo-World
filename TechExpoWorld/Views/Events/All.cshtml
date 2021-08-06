@@ -14,22 +14,26 @@
     {
         <div class="col-md-3 mt-3">
             <div class="card">
-                <img class="card-img-top" src="/event-image.jpg" alt="image">
+                <a asp-controller="Events" asp-action="Details" asp-route-id="@eventData.Id">
+                    <img class="card-img-top" src="/event-image.jpg" alt="image">
+                </a>
                 <div class="card-body">
                     <h5 class="card-title">@eventData.Title</h5>
                 </div>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">@eventData.Location</li>
                     <li class="list-group-item">@eventData.StartDate - @eventData.EndDate</li>
-                </ul>
-                <div class="card-body">
-                    <a asp-controller="Events" asp-action="Details" asp-route-id="@eventData.Id" class="card-link">See available tickets and information about the event</a>
+                    <li class="list-group-item">
+                        <a asp-controller="Events" asp-action="Details" asp-route-id="@eventData.Id" class="card-link">See available tickets and information about the event</a>
+                    </li>
                     @if (User.IsAdmin())
                     {
-                        <a asp-controller="Events" asp-action="Edit" asp-route-id="@eventData.Id" class="btn btn-info btn-outline-warning">Edit</a>
-                        <a asp-controller="Events" asp-action="DeleteDetails" asp-route-id="@eventData.Id" class="btn btn-danger btn-outline-dark">Delete</a>
+                        <li class="list-group-item">
+                            <a asp-controller="Events" asp-action="Edit" asp-route-id="@eventData.Id" class="btn btn-info btn-outline-warning">Edit</a>
+                            <a asp-controller="Events" asp-action="DeleteDetails" asp-route-id="@eventData.Id" class="btn btn-danger btn-outline-dark">Delete</a>
+                        </li>
                     }
-                </div>
+                </ul>
             </div>
         </div>
     }

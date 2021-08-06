@@ -5,7 +5,9 @@
     {
         <div class="col-md-4">
             <div class="card mb-3">
-                <img class="card-img-top" src="@news.ImageUrl" alt="@news.Title (@news.CategoryName)">
+                <a asp-controller="News" asp-action="Details" asp-route-id="@news.Id">
+                    <img class="card-img-top" src="@news.ImageUrl" alt="@news.Title (@news.CategoryName)">
+                </a>
                 <div class="card-body text-center">
                     <h5 class="card-title">@news.Title</h5>
                     <div>

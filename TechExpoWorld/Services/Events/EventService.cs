@@ -158,6 +158,12 @@
             return true;
         }
 
+        public bool BuyPhysicalTicket(int eventId, int attendeeId)
+            => BuyTicket(eventId, attendeeId, physicalTicketType);
+
+        public bool BuyVirtualTicket(int eventId, int attendeeId)
+            => BuyTicket(eventId, attendeeId, virtualTicketType);
+
         public bool IsValidDate(string date)
         {
             var isDate = DateTime.TryParseExact(
@@ -173,12 +179,11 @@
         public bool EventExists(int eventId)
             => this.data.Events.Any(e => e.Id == eventId);
 
-        private decimal TicketPrice(int eventId, string ticketType)
-            => this.data
-                .Tickets
-                .Where(t => t.EventId == eventId && t.Type == ticketType)
-                .Select(t => t.Price)
-                .FirstOrDefault();
+        public int TotalAvailablePhysicalTicketsForEvent(int eventId)
+            => TotalAvailableOfTypeTicketsForEvent(eventId, physicalTicketType);
+
+        public int TotalAvailableVirtualTicketsForEvent(int eventId)
+            => TotalAvailableOfTypeTicketsForEvent(eventId, virtualTicketType);
 
         private static (bool, DateTime) ValidDate(string date)
         {
@@ -219,6 +224,58 @@
             }
 
             return tickets;
+        }
+
+        private decimal TicketPrice(int eventId, string ticketType)
+            => this.data
+                .Tickets
+                .Where(t => t.EventId == eventId && t.Type == ticketType)
+                .Select(t => t.Price)
+                .FirstOrDefault();
+
+        private int TotalAvailableOfTypeTicketsForEvent(int eventId, string ticketType)
+            => this.data
+                .Tickets
+                .Where(t => t.EventId == eventId &&
+                            t.IsSold == false &&
+                            t.Type == ticketType)
+                .Count();
+
+        private bool BuyTicket(int eventId, int attendeeId, string ticketType)
+        {
+            var ticket = this.data
+                .Tickets
+                .Where(t => t.EventId == eventId &&
+                            t.IsSold == false &&
+                            t.Type == ticketType)
+                .FirstOrDefault();
+
+            if (ticket == null)
+            {
+                return false;
+            }
+
+            ticket.IsSold = true;
+            ticket.AttendeeId = attendeeId;
+
+            var eventAttendeeExists = this.data
+                .EventAttendees
+                .Any(ea => ea.EventId == eventId && ea.AttendeeId == attendeeId);
+
+            if (!eventAttendeeExists)
+            {
+                var eventAttendee = new EventAttendee
+                {
+                    EventId = eventId,
+                    AttendeeId = attendeeId
+                };
+
+                this.data.EventAttendees.Add(eventAttendee);
+            }
+
+            this.data.SaveChanges();
+
+            return true;
         }
     }
 }

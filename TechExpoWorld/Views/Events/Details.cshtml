@@ -1,0 +1,51 @@
+﻿@model EventDetailsViewModel
+
+@{
+    ViewBag.Title = Model.EventDetails.Title;
+}
+
+<div class="row">
+    <div class="card bg-dark text-white">
+        <img class="card-img" src="/event-image-details.jpg" alt="image">
+        <div class="card-img">
+            <h5 class="card-title">@Model.EventDetails.Title</h5>
+            <p class="card-text">@Model.EventDetails.Location</p>
+            <p class="card-text">@Model.EventDetails.StartDate - @Model.EventDetails.EndDate</p>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card text-white bg-primary mb-3 text-center">
+                        <div class="card-header text-uppercase">Physical Tickets - @Model.TotalAvailablePhysicalTicketsForEvent/@Model.EventDetails.TotalPhysicalTickets available</div>
+                        @if (Model.TotalAvailablePhysicalTicketsForEvent > 0)
+                        {
+                            <div class="card-body btn-outline-dark">
+                                <a asp-controller="Events" asp-action="BuyPhysicalTicket" asp-route-id="@Model.EventDetails.Id" class="text-white">
+                                    <h5 class="card-title">Buy a Ticket</h5>
+                                    <p class="card-text">£@Model.EventDetails.PhysicalTicketPrice</p>
+                                    <p class="card-text">Click here to buy 1 physical ticket</p>
+                                </a>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card text-white bg-secondary mb-3 text-center">
+                        <div class="card-header text-uppercase">Virtual Tickets - @Model.TotalAvailableVirtualTicketsForEvent/@Model.EventDetails.TotalVirtualTickets available</div>
+                        @if (Model.TotalAvailableVirtualTicketsForEvent > 0)
+                        {
+                            <div class="card-body btn-outline-dark">
+                                <a asp-controller="Events" asp-action="BuyVirtualTicket" asp-route-id="@Model.EventDetails.Id" class="text-white">
+                                    <h5 class="card-title">Buy a Ticket</h5>
+                                    <p class="card-text">£@Model.EventDetails.VirtualTicketPrice</p>
+                                    <p class="card-text">Click here to buy 1 virtual ticket</p>
+                                </a>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <p class="card-text">@Model.EventDetails.Content</p>
+</div>

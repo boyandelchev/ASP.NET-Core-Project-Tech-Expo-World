@@ -17,6 +17,13 @@
                 .Attendees
                 .Any(a => a.UserId == userId);
 
+        public int AttendeeId(string userId)
+            => this.data
+                .Attendees
+                .Where(a => a.UserId == userId)
+                .Select(a => a.Id)
+                .FirstOrDefault();
+
         public int Create(
             string name,
             string phoneNumber,

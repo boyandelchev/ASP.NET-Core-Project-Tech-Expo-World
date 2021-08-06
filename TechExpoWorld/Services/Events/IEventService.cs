@@ -34,8 +34,16 @@
 
         bool Delete(int eventId);
 
+        bool BuyPhysicalTicket(int eventId, int attendeeId);
+
+        bool BuyVirtualTicket(int eventId, int attendeeId);
+
         bool IsValidDate(string date);
 
         bool EventExists(int eventId);
+
+        int TotalAvailablePhysicalTicketsForEvent(int eventId);
+
+        int TotalAvailableVirtualTicketsForEvent(int eventId);
     }
 }

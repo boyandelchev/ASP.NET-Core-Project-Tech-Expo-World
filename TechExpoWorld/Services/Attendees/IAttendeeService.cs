@@ -6,6 +6,8 @@
     {
         bool IsAttendee(string userId);
 
+        int AttendeeId(string userId);
+
         int Create(
             string name,
             string phoneNumber,
