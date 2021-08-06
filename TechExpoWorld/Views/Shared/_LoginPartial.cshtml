@@ -1,15 +1,24 @@
 ﻿@using Microsoft.AspNetCore.Identity
-@using TechExpoWorld.Data.Models 
+@using TechExpoWorld.Data.Models
 @inject SignInManager<User> SignInManager
 @inject UserManager<User> UserManager
+@inject IAttendeeService Attendee
 @inject IAuthorService Authors
 
 <ul class="navbar-nav">
     @if (SignInManager.IsSignedIn(User))
     {
         var userId = User.Id();
-        var isAuthor = Authors.IsAuthor(userId);
         var isAdmin = User.IsAdmin();
+        var isAttendee = Attendee.IsAttendee(userId);
+        var isAuthor = Authors.IsAuthor(userId);
+
+        if (!isAttendee && !isAdmin)
+        {
+            <li class="nav-item">
+                <a class="nav-link text-light" asp-area="" asp-controller="Attendees" asp-action="BecomeAttendee">Become Attendee</a>
+            </li>
+        }
 
         if (isAuthor && !isAdmin)
         {

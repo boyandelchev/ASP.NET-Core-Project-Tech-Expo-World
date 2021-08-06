@@ -71,7 +71,6 @@
 
         public class Ticket
         {
-            public const int TypeMinLength = 1;
             public const int TypeMaxLength = 20;
         }
 

@@ -15,6 +15,7 @@
             var totalNewsArticles = this.data.NewsArticles.Count();
             var totalUsers = this.data.Users.Count();
             var totalAuthors = this.data.Authors.Count();
+            var totalAttendees = this.data.Attendees.Count();
             var totalEvents = this.data.Events.Count();
             var totalLocations = this.data.Events.Select(e => e.Location).Distinct().Count();
 
@@ -23,6 +24,7 @@
                 TotalNewsArticles = totalNewsArticles,
                 TotalUsers = totalUsers,
                 TotalAuthors = totalAuthors,
+                TotalAttendees = totalAttendees,
                 TotalEvents = totalEvents,
                 TotalLocations = totalLocations
             };

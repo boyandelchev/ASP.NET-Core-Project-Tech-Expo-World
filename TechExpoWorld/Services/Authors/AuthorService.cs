@@ -30,7 +30,7 @@
             string photoUrl,
             string userId)
         {
-            var authorData = new Author
+            var author = new Author
             {
                 Name = name,
                 PhoneNumber = phoneNumber,
@@ -39,10 +39,10 @@
                 UserId = userId
             };
 
-            this.data.Authors.Add(authorData);
+            this.data.Authors.Add(author);
             this.data.SaveChanges();
 
-            return authorData.Id;
+            return author.Id;
         }
     }
 }

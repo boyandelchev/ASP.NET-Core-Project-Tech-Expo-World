@@ -1,0 +1,90 @@
+﻿@model BecomeAttendeeFormModel
+
+@{ 
+    ViewBag.Title = "Become Attendee"; 
+}
+
+<div class="row">
+    <div class="col-sm-12 offset-md-1 col-md-10 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
+        <h2 class="heading-margin text-center">@ViewBag.Title</h2>
+
+        <form method="post">
+            <div class="form-group">
+                <label asp-for="Name"></label>
+                <input asp-for="Name" class="form-control" placeholder="James Bentley...">
+                <span asp-validation-for="Name" class="small text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PhoneNumber"></label>
+                <input asp-for="PhoneNumber" class="form-control" placeholder="+44-7911-123456...">
+                <span asp-validation-for="PhoneNumber" class="small text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="WorkEmail"></label>
+                <input asp-for="WorkEmail" class="form-control" placeholder="james.bentley@itech.com...">
+                <span asp-validation-for="WorkEmail" class="small text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="JobTitle"></label>
+                <input asp-for="JobTitle" class="form-control" placeholder="Senior Accounts Manager...">
+                <span asp-validation-for="JobTitle" class="small text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CompanyName"></label>
+                <input asp-for="CompanyName" class="form-control" placeholder="ITech...">
+                <span asp-validation-for="CompanyName" class="small text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Country"></label>
+                <input asp-for="Country" class="form-control" placeholder="12 Oxford St London UK...">
+                <span asp-validation-for="Country" class="small text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="JobTypeId"></label>
+                <select asp-for="JobTypeId" class="form-control">
+                    @foreach (var jobType in Model.JobTypes)
+                    {
+                        <option value="@jobType.Id">@jobType.Name</option>
+                    }
+                </select>
+                <span asp-validation-for="JobTypeId" class="small text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CompanyTypeId"></label>
+                <select asp-for="CompanyTypeId" class="form-control">
+                    @foreach (var companyType in Model.CompanyTypes)
+                    {
+                        <option value="@companyType.Id">@companyType.Name</option>
+                    }
+                </select>
+                <span asp-validation-for="CompanyTypeId" class="small text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CompanySectorId"></label>
+                <select asp-for="CompanySectorId" class="form-control">
+                    @foreach (var companySector in Model.CompanySectors)
+                    {
+                        <option value="@companySector.Id">@companySector.Name</option>
+                    }
+                </select>
+                <span asp-validation-for="CompanySectorId" class="small text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CompanySizeId"></label>
+                <select asp-for="CompanySizeId" class="form-control">
+                    @foreach (var companySize in Model.CompanySizes)
+                    {
+                        <option value="@companySize.Id">@companySize.Name</option>
+                    }
+                </select>
+                <span asp-validation-for="CompanySizeId" class="small text-danger"></span>
+            </div>
+
+            <input class="btn btn-primary mt-3" type="submit" value="Save" />
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

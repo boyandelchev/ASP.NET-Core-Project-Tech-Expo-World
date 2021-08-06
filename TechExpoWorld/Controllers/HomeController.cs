@@ -27,6 +27,7 @@
                 TotalNewsArticles = totalStatistics.TotalNewsArticles,
                 TotalUsers = totalStatistics.TotalUsers,
                 TotalAuthors = totalStatistics.TotalAuthors,
+                TotalAttendees = totalStatistics.TotalAttendees,
                 TotalEvents = totalStatistics.TotalEvents,
                 TotalLocations = totalStatistics.TotalLocations,
                 News = newsArticles

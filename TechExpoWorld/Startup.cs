@@ -11,6 +11,7 @@ namespace TechExpoWorld
     using TechExpoWorld.Data;
     using TechExpoWorld.Data.Models;
     using TechExpoWorld.Infrastructure;
+    using TechExpoWorld.Services.Attendees;
     using TechExpoWorld.Services.Authors;
     using TechExpoWorld.Services.Comments;
     using TechExpoWorld.Services.Events;
@@ -48,6 +49,7 @@ namespace TechExpoWorld
                 options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
             });
 
+            services.AddTransient<IAttendeeService, AttendeeService>();
             services.AddTransient<IAuthorService, AuthorService>();
             services.AddTransient<ICommentService, CommentService>();
             services.AddTransient<IEventService, EventService>();
