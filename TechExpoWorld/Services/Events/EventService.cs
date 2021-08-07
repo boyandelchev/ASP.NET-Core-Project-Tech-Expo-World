@@ -51,6 +51,12 @@
                 })
                 .FirstOrDefault();
 
+        public IEnumerable<MyTicketServiceModel> MyPhysicalTickets(int attendeeId)
+            => MyTickets(attendeeId, physicalTicketType);
+
+        public IEnumerable<MyTicketServiceModel> MyVirtualTickets(int attendeeId)
+            => MyTickets(attendeeId, virtualTicketType);
+
         public int CreateEventWithTickets(
             string title,
             string content,
@@ -107,6 +113,7 @@
             var eventData = this.data
                 .Events
                 .Include(e => e.Tickets)
+                .Include(e => e.EventAttendees)
                 .FirstOrDefault(e => e.Id == eventId);
 
             if (eventData == null)
@@ -129,6 +136,20 @@
             eventData.StartDate = dateStart;
             eventData.EndDate = dateEnd;
 
+            if (eventData.TotalPhysicalTickets == totalPhysicalTickets &&
+                eventData.TotalVirtualTickets == totalVirtualTickets &&
+                eventData.Tickets.Any(t => t.Type == physicalTicketType && t.Price == physicalTicketPrice) &&
+                eventData.Tickets.Any(t => t.Type == virtualTicketType && t.Price == virtualTicketPrice))
+            {
+                this.data.SaveChanges();
+
+                return true;
+            }
+            else
+            {
+                eventData.EventAttendees = null;
+            }
+
             eventData.TotalPhysicalTickets = totalPhysicalTickets;
             eventData.TotalVirtualTickets = totalVirtualTickets;
 
@@ -145,12 +166,17 @@
 
         public bool Delete(int eventId)
         {
-            var eventData = this.data.Events.Find(eventId);
+            var eventData = this.data
+                .Events
+                .Include(e => e.EventAttendees)
+                .FirstOrDefault(e => e.Id == eventId);
 
             if (eventData == null)
             {
                 return false;
             }
+
+            eventData.EventAttendees = null;
 
             this.data.Events.Remove(eventData);
             this.data.SaveChanges();
@@ -163,6 +189,44 @@
 
         public bool BuyVirtualTicket(int eventId, int attendeeId)
             => BuyTicket(eventId, attendeeId, virtualTicketType);
+
+        public bool RevokeTicket(int eventId, int ticketId, int attendeeId)
+        {
+            var ticket = this.data
+                .Tickets
+                .Where(t => t.EventId == eventId &&
+                            t.Id == ticketId &&
+                            t.AttendeeId == attendeeId)
+                .FirstOrDefault();
+
+            if (ticket == null)
+            {
+                return false;
+            }
+
+            ticket.IsSold = false;
+            ticket.AttendeeId = null;
+
+            this.data.SaveChanges();
+
+            bool ticketExists = TicketExists(eventId, attendeeId);
+
+            if (!ticketExists)
+            {
+                var eventAttendee = this.data
+                    .EventAttendees
+                    .Where(ea => ea.EventId == eventId && ea.AttendeeId == attendeeId)
+                    .FirstOrDefault();
+
+                if (eventAttendee != null)
+                {
+                    this.data.EventAttendees.Remove(eventAttendee);
+                    this.data.SaveChanges();
+                }
+            }
+
+            return true;
+        }
 
         public bool IsValidDate(string date)
         {
@@ -258,9 +322,7 @@
             ticket.IsSold = true;
             ticket.AttendeeId = attendeeId;
 
-            var eventAttendeeExists = this.data
-                .EventAttendees
-                .Any(ea => ea.EventId == eventId && ea.AttendeeId == attendeeId);
+            bool eventAttendeeExists = EventAttendeeExists(eventId, attendeeId);
 
             if (!eventAttendeeExists)
             {
@@ -277,5 +339,29 @@
 
             return true;
         }
+
+        private bool EventAttendeeExists(int eventId, int attendeeId)
+            => this.data
+                .EventAttendees
+                .Any(ea => ea.EventId == eventId && ea.AttendeeId == attendeeId);
+
+        private bool TicketExists(int eventId, int attendeeId)
+            => this.data
+                .Tickets
+                .Any(t => t.EventId == eventId && t.AttendeeId == attendeeId);
+
+        private IEnumerable<MyTicketServiceModel> MyTickets(int attendeeId, string ticketType)
+            => this.data
+                .Attendees
+                .Where(a => a.Id == attendeeId)
+                .SelectMany(a => a.Tickets
+                    .Where(t => t.Type == ticketType)
+                    .Select(t => new MyTicketServiceModel
+                    {
+                        EventId = t.EventId,
+                        EventTitle = t.Event.Title,
+                        TicketId = t.Id
+                    }))
+                    .ToList();
     }
 }

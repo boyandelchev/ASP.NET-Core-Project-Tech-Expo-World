@@ -8,6 +8,10 @@
 
         EventDetailsServiceModel Details(int eventId);
 
+        IEnumerable<MyTicketServiceModel> MyPhysicalTickets(int attendeeId);
+
+        IEnumerable<MyTicketServiceModel> MyVirtualTickets(int attendeeId);
+
         int CreateEventWithTickets(
             string title,
             string content,
@@ -37,6 +41,8 @@
         bool BuyPhysicalTicket(int eventId, int attendeeId);
 
         bool BuyVirtualTicket(int eventId, int attendeeId);
+
+        bool RevokeTicket(int eventId, int ticketId, int attendeeId);
 
         bool IsValidDate(string date);
 

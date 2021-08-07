@@ -23,10 +23,18 @@
 
         IEnumerable<JobTypeServiceModel> JobTypes();
 
+        bool JobTypeExists(int jobTypeId);
+
         IEnumerable<CompanyTypeServiceModel> CompanyTypes();
+
+        bool CompanyTypeExists(int companyTypeId);
 
         IEnumerable<CompanySectorServiceModel> CompanySectors();
 
+        bool CompanySectorExists(int companySectorId);
+
         IEnumerable<CompanySizeServiceModel> CompanySizes();
+
+        bool CompanySizeExists(int companySizeId);
     }
 }

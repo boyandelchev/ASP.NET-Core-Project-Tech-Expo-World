@@ -53,7 +53,19 @@
 
             return View(new NewsArticleWithCommentsViewModel
             {
-                NewsArticle = newsArticle,
+                NewsArticleId = id,
+                NewsArticle = new NewsArticleDetailsServiceModel
+                {
+                    Title = newsArticle.Title,
+                    Content = newsArticle.Content,
+                    ImageUrl = newsArticle.ImageUrl,
+                    CreatedOn = newsArticle.CreatedOn,
+                    LastModifiedOn = newsArticle.LastModifiedOn,
+                    ViewCount = newsArticle.ViewCount,
+                    CategoryName = newsArticle.CategoryName,
+                    AuthorName = newsArticle.AuthorName,
+                    TagNames = newsArticle.TagNames
+                },
                 Comment = new CommentFormModel(),
                 Comments = comments,
                 TotalComments = totalComments

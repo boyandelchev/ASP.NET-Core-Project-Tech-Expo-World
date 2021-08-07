@@ -48,6 +48,24 @@
         }
 
         [Authorize]
+        public IActionResult MyTickets()
+        {
+            var userId = this.User.Id();
+            var attendeeId = this.attendees.AttendeeId(userId);
+
+            if (attendeeId == 0 && !this.User.IsAdmin())
+            {
+                return RedirectToAction(nameof(AttendeesController.BecomeAttendee), "Attendees");
+            }
+
+            return View(new MyTicketsViewModel
+            {
+                MyPhysicalTickets = this.events.MyPhysicalTickets(attendeeId),
+                MyVirtualTickets = this.events.MyVirtualTickets(attendeeId)
+            });
+        }
+
+        [Authorize]
         public IActionResult BuyPhysicalTicket(int id)
         {
             if (!this.events.EventExists(id))
@@ -97,6 +115,27 @@
             this.events.BuyVirtualTicket(id, attendeeId);
 
             return RedirectToAction(nameof(All));
+        }
+
+        [Authorize]
+        public IActionResult RevokeTicket(int id, int ticketId)
+        {
+            var userId = this.User.Id();
+            var attendeeId = this.attendees.AttendeeId(userId);
+
+            if (attendeeId == 0 && !this.User.IsAdmin())
+            {
+                return RedirectToAction(nameof(AttendeesController.BecomeAttendee), "Attendees");
+            }
+
+            var isRevoked = this.events.RevokeTicket(id, ticketId, attendeeId);
+
+            if (!isRevoked)
+            {
+                return BadRequest();
+            }
+
+            return RedirectToAction(nameof(MyTickets));
         }
 
         [Authorize(Roles = AdministratorRoleName)]

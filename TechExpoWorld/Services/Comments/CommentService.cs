@@ -44,20 +44,9 @@
         }
 
         public int TotalCommentsOnNewsArticle(int newsArticleId)
-        {
-            var newsArticle = this.data
-                .NewsArticles
-                .Include(na => na.Comments)
-                .FirstOrDefault(na => na.Id == newsArticleId);
-
-            if (newsArticle == null)
-            {
-                return 0;
-            }
-
-            var totalComments = newsArticle.Comments.Count();
-
-            return totalComments;
-        }
+            => this.data
+                .Comments
+                .Where(c => c.NewsArticleId == newsArticleId)
+                .Count();
     }
 }

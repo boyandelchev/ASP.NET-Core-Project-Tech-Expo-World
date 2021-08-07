@@ -12,9 +12,9 @@
 
         public int AuthorId { get; init; }
 
-        public IEnumerable<string> TagNames { get; init; }
-
         public IEnumerable<int> TagIds { get; init; }
+
+        public IEnumerable<string> TagNames { get; init; }
 
         public string UserId { get; init; }
     }

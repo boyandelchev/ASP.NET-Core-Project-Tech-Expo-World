@@ -1,0 +1,25 @@
+﻿@model MyTicketsViewModel
+
+<table class="table table-hover">
+    <thead class="bg-info text-white">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Event</th>
+            <th scope="col" class="text-right">Physical Tickets</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var myPhysicalTicket in Model.MyPhysicalTickets)
+        {
+            <tr>
+                <th scope="row">@(ViewBag.CountPhysicalTickets++)</th>
+                <td>@myPhysicalTicket.EventTitle</td>
+                <td>
+                    <a asp-controller="Events" asp-action="RevokeTicket" asp-route-id="@myPhysicalTicket.EventId" asp-route-ticketId="@myPhysicalTicket.TicketId">
+                        <span class="btn btn-primary btn-outline-dark float-right">Revoke this Ticket</span>
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

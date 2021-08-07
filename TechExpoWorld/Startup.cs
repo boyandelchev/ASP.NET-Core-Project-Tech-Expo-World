@@ -80,6 +80,9 @@ namespace TechExpoWorld
                 .UseAuthorization()
                 .UseEndpoints(endpoints =>
                 {
+                    endpoints.MapControllerRoute(
+                        name: "",
+                        pattern: "{controller=Home}/{action=Index}/{id?}/{ticketId?}");
                     endpoints.MapDefaultControllerRoute();
                     endpoints.MapRazorPages();
                 });

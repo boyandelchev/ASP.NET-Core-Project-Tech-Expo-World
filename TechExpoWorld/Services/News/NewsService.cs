@@ -104,8 +104,8 @@
                     CategoryName = na.NewsCategory.Name,
                     AuthorId = na.AuthorId,
                     AuthorName = na.Author.Name,
-                    TagNames = na.NewsArticleTags.Select(nat => nat.Tag.Name),
                     TagIds = na.NewsArticleTags.Select(nat => nat.TagId),
+                    TagNames = na.NewsArticleTags.Select(nat => nat.Tag.Name),
                     UserId = na.Author.UserId
                 })
                 .FirstOrDefault();

@@ -69,6 +69,11 @@
                 .OrderBy(jt => jt.Name)
                 .ToList();
 
+        public bool JobTypeExists(int jobTypeId)
+            => this.data
+                .JobTypes
+                .Any(jt => jt.Id == jobTypeId);
+
         public IEnumerable<CompanyTypeServiceModel> CompanyTypes()
             => this.data
                 .CompanyTypes
@@ -79,6 +84,11 @@
                 })
                 .OrderBy(ct => ct.Name)
                 .ToList();
+
+        public bool CompanyTypeExists(int companyTypeId)
+            => this.data
+                .CompanyTypes
+                .Any(ct => ct.Id == companyTypeId);
 
         public IEnumerable<CompanySectorServiceModel> CompanySectors()
             => this.data
@@ -91,6 +101,11 @@
                 .OrderBy(cs => cs.Name)
                 .ToList();
 
+        public bool CompanySectorExists(int companySectorId)
+            => this.data
+                .CompanySectors
+                .Any(cs => cs.Id == companySectorId);
+
         public IEnumerable<CompanySizeServiceModel> CompanySizes()
             => this.data
                 .CompanySizes
@@ -100,5 +115,10 @@
                     Name = cs.Name
                 })
                 .ToList();
+
+        public bool CompanySizeExists(int companySizeId)
+            => this.data
+                .CompanySizes
+                .Any(cs => cs.Id == companySizeId);
     }
 }

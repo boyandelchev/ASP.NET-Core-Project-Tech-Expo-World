@@ -7,9 +7,11 @@
 
     public class NewsArticleWithCommentsViewModel
     {
+        public int NewsArticleId { get; init; }
+
         public NewsArticleDetailsServiceModel NewsArticle { get; init; }
 
-        public CommentFormModel Comment{ get; init; }
+        public CommentFormModel Comment { get; init; }
 
         public IEnumerable<CommentServiceModel> Comments { get; init; }
 

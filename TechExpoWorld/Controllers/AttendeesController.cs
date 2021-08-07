@@ -43,6 +43,26 @@
                 return BadRequest();
             }
 
+            if (!this.attendees.JobTypeExists(attendee.JobTypeId))
+            {
+                this.ModelState.AddModelError(nameof(attendee.JobTypeId), "Job type does not exist.");
+            }
+
+            if (!this.attendees.CompanyTypeExists(attendee.CompanyTypeId))
+            {
+                this.ModelState.AddModelError(nameof(attendee.CompanyTypeId), "Company type does not exist.");
+            }
+
+            if (!this.attendees.CompanySectorExists(attendee.CompanySectorId))
+            {
+                this.ModelState.AddModelError(nameof(attendee.CompanySectorId), "Company sector does not exist.");
+            }
+
+            if (!this.attendees.CompanySizeExists(attendee.CompanySizeId))
+            {
+                this.ModelState.AddModelError(nameof(attendee.CompanySizeId), "Company size does not exist.");
+            }
+
             if (!ModelState.IsValid)
             {
                 return View(new BecomeAttendeeFormModel

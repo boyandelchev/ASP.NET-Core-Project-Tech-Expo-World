@@ -13,13 +13,6 @@
         var isAttendee = Attendee.IsAttendee(userId);
         var isAuthor = Authors.IsAuthor(userId);
 
-        if (!isAttendee && !isAdmin)
-        {
-            <li class="nav-item">
-                <a class="nav-link text-light" asp-area="" asp-controller="Attendees" asp-action="BecomeAttendee">Become Attendee</a>
-            </li>
-        }
-
         if (isAuthor && !isAdmin)
         {
             <li class="nav-item">
@@ -30,6 +23,18 @@
         {
             <li class="nav-item">
                 <a class="nav-link text-light" asp-area="" asp-controller="Authors" asp-action="BecomeAuthor">Become Author</a>
+            </li>
+        }
+        if (isAttendee && !isAdmin)
+        {
+            <li class="nav-item">
+                <a class="nav-link text-light" asp-area="" asp-controller="Events" asp-action="MyTickets">My Tickets</a>
+            </li>
+        }
+        else if (!isAdmin)
+        {
+            <li class="nav-item">
+                <a class="nav-link text-light" asp-area="" asp-controller="Attendees" asp-action="BecomeAttendee">Become Attendee</a>
             </li>
         }
         <li class="nav-item">
