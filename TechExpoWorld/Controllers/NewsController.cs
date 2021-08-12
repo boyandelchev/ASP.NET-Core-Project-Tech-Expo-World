@@ -1,5 +1,6 @@
 ﻿namespace TechExpoWorld.Controllers
 {
+    using AutoMapper;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using TechExpoWorld.Infrastructure;
@@ -14,12 +15,18 @@
         private readonly INewsService news;
         private readonly IAuthorService authors;
         private readonly ICommentService comments;
+        private readonly IMapper mapper;
 
-        public NewsController(INewsService news, IAuthorService authors, ICommentService comments)
+        public NewsController(
+            INewsService news,
+            IAuthorService authors,
+            ICommentService comments,
+            IMapper mapper)
         {
             this.news = news;
             this.authors = authors;
             this.comments = comments;
+            this.mapper = mapper;
         }
 
         public IActionResult All([FromQuery] AllNewsQueryModel query)
@@ -32,40 +39,32 @@
                 query.CurrentPage,
                 AllNewsQueryModel.NewsArticlesPerPage);
 
-            var newsArticlesCategories = this.news.CategoryNames();
-            var newsArticlesTags = this.news.TagNames();
+            var queryData = this.mapper.Map<AllNewsQueryModel>(newsQueryResult);
 
-            query.Categories = newsArticlesCategories;
-            query.Tags = newsArticlesTags;
-            query.TotalNewsArticles = newsQueryResult.TotalNewsArticles;
-            query.News = newsQueryResult.News;
+            queryData.Categories = this.news.CategoryNames();
+            queryData.Tags = this.news.TagNames();
 
-            return View(query);
+            return View(queryData);
         }
 
         public IActionResult Details(int id)
         {
-            this.news.ViewCountIncrement(id);
-
             var newsArticle = this.news.Details(id);
+
+            if (newsArticle == null)
+            {
+                return NotFound();
+            }
+
+            var newsArticleData = this.mapper.Map<NewsArticleDetailsViewModel>(newsArticle);
+
             var comments = this.comments.CommentsOnNewsArticle(id);
             var totalComments = this.comments.TotalCommentsOnNewsArticle(id);
 
             return View(new NewsArticleWithCommentsViewModel
             {
                 NewsArticleId = id,
-                NewsArticle = new NewsArticleDetailsServiceModel
-                {
-                    Title = newsArticle.Title,
-                    Content = newsArticle.Content,
-                    ImageUrl = newsArticle.ImageUrl,
-                    CreatedOn = newsArticle.CreatedOn,
-                    LastModifiedOn = newsArticle.LastModifiedOn,
-                    ViewCount = newsArticle.ViewCount,
-                    CategoryName = newsArticle.CategoryName,
-                    AuthorName = newsArticle.AuthorName,
-                    TagNames = newsArticle.TagNames
-                },
+                NewsArticle = newsArticleData,
                 Comment = new CommentFormModel(),
                 Comments = comments,
                 TotalComments = totalComments
@@ -172,16 +171,12 @@
                 return Unauthorized();
             }
 
-            return View(new NewsArticleFormModel
-            {
-                Title = newsArticle.Title,
-                Content = newsArticle.Content,
-                ImageUrl = newsArticle.ImageUrl,
-                CategoryId = newsArticle.CategoryId,
-                TagIds = newsArticle.TagIds,
-                Categories = this.news.Categories(),
-                Tags = this.news.Tags()
-            });
+            var newsArticleForm = this.mapper.Map<NewsArticleFormModel>(newsArticle);
+
+            newsArticleForm.Categories = this.news.Categories();
+            newsArticleForm.Tags = this.news.Tags();
+
+            return View(newsArticleForm);
         }
 
         [HttpPost]
@@ -251,17 +246,12 @@
                 return Unauthorized();
             }
 
-            return View(new NewsArticleDeleteDetailsViewModel
-            {
-                Id = newsArticle.Id,
-                Title = newsArticle.Title,
-                Content = newsArticle.Content,
-                ImageUrl = newsArticle.ImageUrl,
-                CategoryId = newsArticle.CategoryId,
-                TagIds = newsArticle.TagIds,
-                Categories = this.news.Categories(),
-                Tags = this.news.Tags()
-            });
+            var newsArticleData = this.mapper.Map<NewsArticleDeleteDetailsViewModel>(newsArticle);
+
+            newsArticleData.Categories = this.news.Categories();
+            newsArticleData.Tags = this.news.Tags();
+
+            return View(newsArticleData);
         }
 
         [HttpPost]

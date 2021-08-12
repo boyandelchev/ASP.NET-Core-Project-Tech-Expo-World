@@ -2,15 +2,22 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using AutoMapper;
+    using AutoMapper.QueryableExtensions;
     using TechExpoWorld.Data;
     using TechExpoWorld.Data.Models;
+    using TechExpoWorld.Services.Attendees.Models;
 
     public class AttendeeService : IAttendeeService
     {
         private readonly TechExpoDbContext data;
+        private readonly IMapper mapper;
 
-        public AttendeeService(TechExpoDbContext data)
-            => this.data = data;
+        public AttendeeService(TechExpoDbContext data, IMapper mapper)
+        {
+            this.data = data;
+            this.mapper = mapper;
+        }
 
         public bool IsAttendee(string userId)
             => this.data
@@ -61,11 +68,7 @@
         public IEnumerable<JobTypeServiceModel> JobTypes()
             => this.data
                 .JobTypes
-                .Select(jt => new JobTypeServiceModel
-                {
-                    Id = jt.Id,
-                    Name = jt.Name
-                })
+                .ProjectTo<JobTypeServiceModel>(this.mapper.ConfigurationProvider)
                 .OrderBy(jt => jt.Name)
                 .ToList();
 
@@ -77,11 +80,7 @@
         public IEnumerable<CompanyTypeServiceModel> CompanyTypes()
             => this.data
                 .CompanyTypes
-                .Select(ct => new CompanyTypeServiceModel
-                {
-                    Id = ct.Id,
-                    Name = ct.Name
-                })
+                .ProjectTo<CompanyTypeServiceModel>(this.mapper.ConfigurationProvider)
                 .OrderBy(ct => ct.Name)
                 .ToList();
 
@@ -93,11 +92,7 @@
         public IEnumerable<CompanySectorServiceModel> CompanySectors()
             => this.data
                 .CompanySectors
-                .Select(cs => new CompanySectorServiceModel
-                {
-                    Id = cs.Id,
-                    Name = cs.Name
-                })
+                .ProjectTo<CompanySectorServiceModel>(this.mapper.ConfigurationProvider)
                 .OrderBy(cs => cs.Name)
                 .ToList();
 
@@ -109,11 +104,7 @@
         public IEnumerable<CompanySizeServiceModel> CompanySizes()
             => this.data
                 .CompanySizes
-                .Select(cs => new CompanySizeServiceModel
-                {
-                    Id = cs.Id,
-                    Name = cs.Name
-                })
+                .ProjectTo<CompanySizeServiceModel>(this.mapper.ConfigurationProvider)
                 .ToList();
 
         public bool CompanySizeExists(int companySizeId)

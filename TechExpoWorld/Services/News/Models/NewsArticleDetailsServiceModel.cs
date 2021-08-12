@@ -1,4 +1,4 @@
-﻿namespace TechExpoWorld.Services.News
+﻿namespace TechExpoWorld.Services.News.Models
 {
     using System.Collections.Generic;
 

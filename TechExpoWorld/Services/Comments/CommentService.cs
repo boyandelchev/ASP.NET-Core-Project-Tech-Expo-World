@@ -1,31 +1,30 @@
 ﻿namespace TechExpoWorld.Services.Comments
 {
     using System.Collections.Generic;
-    using System.Globalization;
     using System.Linq;
-    using Microsoft.EntityFrameworkCore;
+    using AutoMapper;
+    using AutoMapper.QueryableExtensions;
     using TechExpoWorld.Data;
     using TechExpoWorld.Data.Models;
+    using TechExpoWorld.Services.Comments.Models;
 
     public class CommentService : ICommentService
     {
-        private const string dateFormat = "dd.MM.yyyy HH:mm";
         private readonly TechExpoDbContext data;
+        private readonly IMapper mapper;
 
-        public CommentService(TechExpoDbContext data)
-            => this.data = data;
+        public CommentService(TechExpoDbContext data, IMapper mapper)
+        {
+            this.data = data;
+            this.mapper = mapper;
+        }
 
         public IEnumerable<CommentServiceModel> CommentsOnNewsArticle(int newsArticleId)
             => this.data
                 .NewsArticles
                 .Where(na => na.Id == newsArticleId)
                 .SelectMany(na => na.Comments)
-                .Select(c => new CommentServiceModel
-                {
-                    Content = c.Content,
-                    CreatedOn = c.CreatedOn.ToString(dateFormat, CultureInfo.InvariantCulture),
-                    UserName = c.User.UserName
-                })
+                .ProjectTo<CommentServiceModel>(this.mapper.ConfigurationProvider)
                 .ToList();
 
         public int Create(int newsArticleId, string content, string userId)

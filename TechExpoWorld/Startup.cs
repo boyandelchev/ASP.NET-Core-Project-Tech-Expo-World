@@ -44,6 +44,8 @@ namespace TechExpoWorld
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<TechExpoDbContext>();
 
+            services.AddAutoMapper(typeof(Startup));
+
             services.AddControllersWithViews(options =>
             {
                 options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();

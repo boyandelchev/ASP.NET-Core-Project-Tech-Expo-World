@@ -2,20 +2,25 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
     using System.Linq;
+    using AutoMapper;
+    using AutoMapper.QueryableExtensions;
     using Microsoft.EntityFrameworkCore;
     using TechExpoWorld.Data;
     using TechExpoWorld.Data.Models;
     using TechExpoWorld.Models.News;
+    using TechExpoWorld.Services.News.Models;
 
     public class NewsService : INewsService
     {
-        private const string dateFormat = "dd.MM.yyyy HH:mm";
         private readonly TechExpoDbContext data;
+        private readonly IMapper mapper;
 
-        public NewsService(TechExpoDbContext data)
-            => this.data = data;
+        public NewsService(TechExpoDbContext data, IMapper mapper)
+        {
+            this.data = data;
+            this.mapper = mapper;
+        }
 
         public NewsArticlesQueryServiceModel All(
             string category,
@@ -78,37 +83,27 @@
             => this.data
                 .NewsArticles
                 .OrderByDescending(c => c.Id)
-                .Select(na => new NewsArticleIndexServiceModel
-                {
-                    Id = na.Id,
-                    Title = na.Title,
-                    ImageUrl = na.ImageUrl
-                })
+                .ProjectTo<NewsArticleIndexServiceModel>(this.mapper.ConfigurationProvider)
                 .Take(3)
                 .ToList();
 
         public NewsArticleDetailsServiceModel Details(int newsArticleId)
-            => this.data
+        {
+            var isIncremented = ViewCountIncrement(newsArticleId);
+
+            if (!isIncremented)
+            {
+                return null;
+            }
+
+            var newsArticle = this.data
                 .NewsArticles
                 .Where(na => na.Id == newsArticleId)
-                .Select(na => new NewsArticleDetailsServiceModel
-                {
-                    Id = na.Id,
-                    Title = na.Title,
-                    Content = na.Content,
-                    ImageUrl = na.ImageUrl,
-                    CreatedOn = na.CreatedOn.ToString(dateFormat, CultureInfo.InvariantCulture),
-                    LastModifiedOn = na.LastModifiedOn.Value.ToString(dateFormat, CultureInfo.InvariantCulture),
-                    ViewCount = na.ViewCount,
-                    CategoryId = na.NewsCategoryId,
-                    CategoryName = na.NewsCategory.Name,
-                    AuthorId = na.AuthorId,
-                    AuthorName = na.Author.Name,
-                    TagIds = na.NewsArticleTags.Select(nat => nat.TagId),
-                    TagNames = na.NewsArticleTags.Select(nat => nat.Tag.Name),
-                    UserId = na.Author.UserId
-                })
+                .ProjectTo<NewsArticleDetailsServiceModel>(this.mapper.ConfigurationProvider)
                 .FirstOrDefault();
+
+            return newsArticle;
+        }
 
         public int Create(
             string title,
@@ -190,30 +185,10 @@
                 .NewsArticles
                 .Any(na => na.Id == newsArticleId && na.AuthorId == authorId);
 
-        public bool ViewCountIncrement(int newsArticleId)
-        {
-            var newsArticle = this.data.NewsArticles.Find(newsArticleId);
-
-            if (newsArticle == null)
-            {
-                return false;
-            }
-
-            newsArticle.ViewCount += 1;
-
-            this.data.SaveChanges();
-
-            return true;
-        }
-
         public IEnumerable<CategoryServiceModel> Categories()
             => this.data
                 .NewsCategories
-                .Select(c => new CategoryServiceModel
-                {
-                    Id = c.Id,
-                    Name = c.Name
-                })
+                .ProjectTo<CategoryServiceModel>(this.mapper.ConfigurationProvider)
                 .OrderBy(c => c.Name)
                 .ToList();
 
@@ -232,11 +207,7 @@
         public IEnumerable<TagServiceModel> Tags()
             => this.data
                 .Tags
-                .Select(t => new TagServiceModel
-                {
-                    Id = t.Id,
-                    Name = t.Name
-                })
+                .ProjectTo<TagServiceModel>(this.mapper.ConfigurationProvider)
                 .OrderBy(t => t.Name)
                 .ToList();
 
@@ -249,25 +220,6 @@
 
         public bool TagsExist(IEnumerable<int> tagIds)
             => tagIds.All(tagId => TagExists(tagId));
-
-        private bool TagExists(int tagId)
-            => this.data
-                .Tags
-                .Any(t => t.Id == tagId);
-
-        private static IEnumerable<NewsArticleServiceModel> GetNewsArticles(IQueryable<NewsArticle> newsQuery)
-            => newsQuery
-                .Select(na => new NewsArticleServiceModel
-                {
-                    Id = na.Id,
-                    Title = na.Title,
-                    Content = na.Content.Substring(0, 200) + "...",
-                    ImageUrl = na.ImageUrl,
-                    CreatedOn = na.CreatedOn.ToString(dateFormat, CultureInfo.InvariantCulture),
-                    CategoryName = na.NewsCategory.Name,
-                    AuthorName = na.Author.Name
-                })
-                .ToList();
 
         private static IEnumerable<NewsArticleTag> CreateNewsArticleTags(IEnumerable<int> tagIds)
         {
@@ -282,6 +234,32 @@
             }
 
             return newsArticleTags;
+        }
+
+        private bool TagExists(int tagId)
+            => this.data
+                .Tags
+                .Any(t => t.Id == tagId);
+
+        private IEnumerable<NewsArticleServiceModel> GetNewsArticles(IQueryable<NewsArticle> newsQuery)
+            => newsQuery
+                .ProjectTo<NewsArticleServiceModel>(this.mapper.ConfigurationProvider)
+                .ToList();
+
+        private bool ViewCountIncrement(int newsArticleId)
+        {
+            var newsArticle = this.data.NewsArticles.Find(newsArticleId);
+
+            if (newsArticle == null)
+            {
+                return false;
+            }
+
+            newsArticle.ViewCount += 1;
+
+            this.data.SaveChanges();
+
+            return true;
         }
     }
 }

@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using TechExpoWorld.Models.News;
+    using TechExpoWorld.Services.News.Models;
 
     public interface INewsService
     {
@@ -38,8 +39,6 @@
         bool Delete(int newsArticleId);
 
         bool IsByAuthor(int newsArticleId, int authorId);
-
-        bool ViewCountIncrement(int newsArticleId);
 
         IEnumerable<CategoryServiceModel> Categories();
 

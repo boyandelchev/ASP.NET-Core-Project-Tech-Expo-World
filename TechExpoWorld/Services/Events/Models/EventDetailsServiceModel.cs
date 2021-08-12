@@ -1,4 +1,4 @@
-﻿namespace TechExpoWorld.Services.Events
+﻿namespace TechExpoWorld.Services.Events.Models
 {
     public class EventDetailsServiceModel : EventServiceModel
     {
@@ -8,8 +8,8 @@
 
         public int TotalVirtualTickets { get; init; }
 
-        public decimal PhysicalTicketPrice { get; init; }
+        public decimal PhysicalTicketPrice { get; set; }
 
-        public decimal VirtualTicketPrice { get; init; }
+        public decimal VirtualTicketPrice { get; set; }
     }
 }

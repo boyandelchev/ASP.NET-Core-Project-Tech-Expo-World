@@ -1,5 +1,6 @@
 ﻿namespace TechExpoWorld.Areas.Admin.Controllers
 {
+    using AutoMapper;
     using Microsoft.AspNetCore.Mvc;
     using TechExpoWorld.Areas.Admin.Models.Events;
     using TechExpoWorld.Infrastructure;
@@ -8,9 +9,13 @@
     public class EventsController : AdminController
     {
         private readonly IEventService events;
+        private readonly IMapper mapper;
 
-        public EventsController(IEventService events)
-            => this.events = events;
+        public EventsController(IEventService events, IMapper mapper)
+        {
+            this.events = events;
+            this.mapper = mapper;
+        }
 
         public IActionResult Add()
         {
@@ -20,16 +25,6 @@
         [HttpPost]
         public IActionResult Add(EventFormModel eventData)
         {
-            if (!this.events.IsValidDate(eventData.StartDate))
-            {
-                this.ModelState.AddModelError(nameof(eventData.StartDate), "The field Start Date must be in format '15.08.2021'!");
-            }
-
-            if (!this.events.IsValidDate(eventData.EndDate))
-            {
-                this.ModelState.AddModelError(nameof(eventData.EndDate), "The field End Date must be in format '15.08.2021'!");
-            }
-
             if (!ModelState.IsValid)
             {
                 return View(eventData);
@@ -61,18 +56,9 @@
                 return NotFound();
             }
 
-            return View(new EventFormModel
-            {
-                Title = eventData.Title,
-                Content = eventData.Content,
-                Location = eventData.Location,
-                StartDate = eventData.StartDate,
-                EndDate = eventData.EndDate,
-                TotalPhysicalTickets = eventData.TotalPhysicalTickets,
-                TotalVirtualTickets = eventData.TotalVirtualTickets,
-                PhysicalTicketPrice = eventData.PhysicalTicketPrice,
-                VirtualTicketPrice = eventData.VirtualTicketPrice
-            });
+            var eventForm = this.mapper.Map<EventFormModel>(eventData);
+
+            return View(eventForm);
         }
 
         [HttpPost]

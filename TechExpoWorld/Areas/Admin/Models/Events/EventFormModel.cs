@@ -19,12 +19,12 @@
         public string Location { get; init; }
 
         [Required]
-        [RegularExpression(DateRegularExpression, ErrorMessage = "The field Start Date must be in format '15.08.2021'!")]
+        [ValidDateTime]
         [Display(Name = "Start Date")]
         public string StartDate { get; init; }
 
         [Required]
-        [RegularExpression(DateRegularExpression, ErrorMessage = "The field End Date must be in format '15.08.2021'!")]
+        [ValidDateTime]
         [Display(Name = "End Date")]
         public string EndDate { get; init; }
 

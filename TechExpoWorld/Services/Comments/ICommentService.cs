@@ -1,6 +1,7 @@
 ﻿namespace TechExpoWorld.Services.Comments
 {
     using System.Collections.Generic;
+    using TechExpoWorld.Services.Comments.Models;
 
     public interface ICommentService
     {

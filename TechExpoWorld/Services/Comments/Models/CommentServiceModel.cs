@@ -1,4 +1,4 @@
-﻿namespace TechExpoWorld.Services.Comments
+﻿namespace TechExpoWorld.Services.Comments.Models
 {
     public class CommentServiceModel
     {

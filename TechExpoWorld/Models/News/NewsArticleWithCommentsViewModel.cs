@@ -2,14 +2,13 @@
 {
     using System.Collections.Generic;
     using TechExpoWorld.Models.Comments;
-    using TechExpoWorld.Services.Comments;
-    using TechExpoWorld.Services.News;
+    using TechExpoWorld.Services.Comments.Models;
 
     public class NewsArticleWithCommentsViewModel
     {
         public int NewsArticleId { get; init; }
 
-        public NewsArticleDetailsServiceModel NewsArticle { get; init; }
+        public NewsArticleDetailsViewModel NewsArticle { get; init; }
 
         public CommentFormModel Comment { get; init; }
 

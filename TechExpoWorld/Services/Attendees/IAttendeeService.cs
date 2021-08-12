@@ -1,6 +1,7 @@
 ﻿namespace TechExpoWorld.Services.Attendees
 {
     using System.Collections.Generic;
+    using TechExpoWorld.Services.Attendees.Models;
 
     public interface IAttendeeService
     {

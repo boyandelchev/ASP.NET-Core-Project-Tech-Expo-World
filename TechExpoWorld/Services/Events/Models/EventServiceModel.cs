@@ -1,4 +1,4 @@
-﻿namespace TechExpoWorld.Services.Events
+﻿namespace TechExpoWorld.Services.Events.Models
 {
     public class EventServiceModel
     {

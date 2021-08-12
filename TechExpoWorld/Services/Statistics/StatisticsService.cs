@@ -2,6 +2,7 @@
 {
     using System.Linq;
     using TechExpoWorld.Data;
+    using TechExpoWorld.Services.Statistics.Models;
 
     public class StatisticsService : IStatisticsService
     {

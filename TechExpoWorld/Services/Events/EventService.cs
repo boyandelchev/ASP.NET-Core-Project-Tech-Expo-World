@@ -4,58 +4,59 @@
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
+    using AutoMapper;
+    using AutoMapper.QueryableExtensions;
     using Microsoft.EntityFrameworkCore;
     using TechExpoWorld.Data;
     using TechExpoWorld.Data.Models;
+    using TechExpoWorld.Services.Events.Models;
+
+    using static Data.DataConstants.Event;
 
     public class EventService : IEventService
     {
-        private const string dateFormat = "dd.MM.yyyy";
-        private const string physicalTicketType = "Physical";
-        private const string virtualTicketType = "Virtual";
+        private const string PhysicalTicketType = "Physical";
+        private const string VirtualTicketType = "Virtual";
         private readonly TechExpoDbContext data;
+        private readonly IMapper mapper;
 
-        public EventService(TechExpoDbContext data)
-            => this.data = data;
+        public EventService(TechExpoDbContext data, IMapper mapper)
+        {
+            this.data = data;
+            this.mapper = mapper;
+        }
 
         public IEnumerable<EventServiceModel> All()
             => this.data
                 .Events
-                .Select(e => new EventServiceModel
-                {
-                    Id = e.Id,
-                    Title = e.Title,
-                    Location = e.Location,
-                    StartDate = e.StartDate.ToString(dateFormat, CultureInfo.InvariantCulture),
-                    EndDate = e.EndDate.ToString(dateFormat, CultureInfo.InvariantCulture)
-                })
+                .ProjectTo<EventServiceModel>(this.mapper.ConfigurationProvider)
                 .OrderByDescending(e => e.Id)
                 .ToList();
 
         public EventDetailsServiceModel Details(int eventId)
-            => this.data
+        {
+            var eventData = this.data
                 .Events
                 .Where(e => e.Id == eventId)
-                .Select(e => new EventDetailsServiceModel
-                {
-                    Id = e.Id,
-                    Title = e.Title,
-                    Content = e.Content,
-                    Location = e.Location,
-                    StartDate = e.StartDate.ToString(dateFormat, CultureInfo.InvariantCulture),
-                    EndDate = e.EndDate.ToString(dateFormat, CultureInfo.InvariantCulture),
-                    TotalPhysicalTickets = e.TotalPhysicalTickets,
-                    TotalVirtualTickets = e.TotalVirtualTickets,
-                    PhysicalTicketPrice = TicketPrice(eventId, physicalTicketType),
-                    VirtualTicketPrice = TicketPrice(eventId, virtualTicketType)
-                })
+                .ProjectTo<EventDetailsServiceModel>(this.mapper.ConfigurationProvider)
                 .FirstOrDefault();
 
+            if (eventData == null)
+            {
+                return null;
+            }
+
+            eventData.PhysicalTicketPrice = TicketPrice(eventId, PhysicalTicketType);
+            eventData.VirtualTicketPrice = TicketPrice(eventId, VirtualTicketType);
+
+            return eventData;
+        }
+
         public IEnumerable<MyTicketServiceModel> MyPhysicalTickets(int attendeeId)
-            => MyTickets(attendeeId, physicalTicketType);
+            => MyTickets(attendeeId, PhysicalTicketType);
 
         public IEnumerable<MyTicketServiceModel> MyVirtualTickets(int attendeeId)
-            => MyTickets(attendeeId, virtualTicketType);
+            => MyTickets(attendeeId, VirtualTicketType);
 
         public int CreateEventWithTickets(
             string title,
@@ -69,8 +70,8 @@
             decimal virtualTicketPrice,
             string userId)
         {
-            var (isStartDate, dateStart) = ValidDate(startDate);
-            var (isEndDate, dateEnd) = ValidDate(endDate);
+            var (isStartDate, dateStart) = ValidDate(startDate, DateFormatOne, DateFormatTwo, DateFormatThree);
+            var (isEndDate, dateEnd) = ValidDate(endDate, DateFormatOne, DateFormatTwo, DateFormatThree);
 
             var eventData = new Event
             {
@@ -125,21 +126,16 @@
             eventData.Content = content;
             eventData.Location = location;
 
-            var (isStartDate, dateStart) = ValidDate(startDate);
-            var (isEndDate, dateEnd) = ValidDate(endDate);
-
-            if (!isStartDate || !isEndDate)
-            {
-                return false;
-            }
+            var (isStartDate, dateStart) = ValidDate(startDate, DateFormatOne, DateFormatTwo, DateFormatThree);
+            var (isEndDate, dateEnd) = ValidDate(endDate, DateFormatOne, DateFormatTwo, DateFormatThree);
 
             eventData.StartDate = dateStart;
             eventData.EndDate = dateEnd;
 
             if (eventData.TotalPhysicalTickets == totalPhysicalTickets &&
                 eventData.TotalVirtualTickets == totalVirtualTickets &&
-                eventData.Tickets.Any(t => t.Type == physicalTicketType && t.Price == physicalTicketPrice) &&
-                eventData.Tickets.Any(t => t.Type == virtualTicketType && t.Price == virtualTicketPrice))
+                eventData.Tickets.Any(t => t.Type == PhysicalTicketType && t.Price == physicalTicketPrice) &&
+                eventData.Tickets.Any(t => t.Type == VirtualTicketType && t.Price == virtualTicketPrice))
             {
                 this.data.SaveChanges();
 
@@ -185,10 +181,10 @@
         }
 
         public bool BuyPhysicalTicket(int eventId, int attendeeId)
-            => BuyTicket(eventId, attendeeId, physicalTicketType);
+            => BuyTicket(eventId, attendeeId, PhysicalTicketType);
 
         public bool BuyVirtualTicket(int eventId, int attendeeId)
-            => BuyTicket(eventId, attendeeId, virtualTicketType);
+            => BuyTicket(eventId, attendeeId, VirtualTicketType);
 
         public bool RevokeTicket(int eventId, int ticketId, int attendeeId)
         {
@@ -228,37 +224,49 @@
             return true;
         }
 
-        public bool IsValidDate(string date)
-        {
-            var isDate = DateTime.TryParseExact(
-                date,
-                dateFormat,
-                CultureInfo.InvariantCulture,
-                DateTimeStyles.None,
-                out var dateTime);
-
-            return isDate;
-        }
-
         public bool EventExists(int eventId)
             => this.data.Events.Any(e => e.Id == eventId);
 
         public int TotalAvailablePhysicalTicketsForEvent(int eventId)
-            => TotalAvailableOfTypeTicketsForEvent(eventId, physicalTicketType);
+            => TotalAvailableOfTypeTicketsForEvent(eventId, PhysicalTicketType);
 
         public int TotalAvailableVirtualTicketsForEvent(int eventId)
-            => TotalAvailableOfTypeTicketsForEvent(eventId, virtualTicketType);
+            => TotalAvailableOfTypeTicketsForEvent(eventId, VirtualTicketType);
 
-        private static (bool, DateTime) ValidDate(string date)
+        private static (bool, DateTime) ValidDate(string date, string dateFormatOne, string dateFormatTwo, string dateFormatThree)
         {
             var isDate = DateTime.TryParseExact(
                 date,
-                dateFormat,
+                dateFormatOne,
                 CultureInfo.InvariantCulture,
                 DateTimeStyles.None,
-                out var dateTime);
+                out var dateTimeOne);
 
-            return (isDate, dateTime);
+            if (isDate)
+            {
+                return (isDate, dateTimeOne);
+            }
+
+            isDate = DateTime.TryParseExact(
+                date,
+                dateFormatTwo,
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.None,
+                out var dateTimeTwo);
+
+            if (isDate)
+            {
+                return (isDate, dateTimeTwo);
+            }
+
+            isDate = DateTime.TryParseExact(
+                date,
+                dateFormatThree,
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.None,
+                out var dateTimeThree);
+
+            return (isDate, dateTimeThree);
         }
 
         private static IEnumerable<Ticket> CreateTickets(
@@ -273,7 +281,7 @@
             {
                 tickets.Add(new Ticket
                 {
-                    Type = physicalTicketType,
+                    Type = PhysicalTicketType,
                     Price = physicalTicketPrice
                 });
             }
@@ -282,7 +290,7 @@
             {
                 tickets.Add(new Ticket
                 {
-                    Type = virtualTicketType,
+                    Type = VirtualTicketType,
                     Price = virtualTicketPrice
                 });
             }
@@ -354,14 +362,9 @@
             => this.data
                 .Attendees
                 .Where(a => a.Id == attendeeId)
-                .SelectMany(a => a.Tickets
-                    .Where(t => t.Type == ticketType)
-                    .Select(t => new MyTicketServiceModel
-                    {
-                        EventId = t.EventId,
-                        EventTitle = t.Event.Title,
-                        TicketId = t.Id
-                    }))
-                    .ToList();
+                .SelectMany(a => a.Tickets)
+                .Where(t => t.Type == ticketType)
+                .ProjectTo<MyTicketServiceModel>(this.mapper.ConfigurationProvider)
+                .ToList();
     }
 }

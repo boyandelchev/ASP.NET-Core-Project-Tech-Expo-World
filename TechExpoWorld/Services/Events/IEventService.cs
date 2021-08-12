@@ -1,6 +1,7 @@
 ﻿namespace TechExpoWorld.Services.Events
 {
     using System.Collections.Generic;
+    using TechExpoWorld.Services.Events.Models;
 
     public interface IEventService
     {
@@ -43,8 +44,6 @@
         bool BuyVirtualTicket(int eventId, int attendeeId);
 
         bool RevokeTicket(int eventId, int ticketId, int attendeeId);
-
-        bool IsValidDate(string date);
 
         bool EventExists(int eventId);
 

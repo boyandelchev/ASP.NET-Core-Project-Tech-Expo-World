@@ -1,4 +1,4 @@
-﻿namespace TechExpoWorld.Services.Statistics
+﻿namespace TechExpoWorld.Services.Statistics.Models
 {
     public class StatisticsServiceModel
     {

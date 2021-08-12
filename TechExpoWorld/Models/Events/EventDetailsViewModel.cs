@@ -1,6 +1,6 @@
 ﻿namespace TechExpoWorld.Models.Events
 {
-    using TechExpoWorld.Services.Events;
+    using TechExpoWorld.Services.Events.Models;
 
     public class EventDetailsViewModel
     {
