@@ -7,6 +7,8 @@
     using TechExpoWorld.Services.Attendees;
     using TechExpoWorld.Services.Events;
 
+    using static WebConstants;
+
     public class EventsController : Controller
     {
         private readonly IEventService events;
@@ -86,6 +88,8 @@
 
             this.events.BuyPhysicalTicket(id, attendeeId);
 
+            TempData[GlobalMessageKey] = "Your have booked a ticket successfully!";
+
             return RedirectToAction(nameof(All));
         }
 
@@ -112,6 +116,8 @@
 
             this.events.BuyVirtualTicket(id, attendeeId);
 
+            TempData[GlobalMessageKey] = "Your have booked a ticket successfully!";
+
             return RedirectToAction(nameof(All));
         }
 
@@ -132,6 +138,8 @@
             {
                 return BadRequest();
             }
+
+            TempData[GlobalMessageKey] = "Your have revoked a ticket successfully!";
 
             return RedirectToAction(nameof(MyTickets));
         }

@@ -6,6 +6,8 @@
     using TechExpoWorld.Models.Comments;
     using TechExpoWorld.Services.Comments;
 
+    using static WebConstants;
+
     public class CommentsController : Controller
     {
         private readonly ICommentService comments;
@@ -25,6 +27,8 @@
             var userId = this.User.Id();
 
             this.comments.Create(id, comment.Content, userId);
+
+            TempData[GlobalMessageKey] = "Your comment was added successfully!";
 
             return RedirectToAction(nameof(NewsController.Details), "News", new { id });
         }

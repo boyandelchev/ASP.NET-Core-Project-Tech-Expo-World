@@ -6,6 +6,8 @@
     using TechExpoWorld.Infrastructure;
     using TechExpoWorld.Services.Events;
 
+    using static WebConstants;
+
     public class EventsController : AdminController
     {
         private readonly IEventService events;
@@ -44,7 +46,11 @@
                 eventData.VirtualTicketPrice,
                 userId);
 
-            return RedirectToAction(nameof(TechExpoWorld.Controllers.EventsController.All), "Events", new { area = "" });
+            TempData[GlobalMessageKey] = "Your event was added successfully!";
+
+            return RedirectToAction(nameof(TechExpoWorld.Controllers.EventsController.All),
+                                    "Events",
+                                    new { area = "" });
         }
 
         public IActionResult Edit(int id)
@@ -88,7 +94,11 @@
                 eventData.TotalVirtualTickets,
                 eventData.VirtualTicketPrice);
 
-            return RedirectToAction(nameof(TechExpoWorld.Controllers.EventsController.All), "Events", new { area = "" });
+            TempData[GlobalMessageKey] = "Your event was edited successfully!";
+
+            return RedirectToAction(nameof(TechExpoWorld.Controllers.EventsController.All),
+                                    "Events",
+                                    new { area = "" });
         }
 
         public IActionResult DeleteDetails(int id)
@@ -115,7 +125,11 @@
 
             this.events.Delete(id);
 
-            return RedirectToAction(nameof(TechExpoWorld.Controllers.EventsController.All), "Events", new { area = "" });
+            TempData[GlobalMessageKey] = "Your event was deleted successfully!";
+
+            return RedirectToAction(nameof(TechExpoWorld.Controllers.EventsController.All),
+                                    "Events",
+                                    new { area = "" });
         }
     }
 }

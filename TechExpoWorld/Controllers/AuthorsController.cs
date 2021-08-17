@@ -6,6 +6,8 @@
     using TechExpoWorld.Models.Authors;
     using TechExpoWorld.Services.Authors;
 
+    using static WebConstants;
+
     public class AuthorsController : Controller
     {
         private readonly IAuthorService authors;
@@ -48,6 +50,8 @@
                 author.Address,
                 author.PhotoUrl,
                 userId);
+
+            TempData[GlobalMessageKey] = "Thank you for becomming an author!";
 
             return RedirectToAction(nameof(NewsController.All), "News");
         }

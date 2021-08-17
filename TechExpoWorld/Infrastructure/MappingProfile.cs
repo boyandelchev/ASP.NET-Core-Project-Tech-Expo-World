@@ -21,7 +21,7 @@
 
         public MappingProfile()
         {
-            this.CreateMap<NewsArticle, NewsArticleIndexServiceModel>();
+            this.CreateMap<NewsArticle, LatestNewsArticleServiceModel>();
 
             this.CreateMap<StatisticsServiceModel, IndexViewModel>();
 

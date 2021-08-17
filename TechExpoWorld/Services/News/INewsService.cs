@@ -16,7 +16,7 @@
 
         IEnumerable<NewsArticleServiceModel> NewsArticlesByUser(string userId);
 
-        List<NewsArticleIndexServiceModel> LatestNewsArticles();
+        IEnumerable<LatestNewsArticleServiceModel> LatestNewsArticles();
 
         NewsArticleDetailsServiceModel Details(int newsArticleId);
 

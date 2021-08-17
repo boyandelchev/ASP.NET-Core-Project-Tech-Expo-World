@@ -79,11 +79,11 @@
                 .Where(na => na.Author.UserId == userId)
                 .OrderByDescending(na => na.Id));
 
-        public List<NewsArticleIndexServiceModel> LatestNewsArticles()
+        public IEnumerable<LatestNewsArticleServiceModel> LatestNewsArticles()
             => this.data
                 .NewsArticles
                 .OrderByDescending(c => c.Id)
-                .ProjectTo<NewsArticleIndexServiceModel>(this.mapper.ConfigurationProvider)
+                .ProjectTo<LatestNewsArticleServiceModel>(this.mapper.ConfigurationProvider)
                 .Take(3)
                 .ToList();
 

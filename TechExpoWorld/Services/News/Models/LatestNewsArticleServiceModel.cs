@@ -1,6 +1,6 @@
 ﻿namespace TechExpoWorld.Services.News.Models
 {
-    public class NewsArticleIndexServiceModel
+    public class LatestNewsArticleServiceModel
     {
         public int Id { get; init; }
 

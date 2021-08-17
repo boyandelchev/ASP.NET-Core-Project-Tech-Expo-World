@@ -21,6 +21,6 @@
 
         public int TotalLocations { get; init; }
 
-        public List<NewsArticleIndexServiceModel> News { get; set; }
+        public IList<LatestNewsArticleServiceModel> News { get; set; }
     }
 }

@@ -10,6 +10,8 @@
     using TechExpoWorld.Services.Comments;
     using TechExpoWorld.Services.News;
 
+    using static WebConstants;
+
     public class NewsController : Controller
     {
         private readonly INewsService news;
@@ -146,6 +148,8 @@
                 newsArticle.TagIds,
                 authorId);
 
+            TempData[GlobalMessageKey] = "Your news article was added successfully!";
+
             return RedirectToAction(nameof(All));
         }
 
@@ -221,6 +225,8 @@
                 newsArticle.CategoryId,
                 newsArticle.TagIds);
 
+            TempData[GlobalMessageKey] = "Your news article was edited successfully!";
+
             return RedirectToAction(nameof(All));
         }
 
@@ -271,6 +277,8 @@
             }
 
             this.news.Delete(id);
+
+            TempData[GlobalMessageKey] = "Your news article was deleted successfully!";
 
             return RedirectToAction(nameof(All));
         }

@@ -6,6 +6,8 @@
     using TechExpoWorld.Models.Attendees;
     using TechExpoWorld.Services.Attendees;
 
+    using static WebConstants;
+
     public class AttendeesController : Controller
     {
         private readonly IAttendeeService attendees;
@@ -86,6 +88,8 @@
                 attendee.CompanySectorId,
                 attendee.CompanySizeId,
                 userId);
+
+            TempData[GlobalMessageKey] = "Thank you for becomming an attendee!";
 
             return RedirectToAction(nameof(EventsController.All), "Events");
         }
