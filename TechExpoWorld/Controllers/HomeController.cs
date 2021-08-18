@@ -9,6 +9,8 @@
     using TechExpoWorld.Services.News;
     using TechExpoWorld.Services.Statistics;
 
+    using static WebConstants.Cache;
+
     public class HomeController : Controller
     {
         private readonly INewsService news;
@@ -30,9 +32,7 @@
 
         public IActionResult Index()
         {
-            const string latestStatisticsAndNewsArticlesCacheKey = "LatestStatisticsAndNewsArticlesCacheKey";
-
-            var indexData = this.cache.Get<IndexViewModel>(latestStatisticsAndNewsArticlesCacheKey);
+            var indexData = this.cache.Get<IndexViewModel>(LatestStatisticsAndNewsArticlesCacheKey);
 
             if (indexData == null)
             {
@@ -45,7 +45,7 @@
                 var cacheOptions = new MemoryCacheEntryOptions()
                     .SetAbsoluteExpiration(TimeSpan.FromMinutes(5));
 
-                this.cache.Set(latestStatisticsAndNewsArticlesCacheKey, indexData, cacheOptions);
+                this.cache.Set(LatestStatisticsAndNewsArticlesCacheKey, indexData, cacheOptions);
             }
 
             return View(indexData);
