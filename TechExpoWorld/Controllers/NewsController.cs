@@ -41,12 +41,12 @@
                 query.CurrentPage,
                 AllNewsQueryModel.NewsArticlesPerPage);
 
-            var queryData = this.mapper.Map<AllNewsQueryModel>(newsQueryResult);
+            query.Categories = this.news.CategoryNames();
+            query.Tags = this.news.TagNames();
+            query.TotalNewsArticles = newsQueryResult.TotalNewsArticles;
+            query.News = newsQueryResult.News;
 
-            queryData.Categories = this.news.CategoryNames();
-            queryData.Tags = this.news.TagNames();
-
-            return View(queryData);
+            return View(query);
         }
 
         public IActionResult Details(int id)

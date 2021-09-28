@@ -43,8 +43,6 @@
 
             this.CreateMap<Tag, TagServiceModel>();
 
-            this.CreateMap<NewsArticlesQueryServiceModel, AllNewsQueryModel>();
-
             this.CreateMap<NewsArticleDetailsServiceModel, NewsArticleDetailsViewModel>();
 
             this.CreateMap<NewsArticleDetailsServiceModel, NewsArticleFormModel>();
