@@ -30,8 +30,8 @@
         public void DetailsShouldReturnViewWithCorrectModelAndData()
             => MyPipeline
                 .Configuration()
-                .ShouldMap("/News/Details/1")
-                .To<NewsController>(c => c.Details(1))
+                .ShouldMap("/News/Details/1/Article")
+                .To<NewsController>(c => c.Details(1, "Article"))
                 .Which(controller => controller
                     .WithData(OneNewsArticle))
                 .ShouldReturn()

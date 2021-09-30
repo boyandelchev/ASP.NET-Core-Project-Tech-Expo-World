@@ -21,7 +21,7 @@
                 .MemoryCache(cache => cache
                     .ContainingEntry(entry => entry
                         .WithKey(LatestStatisticsAndNewsArticlesCacheKey)
-                        .WithAbsoluteExpirationRelativeToNow(TimeSpan.FromMinutes(5))
+                        .WithAbsoluteExpirationRelativeToNow(TimeSpan.FromSeconds(1))
                         .WithValueOfType<IndexViewModel>()))
                 .AndAlso()
                 .ShouldReturn()

@@ -2,7 +2,7 @@
 {
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-    using TechExpoWorld.Infrastructure;
+    using TechExpoWorld.Infrastructure.Extensions;
     using TechExpoWorld.Models.Authors;
     using TechExpoWorld.Services.Authors;
 

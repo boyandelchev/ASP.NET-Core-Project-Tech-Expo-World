@@ -1,4 +1,4 @@
-﻿namespace TechExpoWorld.Infrastructure
+﻿namespace TechExpoWorld.Infrastructure.Extensions
 {
     using System;
     using System.Linq;

@@ -6,7 +6,7 @@
 
     using static Data.DataConstants.NewsArticle;
 
-    public class NewsArticleFormModel
+    public class NewsArticleFormModel : INewsArticleModel
     {
         [Required]
         [StringLength(TitleMaxLength, MinimumLength = TitleMinLength)]

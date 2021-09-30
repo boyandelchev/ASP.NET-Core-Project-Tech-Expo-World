@@ -3,7 +3,7 @@
     using AutoMapper;
     using Microsoft.AspNetCore.Mvc;
     using TechExpoWorld.Areas.Admin.Models.Events;
-    using TechExpoWorld.Infrastructure;
+    using TechExpoWorld.Infrastructure.Extensions;
     using TechExpoWorld.Services.Events;
 
     using static WebConstants;

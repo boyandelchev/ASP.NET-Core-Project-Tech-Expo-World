@@ -20,6 +20,8 @@
 
         NewsArticleDetailsServiceModel Details(int newsArticleId);
 
+        NewsArticleDetailsServiceModel DetailsWithNoViewCountIncrement(int newsArticleId);
+
         int Create(
             string title,
             string content,

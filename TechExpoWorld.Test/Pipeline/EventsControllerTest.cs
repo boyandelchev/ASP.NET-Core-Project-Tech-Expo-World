@@ -28,8 +28,8 @@
         public void DetailsShouldReturnViewWithCorrectModelAndData()
             => MyPipeline
                 .Configuration()
-                .ShouldMap("/Events/Details/1")
-                .To<EventsController>(c => c.Details(1))
+                .ShouldMap("/Events/Details/1/Event")
+                .To<EventsController>(c => c.Details(1, "Event"))
                 .Which(controller => controller
                     .WithData(OneEvent))
                 .ShouldReturn()

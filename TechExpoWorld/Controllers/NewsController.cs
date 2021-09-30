@@ -3,7 +3,7 @@
     using AutoMapper;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-    using TechExpoWorld.Infrastructure;
+    using TechExpoWorld.Infrastructure.Extensions;
     using TechExpoWorld.Models.Comments;
     using TechExpoWorld.Models.News;
     using TechExpoWorld.Services.Authors;
@@ -49,13 +49,18 @@
             return View(query);
         }
 
-        public IActionResult Details(int id)
+        public IActionResult Details(int id, string information)
         {
             var newsArticle = this.news.Details(id);
 
             if (newsArticle == null)
             {
                 return NotFound();
+            }
+
+            if (information != newsArticle.GetNewsArticleInformation())
+            {
+                return BadRequest();
             }
 
             var newsArticleData = this.mapper.Map<NewsArticleDetailsViewModel>(newsArticle);
@@ -140,7 +145,7 @@
                 return View(newsArticle);
             }
 
-            this.news.Create(
+            var newsArticleId = this.news.Create(
                 newsArticle.Title,
                 newsArticle.Content,
                 newsArticle.ImageUrl,
@@ -150,7 +155,7 @@
 
             TempData[GlobalMessageKey] = "Your news article was added successfully!";
 
-            return RedirectToAction(nameof(All));
+            return RedirectToAction(nameof(Details), new { id = newsArticleId, information = newsArticle.GetNewsArticleInformation() });
         }
 
         [Authorize]
@@ -163,7 +168,7 @@
                 return RedirectToAction(nameof(AuthorsController.BecomeAuthor), "Authors");
             }
 
-            var newsArticle = this.news.Details(id);
+            var newsArticle = this.news.DetailsWithNoViewCountIncrement(id);
 
             if (newsArticle == null)
             {
@@ -227,7 +232,7 @@
 
             TempData[GlobalMessageKey] = "Your news article was edited successfully!";
 
-            return RedirectToAction(nameof(All));
+            return RedirectToAction(nameof(Details), new { id, information = newsArticle.GetNewsArticleInformation() });
         }
 
         [Authorize]
@@ -240,7 +245,7 @@
                 return RedirectToAction(nameof(AuthorsController.BecomeAuthor), "Authors");
             }
 
-            var newsArticle = this.news.Details(id);
+            var newsArticle = this.news.DetailsWithNoViewCountIncrement(id);
 
             if (newsArticle == null)
             {

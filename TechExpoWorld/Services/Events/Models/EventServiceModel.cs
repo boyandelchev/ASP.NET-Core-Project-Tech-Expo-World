@@ -1,6 +1,6 @@
 ﻿namespace TechExpoWorld.Services.Events.Models
 {
-    public class EventServiceModel
+    public class EventServiceModel : IEventModel
     {
         public int Id { get; init; }
 

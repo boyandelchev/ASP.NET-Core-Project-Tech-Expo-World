@@ -43,7 +43,7 @@
                 indexData.News = this.news.LatestNewsArticles().ToList();
 
                 var cacheOptions = new MemoryCacheEntryOptions()
-                    .SetAbsoluteExpiration(TimeSpan.FromMinutes(5));
+                    .SetAbsoluteExpiration(TimeSpan.FromSeconds(1));
 
                 this.cache.Set(LatestStatisticsAndNewsArticlesCacheKey, indexData, cacheOptions);
             }

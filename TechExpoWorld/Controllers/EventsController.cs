@@ -2,7 +2,7 @@
 {
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-    using TechExpoWorld.Infrastructure;
+    using TechExpoWorld.Infrastructure.Extensions;
     using TechExpoWorld.Models.Events;
     using TechExpoWorld.Services.Attendees;
     using TechExpoWorld.Services.Events;
@@ -27,13 +27,18 @@
             return View(eventsAll);
         }
 
-        public IActionResult Details(int id)
+        public IActionResult Details(int id, string information)
         {
             var eventData = this.events.Details(id);
 
             if (eventData == null)
             {
                 return NotFound();
+            }
+
+            if (information != eventData.GetEventInformation())
+            {
+                return BadRequest();
             }
 
             var totalAvailablePhysicalTicketsForEvent = this.events.TotalAvailablePhysicalTicketsForEvent(id);

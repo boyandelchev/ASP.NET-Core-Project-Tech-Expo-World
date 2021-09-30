@@ -96,14 +96,17 @@
                 return null;
             }
 
-            var newsArticle = this.data
+            var newsArticle = DetailsWithNoViewCountIncrement(newsArticleId);
+
+            return newsArticle;
+        }
+
+        public NewsArticleDetailsServiceModel DetailsWithNoViewCountIncrement(int newsArticleId)
+            => this.data
                 .NewsArticles
                 .Where(na => na.Id == newsArticleId)
                 .ProjectTo<NewsArticleDetailsServiceModel>(this.mapper.ConfigurationProvider)
                 .FirstOrDefault();
-
-            return newsArticle;
-        }
 
         public int Create(
             string title,

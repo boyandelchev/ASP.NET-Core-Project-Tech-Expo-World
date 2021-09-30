@@ -5,7 +5,7 @@
     {
         <div class="col-md-4">
             <div class="card mb-3">
-                <a asp-controller="News" asp-action="Details" asp-route-id="@news.Id">
+                <a asp-controller="News" asp-action="Details" asp-route-id="@news.Id" asp-route-information="@news.GetNewsArticleInformation()">
                     <img class="card-img-top" src="@news.ImageUrl" alt="@news.Title (@news.CategoryName)">
                 </a>
                 <div class="card-body text-center">
@@ -16,7 +16,7 @@
                     </div>
                     <p class="text-muted">@news.Content</p>
                     <p class="text-primary">@news.CategoryName</p>
-                    <a asp-controller="News" asp-action="Details" asp-route-id="@news.Id" class="btn btn-primary btn-outline-secondary">Read More</a>
+                    <a asp-controller="News" asp-action="Details" asp-route-id="@news.Id" asp-route-information="@news.GetNewsArticleInformation()" class="btn btn-primary btn-outline-secondary">Read More</a>
                     @if (ViewBag.EditDelete == true || User.IsAdmin())
                     {
                         <a asp-controller="News" asp-action="Edit" asp-route-id="@news.Id" class="btn btn-info btn-outline-warning">Edit</a>

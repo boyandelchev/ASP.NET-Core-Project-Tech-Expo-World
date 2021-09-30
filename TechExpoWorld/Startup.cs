@@ -10,7 +10,7 @@ namespace TechExpoWorld
     using Microsoft.Extensions.Hosting;
     using TechExpoWorld.Data;
     using TechExpoWorld.Data.Models;
-    using TechExpoWorld.Infrastructure;
+    using TechExpoWorld.Infrastructure.Extensions;
     using TechExpoWorld.Services.Attendees;
     using TechExpoWorld.Services.Authors;
     using TechExpoWorld.Services.Comments;
@@ -85,7 +85,9 @@ namespace TechExpoWorld
                 .UseEndpoints(endpoints =>
                 {
                     endpoints.MapDefaultAreaRoute();
-                    endpoints.MapTicketsControllerRoute();
+                    endpoints.MapNewsArticleDetailsControllerRoute();
+                    endpoints.MapEventDetailsControllerRoute();
+                    endpoints.MapRevokeTicketControllerRoute();
                     endpoints.MapDefaultControllerRoute();
                     endpoints.MapRazorPages();
                 });
