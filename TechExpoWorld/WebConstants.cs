@@ -2,7 +2,7 @@
 {
     public class WebConstants
     {
-        public const string GlobalMessageKey = "GlobalMessage";
+        public const string GlobalMessageKey = nameof(GlobalMessageKey);
 
         public class Cache
         {

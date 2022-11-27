@@ -25,15 +25,17 @@ namespace TechExpoWorld
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            var services = builder.Services;
+
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
                 ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
-            builder.Services.AddDbContext<TechExpoDbContext>(options =>
+            services.AddDbContext<TechExpoDbContext>(options =>
                 options.UseSqlServer(connectionString));
 
-            builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+            services.AddDatabaseDeveloperPageExceptionFilter();
 
-            builder.Services.AddDefaultIdentity<User>(options =>
+            services.AddDefaultIdentity<User>(options =>
             {
                 options.Password.RequireDigit = false;
                 options.Password.RequireLowercase = false;
@@ -43,21 +45,21 @@ namespace TechExpoWorld
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<TechExpoDbContext>();
 
-            builder.Services.AddAutoMapper(typeof(Program));
+            services.AddAutoMapper(typeof(Program));
 
-            builder.Services.AddMemoryCache();
+            services.AddMemoryCache();
 
-            builder.Services.AddControllersWithViews(options =>
+            services.AddControllersWithViews(options =>
             {
                 options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
             });
 
-            builder.Services.AddTransient<IAttendeeService, AttendeeService>();
-            builder.Services.AddTransient<IAuthorService, AuthorService>();
-            builder.Services.AddTransient<ICommentService, CommentService>();
-            builder.Services.AddTransient<IEventService, EventService>();
-            builder.Services.AddTransient<INewsService, NewsService>();
-            builder.Services.AddTransient<IStatisticsService, StatisticsService>();
+            services.AddTransient<IAttendeeService, AttendeeService>();
+            services.AddTransient<IAuthorService, AuthorService>();
+            services.AddTransient<ICommentService, CommentService>();
+            services.AddTransient<IEventService, EventService>();
+            services.AddTransient<INewsService, NewsService>();
+            services.AddTransient<IStatisticsService, StatisticsService>();
 
             var app = builder.Build();
 
