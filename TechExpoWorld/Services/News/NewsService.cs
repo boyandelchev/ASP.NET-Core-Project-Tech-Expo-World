@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
     using Microsoft.EntityFrameworkCore;
@@ -22,7 +23,7 @@
             this.mapper = mapper;
         }
 
-        public NewsArticlesQueryServiceModel All(
+        public async Task<NewsArticlesQueryServiceModel> All(
             string category,
             string tag,
             string searchTerm,
@@ -60,9 +61,9 @@
                 NewsSorting.Descending or _ => newsQuery.OrderByDescending(na => na.Id)
             };
 
-            var totalNewsArticles = newsQuery.Count();
+            var totalNewsArticles = await newsQuery.CountAsync();
 
-            var news = GetNewsArticles(newsQuery
+            var news = await GetNewsArticles(newsQuery
                 .Skip((currentPage - 1) * newsArticlesPerPage)
                 .Take(newsArticlesPerPage));
 
@@ -73,42 +74,42 @@
             };
         }
 
-        public IEnumerable<NewsArticleServiceModel> NewsArticlesByUser(string userId)
-            => GetNewsArticles(this.data
+        public async Task<IEnumerable<NewsArticleServiceModel>> NewsArticlesByUser(string userId)
+            => await GetNewsArticles(this.data
                 .NewsArticles
                 .Where(na => na.Author.UserId == userId)
                 .OrderByDescending(na => na.Id));
 
-        public IEnumerable<LatestNewsArticleServiceModel> LatestNewsArticles()
-            => this.data
+        public async Task<IList<LatestNewsArticleServiceModel>> LatestNewsArticles()
+            => await this.data
                 .NewsArticles
                 .OrderByDescending(c => c.Id)
                 .ProjectTo<LatestNewsArticleServiceModel>(this.mapper.ConfigurationProvider)
                 .Take(3)
-                .ToList();
+                .ToListAsync();
 
-        public NewsArticleDetailsServiceModel Details(int newsArticleId)
+        public async Task<NewsArticleDetailsServiceModel> Details(int newsArticleId)
         {
-            var isIncremented = ViewCountIncrement(newsArticleId);
+            var isIncremented = await ViewCountIncrement(newsArticleId);
 
             if (!isIncremented)
             {
                 return null;
             }
 
-            var newsArticle = DetailsWithNoViewCountIncrement(newsArticleId);
+            var newsArticle = await DetailsWithNoViewCountIncrement(newsArticleId);
 
             return newsArticle;
         }
 
-        public NewsArticleDetailsServiceModel DetailsWithNoViewCountIncrement(int newsArticleId)
-            => this.data
+        public async Task<NewsArticleDetailsServiceModel> DetailsWithNoViewCountIncrement(int newsArticleId)
+            => await this.data
                 .NewsArticles
                 .Where(na => na.Id == newsArticleId)
                 .ProjectTo<NewsArticleDetailsServiceModel>(this.mapper.ConfigurationProvider)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
 
-        public int Create(
+        public async Task<int> Create(
             string title,
             string content,
             string imageUrl,
@@ -127,13 +128,13 @@
 
             newsArticle.NewsArticleTags = CreateNewsArticleTags(tagIds);
 
-            this.data.NewsArticles.Add(newsArticle);
-            this.data.SaveChanges();
+            await this.data.NewsArticles.AddAsync(newsArticle);
+            await this.data.SaveChangesAsync();
 
             return newsArticle.Id;
         }
 
-        public bool Edit(
+        public async Task<bool> Edit(
             int newsArticleId,
             string title,
             string content,
@@ -141,10 +142,10 @@
             int categoryId,
             IEnumerable<int> tagIds)
         {
-            var newsArticle = this.data
+            var newsArticle = await this.data
                 .NewsArticles
                 .Include(na => na.NewsArticleTags)
-                .FirstOrDefault(na => na.Id == newsArticleId);
+                .FirstOrDefaultAsync(na => na.Id == newsArticleId);
 
             if (newsArticle == null)
             {
@@ -158,17 +159,17 @@
             newsArticle.NewsCategoryId = categoryId;
             newsArticle.NewsArticleTags = CreateNewsArticleTags(tagIds);
 
-            this.data.SaveChanges();
+            await this.data.SaveChangesAsync();
 
             return true;
         }
 
-        public bool Delete(int newsArticleId)
+        public async Task<bool> Delete(int newsArticleId)
         {
-            var newsArticle = this.data
+            var newsArticle = await this.data
                 .NewsArticles
                 .Include(na => na.NewsArticleTags)
-                .FirstOrDefault(na => na.Id == newsArticleId);
+                .FirstOrDefaultAsync(na => na.Id == newsArticleId);
 
             if (newsArticle == null)
             {
@@ -178,51 +179,51 @@
             newsArticle.NewsArticleTags = null;
 
             this.data.NewsArticles.Remove(newsArticle);
-            this.data.SaveChanges();
+            await this.data.SaveChangesAsync();
 
             return true;
         }
 
-        public bool IsByAuthor(int newsArticleId, int authorId)
-            => this.data
+        public async Task<bool> IsByAuthor(int newsArticleId, int authorId)
+            => await this.data
                 .NewsArticles
-                .Any(na => na.Id == newsArticleId && na.AuthorId == authorId);
+                .AnyAsync(na => na.Id == newsArticleId && na.AuthorId == authorId);
 
-        public IEnumerable<CategoryServiceModel> Categories()
-            => this.data
+        public async Task<IEnumerable<CategoryServiceModel>> Categories()
+            => await this.data
                 .NewsCategories
                 .ProjectTo<CategoryServiceModel>(this.mapper.ConfigurationProvider)
                 .OrderBy(c => c.Name)
-                .ToList();
+                .ToListAsync();
 
-        public IEnumerable<string> CategoryNames()
-            => this.data
+        public async Task<IEnumerable<string>> CategoryNames()
+            => await this.data
                 .NewsCategories
                 .Select(nc => nc.Name)
                 .OrderBy(name => name)
-                .ToList();
+                .ToListAsync();
 
-        public bool CategoryExists(int categoryId)
-            => this.data
+        public async Task<bool> CategoryExists(int categoryId)
+            => await this.data
                 .NewsCategories
-                .Any(nc => nc.Id == categoryId);
+                .AnyAsync(nc => nc.Id == categoryId);
 
-        public IEnumerable<TagServiceModel> Tags()
-            => this.data
+        public async Task<IEnumerable<TagServiceModel>> Tags()
+            => await this.data
                 .Tags
                 .ProjectTo<TagServiceModel>(this.mapper.ConfigurationProvider)
                 .OrderBy(t => t.Name)
-                .ToList();
+                .ToListAsync();
 
-        public IEnumerable<string> TagNames()
-            => this.data
+        public async Task<IEnumerable<string>> TagNames()
+            => await this.data
                 .Tags
                 .Select(t => t.Name.ToLower())
                 .OrderBy(name => name)
-                .ToList();
+                .ToListAsync();
 
         public bool TagsExist(IEnumerable<int> tagIds)
-            => tagIds.All(tagId => TagExists(tagId));
+            => tagIds.All(tagId => TagExists(tagId).GetAwaiter().GetResult());
 
         private static IEnumerable<NewsArticleTag> CreateNewsArticleTags(IEnumerable<int> tagIds)
         {
@@ -239,19 +240,19 @@
             return newsArticleTags;
         }
 
-        private bool TagExists(int tagId)
-            => this.data
+        private async Task<bool> TagExists(int tagId)
+            => await this.data
                 .Tags
-                .Any(t => t.Id == tagId);
+                .AnyAsync(t => t.Id == tagId);
 
-        private IEnumerable<NewsArticleServiceModel> GetNewsArticles(IQueryable<NewsArticle> newsQuery)
-            => newsQuery
+        private async Task<IEnumerable<NewsArticleServiceModel>> GetNewsArticles(IQueryable<NewsArticle> newsQuery)
+            => await newsQuery
                 .ProjectTo<NewsArticleServiceModel>(this.mapper.ConfigurationProvider)
-                .ToList();
+                .ToListAsync();
 
-        private bool ViewCountIncrement(int newsArticleId)
+        private async Task<bool> ViewCountIncrement(int newsArticleId)
         {
-            var newsArticle = this.data.NewsArticles.Find(newsArticleId);
+            var newsArticle = await this.data.NewsArticles.FindAsync(newsArticleId);
 
             if (newsArticle == null)
             {
@@ -260,7 +261,7 @@
 
             newsArticle.ViewCount += 1;
 
-            this.data.SaveChanges();
+            await this.data.SaveChangesAsync();
 
             return true;
         }

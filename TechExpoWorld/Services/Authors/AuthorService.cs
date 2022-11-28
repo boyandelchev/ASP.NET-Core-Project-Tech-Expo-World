@@ -1,6 +1,8 @@
 ﻿namespace TechExpoWorld.Services.Authors
 {
     using System.Linq;
+    using System.Threading.Tasks;
+    using Microsoft.EntityFrameworkCore;
     using TechExpoWorld.Data;
     using TechExpoWorld.Data.Models;
 
@@ -11,19 +13,19 @@
         public AuthorService(TechExpoDbContext data)
             => this.data = data;
 
-        public bool IsAuthor(string userId)
-            => this.data
+        public async Task<bool> IsAuthor(string userId)
+            => await this.data
                 .Authors
-                .Any(a => a.UserId == userId);
+                .AnyAsync(a => a.UserId == userId);
 
-        public int AuthorId(string userId)
-            => this.data
+        public async Task<int> AuthorId(string userId)
+            => await this.data
                 .Authors
                 .Where(a => a.UserId == userId)
                 .Select(a => a.Id)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
 
-        public int Create(
+        public async Task<int> Create(
             string name,
             string phoneNumber,
             string address,
@@ -39,8 +41,8 @@
                 UserId = userId
             };
 
-            this.data.Authors.Add(author);
-            this.data.SaveChanges();
+            await this.data.Authors.AddAsync(author);
+            await this.data.SaveChangesAsync();
 
             return author.Id;
         }

@@ -1,5 +1,6 @@
 ﻿namespace TechExpoWorld.Controllers
 {
+    using System.Threading.Tasks;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using TechExpoWorld.Infrastructure.Extensions;
@@ -20,16 +21,16 @@
             this.attendees = attendees;
         }
 
-        public IActionResult All()
+        public async Task<IActionResult> All()
         {
-            var eventsAll = this.events.All();
+            var eventsAll = await this.events.All();
 
             return View(eventsAll);
         }
 
-        public IActionResult Details(int id, string information)
+        public async Task<IActionResult> Details(int id, string information)
         {
-            var eventData = this.events.Details(id);
+            var eventData = await this.events.Details(id);
 
             if (eventData == null)
             {
@@ -41,8 +42,8 @@
                 return BadRequest();
             }
 
-            var totalAvailablePhysicalTicketsForEvent = this.events.TotalAvailablePhysicalTicketsForEvent(id);
-            var totalAvailableVirtualTicketsForEvent = this.events.TotalAvailableVirtualTicketsForEvent(id);
+            var totalAvailablePhysicalTicketsForEvent = await this.events.TotalAvailablePhysicalTicketsForEvent(id);
+            var totalAvailableVirtualTicketsForEvent = await this.events.TotalAvailableVirtualTicketsForEvent(id);
 
             return View(new EventDetailsViewModel
             {
@@ -53,10 +54,10 @@
         }
 
         [Authorize]
-        public IActionResult MyTickets()
+        public async Task<IActionResult> MyTickets()
         {
             var userId = this.User.Id();
-            var attendeeId = this.attendees.AttendeeId(userId);
+            var attendeeId = await this.attendees.AttendeeId(userId);
 
             if (attendeeId == 0 && !this.User.IsAdmin())
             {
@@ -65,15 +66,15 @@
 
             return View(new MyTicketsViewModel
             {
-                MyPhysicalTickets = this.events.MyPhysicalTickets(attendeeId),
-                MyVirtualTickets = this.events.MyVirtualTickets(attendeeId)
+                MyPhysicalTickets = await this.events.MyPhysicalTickets(attendeeId),
+                MyVirtualTickets = await this.events.MyVirtualTickets(attendeeId)
             });
         }
 
         [Authorize]
-        public IActionResult BuyPhysicalTicket(int id)
+        public async Task<IActionResult> BuyPhysicalTicket(int id)
         {
-            if (!this.events.EventExists(id))
+            if (!await this.events.EventExists(id))
             {
                 return NotFound();
             }
@@ -84,14 +85,14 @@
             }
 
             var userId = this.User.Id();
-            var attendeeId = this.attendees.AttendeeId(userId);
+            var attendeeId = await this.attendees.AttendeeId(userId);
 
             if (attendeeId == 0)
             {
                 return RedirectToAction(nameof(AttendeesController.BecomeAttendee), "Attendees");
             }
 
-            this.events.BuyPhysicalTicket(id, attendeeId);
+            await this.events.BuyPhysicalTicket(id, attendeeId);
 
             TempData[GlobalMessageKey] = "Your have booked a ticket successfully!";
 
@@ -99,9 +100,9 @@
         }
 
         [Authorize]
-        public IActionResult BuyVirtualTicket(int id)
+        public async Task<IActionResult> BuyVirtualTicket(int id)
         {
-            if (!this.events.EventExists(id))
+            if (!await this.events.EventExists(id))
             {
                 return NotFound();
             }
@@ -112,14 +113,14 @@
             }
 
             var userId = this.User.Id();
-            var attendeeId = this.attendees.AttendeeId(userId);
+            var attendeeId = await this.attendees.AttendeeId(userId);
 
             if (attendeeId == 0)
             {
                 return RedirectToAction(nameof(AttendeesController.BecomeAttendee), "Attendees");
             }
 
-            this.events.BuyVirtualTicket(id, attendeeId);
+            await this.events.BuyVirtualTicket(id, attendeeId);
 
             TempData[GlobalMessageKey] = "Your have booked a ticket successfully!";
 
@@ -127,17 +128,17 @@
         }
 
         [Authorize]
-        public IActionResult RevokeTicket(int id, int ticketId)
+        public async Task<IActionResult> RevokeTicket(int id, int ticketId)
         {
             var userId = this.User.Id();
-            var attendeeId = this.attendees.AttendeeId(userId);
+            var attendeeId = await this.attendees.AttendeeId(userId);
 
             if (attendeeId == 0 && !this.User.IsAdmin())
             {
                 return RedirectToAction(nameof(AttendeesController.BecomeAttendee), "Attendees");
             }
 
-            var isRevoked = this.events.RevokeTicket(id, ticketId, attendeeId);
+            var isRevoked = await this.events.RevokeTicket(id, ticketId, attendeeId);
 
             if (!isRevoked)
             {

@@ -1,5 +1,6 @@
 ﻿namespace TechExpoWorld.Controllers
 {
+    using System.Threading.Tasks;
     using AutoMapper;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
@@ -31,9 +32,9 @@
             this.mapper = mapper;
         }
 
-        public IActionResult All([FromQuery] AllNewsQueryModel query)
+        public async Task<IActionResult> All([FromQuery] AllNewsQueryModel query)
         {
-            var newsQueryResult = this.news.All(
+            var newsQueryResult = await this.news.All(
                 query.Category,
                 query.Tag,
                 query.SearchTerm,
@@ -41,17 +42,17 @@
                 query.CurrentPage,
                 AllNewsQueryModel.NewsArticlesPerPage);
 
-            query.Categories = this.news.CategoryNames();
-            query.Tags = this.news.TagNames();
+            query.Categories = await this.news.CategoryNames();
+            query.Tags = await this.news.TagNames();
             query.TotalNewsArticles = newsQueryResult.TotalNewsArticles;
             query.News = newsQueryResult.News;
 
             return View(query);
         }
 
-        public IActionResult Details(int id, string information)
+        public async Task<IActionResult> Details(int id, string information)
         {
-            var newsArticle = this.news.Details(id);
+            var newsArticle = await this.news.Details(id);
 
             if (newsArticle == null)
             {
@@ -65,8 +66,8 @@
 
             var newsArticleData = this.mapper.Map<NewsArticleDetailsViewModel>(newsArticle);
 
-            var comments = this.comments.CommentsOnNewsArticle(id);
-            var totalComments = this.comments.TotalCommentsOnNewsArticle(id);
+            var comments = await this.comments.CommentsOnNewsArticle(id);
+            var totalComments = await this.comments.TotalCommentsOnNewsArticle(id);
 
             return View(new NewsArticleWithCommentsViewModel
             {
@@ -79,55 +80,55 @@
         }
 
         [Authorize]
-        public IActionResult MyNewsArticles()
+        public async Task<IActionResult> MyNewsArticles()
         {
             if (this.User.IsAdmin())
             {
                 return BadRequest();
             }
 
-            var myNewsArticles = this.news.NewsArticlesByUser(this.User.Id());
+            var myNewsArticles = await this.news.NewsArticlesByUser(this.User.Id());
 
             return View(myNewsArticles);
         }
 
         [Authorize]
-        public IActionResult Add()
+        public async Task<IActionResult> Add()
         {
             if (this.User.IsAdmin())
             {
                 return BadRequest();
             }
 
-            if (!this.authors.IsAuthor(this.User.Id()))
+            if (!await this.authors.IsAuthor(this.User.Id()))
             {
                 return RedirectToAction(nameof(AuthorsController.BecomeAuthor), "Authors");
             }
 
             return View(new NewsArticleFormModel
             {
-                Categories = this.news.Categories(),
-                Tags = this.news.Tags()
+                Categories = await this.news.Categories(),
+                Tags = await this.news.Tags()
             });
         }
 
         [HttpPost]
         [Authorize]
-        public IActionResult Add(NewsArticleFormModel newsArticle)
+        public async Task<IActionResult> Add(NewsArticleFormModel newsArticle)
         {
             if (this.User.IsAdmin())
             {
                 return BadRequest();
             }
 
-            var authorId = this.authors.AuthorId(this.User.Id());
+            var authorId = await this.authors.AuthorId(this.User.Id());
 
             if (authorId == 0)
             {
                 return RedirectToAction(nameof(AuthorsController.BecomeAuthor), "Authors");
             }
 
-            if (!this.news.CategoryExists(newsArticle.CategoryId))
+            if (!await this.news.CategoryExists(newsArticle.CategoryId))
             {
                 this.ModelState.AddModelError(nameof(newsArticle.CategoryId), "News category does not exist.");
             }
@@ -139,13 +140,13 @@
 
             if (!ModelState.IsValid)
             {
-                newsArticle.Categories = this.news.Categories();
-                newsArticle.Tags = this.news.Tags();
+                newsArticle.Categories = await this.news.Categories();
+                newsArticle.Tags = await this.news.Tags();
 
                 return View(newsArticle);
             }
 
-            var newsArticleId = this.news.Create(
+            var newsArticleId = await this.news.Create(
                 newsArticle.Title,
                 newsArticle.Content,
                 newsArticle.ImageUrl,
@@ -159,16 +160,16 @@
         }
 
         [Authorize]
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
             var userId = this.User.Id();
 
-            if (!this.authors.IsAuthor(userId) && !this.User.IsAdmin())
+            if (!await this.authors.IsAuthor(userId) && !this.User.IsAdmin())
             {
                 return RedirectToAction(nameof(AuthorsController.BecomeAuthor), "Authors");
             }
 
-            var newsArticle = this.news.DetailsWithNoViewCountIncrement(id);
+            var newsArticle = await this.news.DetailsWithNoViewCountIncrement(id);
 
             if (newsArticle == null)
             {
@@ -182,29 +183,29 @@
 
             var newsArticleForm = this.mapper.Map<NewsArticleFormModel>(newsArticle);
 
-            newsArticleForm.Categories = this.news.Categories();
-            newsArticleForm.Tags = this.news.Tags();
+            newsArticleForm.Categories = await this.news.Categories();
+            newsArticleForm.Tags = await this.news.Tags();
 
             return View(newsArticleForm);
         }
 
         [HttpPost]
         [Authorize]
-        public IActionResult Edit(int id, NewsArticleFormModel newsArticle)
+        public async Task<IActionResult> Edit(int id, NewsArticleFormModel newsArticle)
         {
-            var authorId = this.authors.AuthorId(this.User.Id());
+            var authorId = await this.authors.AuthorId(this.User.Id());
 
             if (authorId == 0 && !this.User.IsAdmin())
             {
                 return RedirectToAction(nameof(AuthorsController.BecomeAuthor), "Authors");
             }
 
-            if (!this.news.IsByAuthor(id, authorId) && !this.User.IsAdmin())
+            if (!await this.news.IsByAuthor(id, authorId) && !this.User.IsAdmin())
             {
                 return BadRequest();
             }
 
-            if (!this.news.CategoryExists(newsArticle.CategoryId))
+            if (!await this.news.CategoryExists(newsArticle.CategoryId))
             {
                 this.ModelState.AddModelError(nameof(newsArticle.CategoryId), "News category does not exist.");
             }
@@ -216,19 +217,19 @@
 
             if (!ModelState.IsValid)
             {
-                newsArticle.Categories = this.news.Categories();
-                newsArticle.Tags = this.news.Tags();
+                newsArticle.Categories = await this.news.Categories();
+                newsArticle.Tags = await this.news.Tags();
 
                 return View(newsArticle);
             }
 
-            this.news.Edit(
-                id,
-                newsArticle.Title,
-                newsArticle.Content,
-                newsArticle.ImageUrl,
-                newsArticle.CategoryId,
-                newsArticle.TagIds);
+            await this.news.Edit(
+                 id,
+                 newsArticle.Title,
+                 newsArticle.Content,
+                 newsArticle.ImageUrl,
+                 newsArticle.CategoryId,
+                 newsArticle.TagIds);
 
             TempData[GlobalMessageKey] = "Your news article was edited successfully!";
 
@@ -236,16 +237,16 @@
         }
 
         [Authorize]
-        public IActionResult DeleteDetails(int id)
+        public async Task<IActionResult> DeleteDetails(int id)
         {
             var userId = this.User.Id();
 
-            if (!this.authors.IsAuthor(userId) && !this.User.IsAdmin())
+            if (!await this.authors.IsAuthor(userId) && !this.User.IsAdmin())
             {
                 return RedirectToAction(nameof(AuthorsController.BecomeAuthor), "Authors");
             }
 
-            var newsArticle = this.news.DetailsWithNoViewCountIncrement(id);
+            var newsArticle = await this.news.DetailsWithNoViewCountIncrement(id);
 
             if (newsArticle == null)
             {
@@ -259,29 +260,29 @@
 
             var newsArticleData = this.mapper.Map<NewsArticleDeleteDetailsViewModel>(newsArticle);
 
-            newsArticleData.Categories = this.news.Categories();
-            newsArticleData.Tags = this.news.Tags();
+            newsArticleData.Categories = await this.news.Categories();
+            newsArticleData.Tags = await this.news.Tags();
 
             return View(newsArticleData);
         }
 
         [HttpPost]
         [Authorize]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var authorId = this.authors.AuthorId(this.User.Id());
+            var authorId = await this.authors.AuthorId(this.User.Id());
 
             if (authorId == 0 && !this.User.IsAdmin())
             {
                 return RedirectToAction(nameof(AuthorsController.BecomeAuthor), "Authors");
             }
 
-            if (!this.news.IsByAuthor(id, authorId) && !this.User.IsAdmin())
+            if (!await this.news.IsByAuthor(id, authorId) && !this.User.IsAdmin())
             {
                 return BadRequest();
             }
 
-            this.news.Delete(id);
+            await this.news.Delete(id);
 
             TempData[GlobalMessageKey] = "Your news article was deleted successfully!";
 

@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
+    using System.Threading.Tasks;
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
     using Microsoft.EntityFrameworkCore;
@@ -26,39 +27,39 @@
             this.mapper = mapper;
         }
 
-        public IEnumerable<EventServiceModel> All()
-            => this.data
+        public async Task<IEnumerable<EventServiceModel>> All()
+            => await this.data
                 .Events
                 .ProjectTo<EventServiceModel>(this.mapper.ConfigurationProvider)
                 .OrderByDescending(e => e.Id)
-                .ToList();
+                .ToListAsync();
 
-        public EventDetailsServiceModel Details(int eventId)
+        public async Task<EventDetailsServiceModel> Details(int eventId)
         {
-            var eventData = this.data
+            var eventData = await this.data
                 .Events
                 .Where(e => e.Id == eventId)
                 .ProjectTo<EventDetailsServiceModel>(this.mapper.ConfigurationProvider)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
 
             if (eventData == null)
             {
                 return null;
             }
 
-            eventData.PhysicalTicketPrice = TicketPrice(eventId, PhysicalTicketType);
-            eventData.VirtualTicketPrice = TicketPrice(eventId, VirtualTicketType);
+            eventData.PhysicalTicketPrice = await TicketPrice(eventId, PhysicalTicketType);
+            eventData.VirtualTicketPrice = await TicketPrice(eventId, VirtualTicketType);
 
             return eventData;
         }
 
-        public IEnumerable<MyTicketServiceModel> MyPhysicalTickets(int attendeeId)
-            => MyTickets(attendeeId, PhysicalTicketType);
+        public async Task<IEnumerable<MyTicketServiceModel>> MyPhysicalTickets(int attendeeId)
+            => await MyTickets(attendeeId, PhysicalTicketType);
 
-        public IEnumerable<MyTicketServiceModel> MyVirtualTickets(int attendeeId)
-            => MyTickets(attendeeId, VirtualTicketType);
+        public async Task<IEnumerable<MyTicketServiceModel>> MyVirtualTickets(int attendeeId)
+            => await MyTickets(attendeeId, VirtualTicketType);
 
-        public int CreateEventWithTickets(
+        public async Task<int> CreateEventWithTickets(
             string title,
             string content,
             string location,
@@ -93,13 +94,13 @@
 
             eventData.Tickets = tickets;
 
-            this.data.Events.Add(eventData);
-            this.data.SaveChanges();
+            await this.data.Events.AddAsync(eventData);
+            await this.data.SaveChangesAsync();
 
             return eventData.Id;
         }
 
-        public bool Edit(
+        public async Task<bool> Edit(
             int eventId,
             string title,
             string content,
@@ -111,11 +112,11 @@
             int totalVirtualTickets,
             decimal virtualTicketPrice)
         {
-            var eventData = this.data
+            var eventData = await this.data
                 .Events
                 .Include(e => e.Tickets)
                 .Include(e => e.EventAttendees)
-                .FirstOrDefault(e => e.Id == eventId);
+                .FirstOrDefaultAsync(e => e.Id == eventId);
 
             if (eventData == null)
             {
@@ -137,7 +138,7 @@
                 eventData.Tickets.Any(t => t.Type == PhysicalTicketType && t.Price == physicalTicketPrice) &&
                 eventData.Tickets.Any(t => t.Type == VirtualTicketType && t.Price == virtualTicketPrice))
             {
-                this.data.SaveChanges();
+                await this.data.SaveChangesAsync();
 
                 return true;
             }
@@ -155,17 +156,17 @@
                 totalVirtualTickets,
                 virtualTicketPrice);
 
-            this.data.SaveChanges();
+            await this.data.SaveChangesAsync();
 
             return true;
         }
 
-        public bool Delete(int eventId)
+        public async Task<bool> Delete(int eventId)
         {
-            var eventData = this.data
+            var eventData = await this.data
                 .Events
                 .Include(e => e.EventAttendees)
-                .FirstOrDefault(e => e.Id == eventId);
+                .FirstOrDefaultAsync(e => e.Id == eventId);
 
             if (eventData == null)
             {
@@ -175,25 +176,25 @@
             eventData.EventAttendees = null;
 
             this.data.Events.Remove(eventData);
-            this.data.SaveChanges();
+            await this.data.SaveChangesAsync();
 
             return true;
         }
 
-        public bool BuyPhysicalTicket(int eventId, int attendeeId)
-            => BuyTicket(eventId, attendeeId, PhysicalTicketType);
+        public async Task<bool> BuyPhysicalTicket(int eventId, int attendeeId)
+            => await BuyTicket(eventId, attendeeId, PhysicalTicketType);
 
-        public bool BuyVirtualTicket(int eventId, int attendeeId)
-            => BuyTicket(eventId, attendeeId, VirtualTicketType);
+        public async Task<bool> BuyVirtualTicket(int eventId, int attendeeId)
+            => await BuyTicket(eventId, attendeeId, VirtualTicketType);
 
-        public bool RevokeTicket(int eventId, int ticketId, int attendeeId)
+        public async Task<bool> RevokeTicket(int eventId, int ticketId, int attendeeId)
         {
-            var ticket = this.data
+            var ticket = await this.data
                 .Tickets
                 .Where(t => t.EventId == eventId &&
                             t.Id == ticketId &&
                             t.AttendeeId == attendeeId)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
 
             if (ticket == null)
             {
@@ -203,35 +204,37 @@
             ticket.IsSold = false;
             ticket.AttendeeId = null;
 
-            this.data.SaveChanges();
+            await this.data.SaveChangesAsync();
 
-            bool ticketExists = TicketExists(eventId, attendeeId);
+            bool ticketExists = await TicketExists(eventId, attendeeId);
 
             if (!ticketExists)
             {
-                var eventAttendee = this.data
+                var eventAttendee = await this.data
                     .EventAttendees
                     .Where(ea => ea.EventId == eventId && ea.AttendeeId == attendeeId)
-                    .FirstOrDefault();
+                    .FirstOrDefaultAsync();
 
                 if (eventAttendee != null)
                 {
                     this.data.EventAttendees.Remove(eventAttendee);
-                    this.data.SaveChanges();
+                    await this.data.SaveChangesAsync();
                 }
             }
 
             return true;
         }
 
-        public bool EventExists(int eventId)
-            => this.data.Events.Any(e => e.Id == eventId);
+        public async Task<bool> EventExists(int eventId)
+            => await this.data
+                .Events
+                .AnyAsync(e => e.Id == eventId);
 
-        public int TotalAvailablePhysicalTicketsForEvent(int eventId)
-            => TotalAvailableOfTypeTicketsForEvent(eventId, PhysicalTicketType);
+        public async Task<int> TotalAvailablePhysicalTicketsForEvent(int eventId)
+            => await TotalAvailableOfTypeTicketsForEvent(eventId, PhysicalTicketType);
 
-        public int TotalAvailableVirtualTicketsForEvent(int eventId)
-            => TotalAvailableOfTypeTicketsForEvent(eventId, VirtualTicketType);
+        public async Task<int> TotalAvailableVirtualTicketsForEvent(int eventId)
+            => await TotalAvailableOfTypeTicketsForEvent(eventId, VirtualTicketType);
 
         private static (bool, DateTime) ValidDate(string date, string dateFormatOne, string dateFormatTwo, string dateFormatThree)
         {
@@ -298,29 +301,29 @@
             return tickets;
         }
 
-        private decimal TicketPrice(int eventId, string ticketType)
-            => this.data
+        private async Task<decimal> TicketPrice(int eventId, string ticketType)
+            => await this.data
                 .Tickets
                 .Where(t => t.EventId == eventId && t.Type == ticketType)
                 .Select(t => t.Price)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
 
-        private int TotalAvailableOfTypeTicketsForEvent(int eventId, string ticketType)
-            => this.data
+        private async Task<int> TotalAvailableOfTypeTicketsForEvent(int eventId, string ticketType)
+            => await this.data
                 .Tickets
                 .Where(t => t.EventId == eventId &&
                             t.IsSold == false &&
                             t.Type == ticketType)
-                .Count();
+                .CountAsync();
 
-        private bool BuyTicket(int eventId, int attendeeId, string ticketType)
+        private async Task<bool> BuyTicket(int eventId, int attendeeId, string ticketType)
         {
-            var ticket = this.data
+            var ticket = await this.data
                 .Tickets
                 .Where(t => t.EventId == eventId &&
                             t.IsSold == false &&
                             t.Type == ticketType)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
 
             if (ticket == null)
             {
@@ -330,7 +333,7 @@
             ticket.IsSold = true;
             ticket.AttendeeId = attendeeId;
 
-            bool eventAttendeeExists = EventAttendeeExists(eventId, attendeeId);
+            bool eventAttendeeExists = await EventAttendeeExists(eventId, attendeeId);
 
             if (!eventAttendeeExists)
             {
@@ -340,31 +343,31 @@
                     AttendeeId = attendeeId
                 };
 
-                this.data.EventAttendees.Add(eventAttendee);
+                await this.data.EventAttendees.AddAsync(eventAttendee);
             }
 
-            this.data.SaveChanges();
+            await this.data.SaveChangesAsync();
 
             return true;
         }
 
-        private bool EventAttendeeExists(int eventId, int attendeeId)
-            => this.data
+        private async Task<bool> EventAttendeeExists(int eventId, int attendeeId)
+            => await this.data
                 .EventAttendees
-                .Any(ea => ea.EventId == eventId && ea.AttendeeId == attendeeId);
+                .AnyAsync(ea => ea.EventId == eventId && ea.AttendeeId == attendeeId);
 
-        private bool TicketExists(int eventId, int attendeeId)
-            => this.data
+        private async Task<bool> TicketExists(int eventId, int attendeeId)
+            => await this.data
                 .Tickets
-                .Any(t => t.EventId == eventId && t.AttendeeId == attendeeId);
+                .AnyAsync(t => t.EventId == eventId && t.AttendeeId == attendeeId);
 
-        private IEnumerable<MyTicketServiceModel> MyTickets(int attendeeId, string ticketType)
-            => this.data
+        private async Task<IEnumerable<MyTicketServiceModel>> MyTickets(int attendeeId, string ticketType)
+            => await this.data
                 .Attendees
                 .Where(a => a.Id == attendeeId)
                 .SelectMany(a => a.Tickets)
                 .Where(t => t.Type == ticketType)
                 .ProjectTo<MyTicketServiceModel>(this.mapper.ConfigurationProvider)
-                .ToList();
+                .ToListAsync();
     }
 }

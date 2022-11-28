@@ -1,6 +1,8 @@
 ﻿namespace TechExpoWorld.Services.Statistics
 {
     using System.Linq;
+    using System.Threading.Tasks;
+    using Microsoft.EntityFrameworkCore;
     using TechExpoWorld.Data;
     using TechExpoWorld.Services.Statistics.Models;
 
@@ -11,14 +13,14 @@
         public StatisticsService(TechExpoDbContext data)
             => this.data = data;
 
-        public StatisticsServiceModel Total()
+        public async Task<StatisticsServiceModel> Total()
         {
-            var totalNewsArticles = this.data.NewsArticles.Count();
-            var totalUsers = this.data.Users.Count();
-            var totalAuthors = this.data.Authors.Count();
-            var totalAttendees = this.data.Attendees.Count();
-            var totalEvents = this.data.Events.Count();
-            var totalLocations = this.data.Events.Select(e => e.Location).Distinct().Count();
+            var totalNewsArticles = await this.data.NewsArticles.CountAsync();
+            var totalUsers = await this.data.Users.CountAsync();
+            var totalAuthors = await this.data.Authors.CountAsync();
+            var totalAttendees = await this.data.Attendees.CountAsync();
+            var totalEvents = await this.data.Events.CountAsync();
+            var totalLocations = await this.data.Events.Select(e => e.Location).Distinct().CountAsync();
 
             return new StatisticsServiceModel
             {

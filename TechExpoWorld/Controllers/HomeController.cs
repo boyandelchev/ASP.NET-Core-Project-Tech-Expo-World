@@ -1,7 +1,7 @@
 ﻿namespace TechExpoWorld.Controllers
 {
     using System;
-    using System.Linq;
+    using System.Threading.Tasks;
     using AutoMapper;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Caching.Memory;
@@ -30,17 +30,17 @@
             this.cache = cache;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             var indexData = this.cache.Get<IndexViewModel>(LatestStatisticsAndNewsArticlesCacheKey);
 
             if (indexData == null)
             {
-                var totalStatistics = this.statistics.Total();
+                var totalStatistics = await this.statistics.Total();
 
                 indexData = this.mapper.Map<IndexViewModel>(totalStatistics);
 
-                indexData.News = this.news.LatestNewsArticles().ToList();
+                indexData.News = await this.news.LatestNewsArticles();
 
                 var cacheOptions = new MemoryCacheEntryOptions()
                     .SetAbsoluteExpiration(TimeSpan.FromSeconds(1));

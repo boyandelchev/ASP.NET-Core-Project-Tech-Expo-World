@@ -2,8 +2,10 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
+    using Microsoft.EntityFrameworkCore;
     using TechExpoWorld.Data;
     using TechExpoWorld.Data.Models;
     using TechExpoWorld.Services.Comments.Models;
@@ -19,15 +21,15 @@
             this.mapper = mapper;
         }
 
-        public IEnumerable<CommentServiceModel> CommentsOnNewsArticle(int newsArticleId)
-            => this.data
+        public async Task<IEnumerable<CommentServiceModel>> CommentsOnNewsArticle(int newsArticleId)
+            => await this.data
                 .NewsArticles
                 .Where(na => na.Id == newsArticleId)
                 .SelectMany(na => na.Comments)
                 .ProjectTo<CommentServiceModel>(this.mapper.ConfigurationProvider)
-                .ToList();
+                .ToListAsync();
 
-        public int Create(int newsArticleId, string content, string userId)
+        public async Task<int> Create(int newsArticleId, string content, string userId)
         {
             var comment = new Comment
             {
@@ -36,16 +38,16 @@
                 UserId = userId
             };
 
-            this.data.Comments.Add(comment);
-            this.data.SaveChanges();
+            await this.data.Comments.AddAsync(comment);
+            await this.data.SaveChangesAsync();
 
             return comment.Id;
         }
 
-        public int TotalCommentsOnNewsArticle(int newsArticleId)
-            => this.data
+        public async Task<int> TotalCommentsOnNewsArticle(int newsArticleId)
+            => await this.data
                 .Comments
                 .Where(c => c.NewsArticleId == newsArticleId)
-                .Count();
+                .CountAsync();
     }
 }

@@ -1,15 +1,16 @@
 ﻿namespace TechExpoWorld.Services.Attendees
 {
     using System.Collections.Generic;
+    using System.Threading.Tasks;
     using TechExpoWorld.Services.Attendees.Models;
 
     public interface IAttendeeService
     {
-        bool IsAttendee(string userId);
+        Task<bool> IsAttendee(string userId);
 
-        int AttendeeId(string userId);
+        Task<int> AttendeeId(string userId);
 
-        int Create(
+        Task<int> Create(
             string name,
             string phoneNumber,
             string workEmail,
@@ -22,20 +23,20 @@
             int companySizeId,
             string userId);
 
-        IEnumerable<JobTypeServiceModel> JobTypes();
+        Task<IEnumerable<JobTypeServiceModel>> JobTypes();
 
-        bool JobTypeExists(int jobTypeId);
+        Task<bool> JobTypeExists(int jobTypeId);
 
-        IEnumerable<CompanyTypeServiceModel> CompanyTypes();
+        Task<IEnumerable<CompanyTypeServiceModel>> CompanyTypes();
 
-        bool CompanyTypeExists(int companyTypeId);
+        Task<bool> CompanyTypeExists(int companyTypeId);
 
-        IEnumerable<CompanySectorServiceModel> CompanySectors();
+        Task<IEnumerable<CompanySectorServiceModel>> CompanySectors();
 
-        bool CompanySectorExists(int companySectorId);
+        Task<bool> CompanySectorExists(int companySectorId);
 
-        IEnumerable<CompanySizeServiceModel> CompanySizes();
+        Task<IEnumerable<CompanySizeServiceModel>> CompanySizes();
 
-        bool CompanySizeExists(int companySizeId);
+        Task<bool> CompanySizeExists(int companySizeId);
     }
 }

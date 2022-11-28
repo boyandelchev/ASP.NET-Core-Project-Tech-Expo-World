@@ -1,19 +1,20 @@
 ﻿namespace TechExpoWorld.Services.Events
 {
     using System.Collections.Generic;
+    using System.Threading.Tasks;
     using TechExpoWorld.Services.Events.Models;
 
     public interface IEventService
     {
-        IEnumerable<EventServiceModel> All();
+        Task<IEnumerable<EventServiceModel>> All();
 
-        EventDetailsServiceModel Details(int eventId);
+        Task<EventDetailsServiceModel> Details(int eventId);
 
-        IEnumerable<MyTicketServiceModel> MyPhysicalTickets(int attendeeId);
+        Task<IEnumerable<MyTicketServiceModel>> MyPhysicalTickets(int attendeeId);
 
-        IEnumerable<MyTicketServiceModel> MyVirtualTickets(int attendeeId);
+        Task<IEnumerable<MyTicketServiceModel>> MyVirtualTickets(int attendeeId);
 
-        int CreateEventWithTickets(
+        Task<int> CreateEventWithTickets(
             string title,
             string content,
             string location,
@@ -25,7 +26,7 @@
             decimal virtualTicketPrice,
             string userId);
 
-        bool Edit(
+        Task<bool> Edit(
             int eventId,
             string title,
             string content,
@@ -37,18 +38,18 @@
             int totalVirtualTickets,
             decimal virtualTicketPrice);
 
-        bool Delete(int eventId);
+        Task<bool> Delete(int eventId);
 
-        bool BuyPhysicalTicket(int eventId, int attendeeId);
+        Task<bool> BuyPhysicalTicket(int eventId, int attendeeId);
 
-        bool BuyVirtualTicket(int eventId, int attendeeId);
+        Task<bool> BuyVirtualTicket(int eventId, int attendeeId);
 
-        bool RevokeTicket(int eventId, int ticketId, int attendeeId);
+        Task<bool> RevokeTicket(int eventId, int ticketId, int attendeeId);
 
-        bool EventExists(int eventId);
+        Task<bool> EventExists(int eventId);
 
-        int TotalAvailablePhysicalTicketsForEvent(int eventId);
+        Task<int> TotalAvailablePhysicalTicketsForEvent(int eventId);
 
-        int TotalAvailableVirtualTicketsForEvent(int eventId);
+        Task<int> TotalAvailableVirtualTicketsForEvent(int eventId);
     }
 }

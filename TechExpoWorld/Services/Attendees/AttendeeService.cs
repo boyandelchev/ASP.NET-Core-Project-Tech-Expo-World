@@ -2,8 +2,10 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
+    using Microsoft.EntityFrameworkCore;
     using TechExpoWorld.Data;
     using TechExpoWorld.Data.Models;
     using TechExpoWorld.Services.Attendees.Models;
@@ -19,19 +21,19 @@
             this.mapper = mapper;
         }
 
-        public bool IsAttendee(string userId)
-            => this.data
+        public async Task<bool> IsAttendee(string userId)
+            => await this.data
                 .Attendees
-                .Any(a => a.UserId == userId);
+                .AnyAsync(a => a.UserId == userId);
 
-        public int AttendeeId(string userId)
-            => this.data
+        public async Task<int> AttendeeId(string userId)
+            => await this.data
                 .Attendees
                 .Where(a => a.UserId == userId)
                 .Select(a => a.Id)
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
 
-        public int Create(
+        public async Task<int> Create(
             string name,
             string phoneNumber,
             string workEmail,
@@ -59,57 +61,57 @@
                 UserId = userId
             };
 
-            this.data.Attendees.Add(attendee);
-            this.data.SaveChanges();
+            await this.data.Attendees.AddAsync(attendee);
+            await this.data.SaveChangesAsync();
 
             return attendee.Id;
         }
 
-        public IEnumerable<JobTypeServiceModel> JobTypes()
-            => this.data
+        public async Task<IEnumerable<JobTypeServiceModel>> JobTypes()
+            => await this.data
                 .JobTypes
                 .ProjectTo<JobTypeServiceModel>(this.mapper.ConfigurationProvider)
                 .OrderBy(jt => jt.Name)
-                .ToList();
+                .ToListAsync();
 
-        public bool JobTypeExists(int jobTypeId)
-            => this.data
+        public async Task<bool> JobTypeExists(int jobTypeId)
+            => await this.data
                 .JobTypes
-                .Any(jt => jt.Id == jobTypeId);
+                .AnyAsync(jt => jt.Id == jobTypeId);
 
-        public IEnumerable<CompanyTypeServiceModel> CompanyTypes()
-            => this.data
+        public async Task<IEnumerable<CompanyTypeServiceModel>> CompanyTypes()
+            => await this.data
                 .CompanyTypes
                 .ProjectTo<CompanyTypeServiceModel>(this.mapper.ConfigurationProvider)
                 .OrderBy(ct => ct.Name)
-                .ToList();
+                .ToListAsync();
 
-        public bool CompanyTypeExists(int companyTypeId)
-            => this.data
+        public async Task<bool> CompanyTypeExists(int companyTypeId)
+            => await this.data
                 .CompanyTypes
-                .Any(ct => ct.Id == companyTypeId);
+                .AnyAsync(ct => ct.Id == companyTypeId);
 
-        public IEnumerable<CompanySectorServiceModel> CompanySectors()
-            => this.data
+        public async Task<IEnumerable<CompanySectorServiceModel>> CompanySectors()
+            => await this.data
                 .CompanySectors
                 .ProjectTo<CompanySectorServiceModel>(this.mapper.ConfigurationProvider)
                 .OrderBy(cs => cs.Name)
-                .ToList();
+                .ToListAsync();
 
-        public bool CompanySectorExists(int companySectorId)
-            => this.data
+        public async Task<bool> CompanySectorExists(int companySectorId)
+            => await this.data
                 .CompanySectors
-                .Any(cs => cs.Id == companySectorId);
+                .AnyAsync(cs => cs.Id == companySectorId);
 
-        public IEnumerable<CompanySizeServiceModel> CompanySizes()
-            => this.data
+        public async Task<IEnumerable<CompanySizeServiceModel>> CompanySizes()
+            => await this.data
                 .CompanySizes
                 .ProjectTo<CompanySizeServiceModel>(this.mapper.ConfigurationProvider)
-                .ToList();
+                .ToListAsync();
 
-        public bool CompanySizeExists(int companySizeId)
-            => this.data
+        public async Task<bool> CompanySizeExists(int companySizeId)
+            => await this.data
                 .CompanySizes
-                .Any(cs => cs.Id == companySizeId);
+                .AnyAsync(cs => cs.Id == companySizeId);
     }
 }

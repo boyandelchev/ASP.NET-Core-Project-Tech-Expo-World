@@ -1,5 +1,6 @@
 ﻿namespace TechExpoWorld.Controllers
 {
+    using System.Threading.Tasks;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using TechExpoWorld.Infrastructure.Extensions;
@@ -16,11 +17,11 @@
             => this.authors = authors;
 
         [Authorize]
-        public IActionResult BecomeAuthor()
+        public async Task<IActionResult> BecomeAuthor()
         {
             var userId = this.User.Id();
 
-            if (this.authors.IsAuthor(userId) || this.User.IsAdmin())
+            if (await this.authors.IsAuthor(userId) || this.User.IsAdmin())
             {
                 return BadRequest();
             }
@@ -30,11 +31,11 @@
 
         [HttpPost]
         [Authorize]
-        public IActionResult BecomeAuthor(BecomeAuthorFormModel author)
+        public async Task<IActionResult> BecomeAuthor(BecomeAuthorFormModel author)
         {
             var userId = this.User.Id();
 
-            if (this.authors.IsAuthor(userId) || this.User.IsAdmin())
+            if (await this.authors.IsAuthor(userId) || this.User.IsAdmin())
             {
                 return BadRequest();
             }
@@ -44,7 +45,7 @@
                 return View(author);
             }
 
-            this.authors.Create(
+            await this.authors.Create(
                 author.Name,
                 author.PhoneNumber,
                 author.Address,

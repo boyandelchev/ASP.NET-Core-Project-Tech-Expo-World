@@ -1,5 +1,6 @@
 ﻿namespace TechExpoWorld.Controllers
 {
+    using System.Threading.Tasks;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using TechExpoWorld.Infrastructure.Extensions;
@@ -22,8 +23,10 @@
 
         [HttpPost]
         [Authorize]
-        public IActionResult Add(int id, CommentFormModel comment)
+        public async Task<IActionResult> Add(int id, CommentFormModel comment)
         {
+            var newsArticle = await this.news.DetailsWithNoViewCountIncrement(id);
+
             if (!ModelState.IsValid)
             {
                 return RedirectToAction(nameof(NewsController.Details),
@@ -31,14 +34,13 @@
                                         new
                                         {
                                             id,
-                                            information = this.news.DetailsWithNoViewCountIncrement(id)
-                                                .GetNewsArticleInformation()
+                                            information = newsArticle.GetNewsArticleInformation()
                                         });
             }
 
             var userId = this.User.Id();
 
-            this.comments.Create(id, comment.Content, userId);
+            await this.comments.Create(id, comment.Content, userId);
 
             TempData[GlobalMessageKey] = "Your comment was added successfully!";
 
@@ -47,8 +49,7 @@
                                     new
                                     {
                                         id,
-                                        information = this.news.DetailsWithNoViewCountIncrement(id)
-                                            .GetNewsArticleInformation()
+                                        information = newsArticle.GetNewsArticleInformation()
                                     });
         }
     }

@@ -1,12 +1,14 @@
 ﻿namespace TechExpoWorld.Services.Authors
 {
+    using System.Threading.Tasks;
+
     public interface IAuthorService
     {
-        bool IsAuthor(string userId);
+        Task<bool> IsAuthor(string userId);
 
-        int AuthorId(string userId);
+        Task<int> AuthorId(string userId);
 
-        int Create(
+        Task<int> Create(
             string name,
             string phoneNumber,
             string address,

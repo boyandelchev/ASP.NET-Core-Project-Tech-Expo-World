@@ -1,12 +1,13 @@
 ﻿namespace TechExpoWorld.Services.News
 {
     using System.Collections.Generic;
+    using System.Threading.Tasks;
     using TechExpoWorld.Models.News;
     using TechExpoWorld.Services.News.Models;
 
     public interface INewsService
     {
-        NewsArticlesQueryServiceModel All(
+        Task<NewsArticlesQueryServiceModel> All(
             string category,
             string tag,
             string searchTerm,
@@ -14,15 +15,15 @@
             int currentPage,
             int newsArticlesPerPage);
 
-        IEnumerable<NewsArticleServiceModel> NewsArticlesByUser(string userId);
+        Task<IEnumerable<NewsArticleServiceModel>> NewsArticlesByUser(string userId);
 
-        IEnumerable<LatestNewsArticleServiceModel> LatestNewsArticles();
+        Task<IList<LatestNewsArticleServiceModel>> LatestNewsArticles();
 
-        NewsArticleDetailsServiceModel Details(int newsArticleId);
+        Task<NewsArticleDetailsServiceModel> Details(int newsArticleId);
 
-        NewsArticleDetailsServiceModel DetailsWithNoViewCountIncrement(int newsArticleId);
+        Task<NewsArticleDetailsServiceModel> DetailsWithNoViewCountIncrement(int newsArticleId);
 
-        int Create(
+        Task<int> Create(
             string title,
             string content,
             string imageUrl,
@@ -30,7 +31,7 @@
             IEnumerable<int> tagIds,
             int authorId);
 
-        bool Edit(
+        Task<bool> Edit(
             int newsArticleId,
             string title,
             string content,
@@ -38,19 +39,19 @@
             int categoryId,
             IEnumerable<int> tagIds);
 
-        bool Delete(int newsArticleId);
+        Task<bool> Delete(int newsArticleId);
 
-        bool IsByAuthor(int newsArticleId, int authorId);
+        Task<bool> IsByAuthor(int newsArticleId, int authorId);
 
-        IEnumerable<CategoryServiceModel> Categories();
+        Task<IEnumerable<CategoryServiceModel>> Categories();
 
-        IEnumerable<string> CategoryNames();
+        Task<IEnumerable<string>> CategoryNames();
 
-        bool CategoryExists(int categoryId);
+        Task<bool> CategoryExists(int categoryId);
 
-        IEnumerable<TagServiceModel> Tags();
+        Task<IEnumerable<TagServiceModel>> Tags();
 
-        IEnumerable<string> TagNames();
+        Task<IEnumerable<string>> TagNames();
 
         bool TagsExist(IEnumerable<int> tagIds);
     }

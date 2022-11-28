@@ -1,5 +1,6 @@
 ﻿namespace TechExpoWorld.Controllers
 {
+    using System.Threading.Tasks;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using TechExpoWorld.Infrastructure.Extensions;
@@ -16,51 +17,51 @@
             => this.attendees = attendees;
 
         [Authorize]
-        public IActionResult BecomeAttendee()
+        public async Task<IActionResult> BecomeAttendee()
         {
             var userId = this.User.Id();
 
-            if (this.attendees.IsAttendee(userId) || this.User.IsAdmin())
+            if (await this.attendees.IsAttendee(userId) || this.User.IsAdmin())
             {
                 return BadRequest();
             }
 
             return View(new BecomeAttendeeFormModel
             {
-                JobTypes = this.attendees.JobTypes(),
-                CompanyTypes = this.attendees.CompanyTypes(),
-                CompanySectors = this.attendees.CompanySectors(),
-                CompanySizes = this.attendees.CompanySizes()
+                JobTypes = await this.attendees.JobTypes(),
+                CompanyTypes = await this.attendees.CompanyTypes(),
+                CompanySectors = await this.attendees.CompanySectors(),
+                CompanySizes = await this.attendees.CompanySizes()
             });
         }
 
         [HttpPost]
         [Authorize]
-        public IActionResult BecomeAttendee(BecomeAttendeeFormModel attendee)
+        public async Task<IActionResult> BecomeAttendee(BecomeAttendeeFormModel attendee)
         {
             var userId = this.User.Id();
 
-            if (this.attendees.IsAttendee(userId) || this.User.IsAdmin())
+            if (await this.attendees.IsAttendee(userId) || this.User.IsAdmin())
             {
                 return BadRequest();
             }
 
-            if (!this.attendees.JobTypeExists(attendee.JobTypeId))
+            if (!await this.attendees.JobTypeExists(attendee.JobTypeId))
             {
                 this.ModelState.AddModelError(nameof(attendee.JobTypeId), "Job type does not exist.");
             }
 
-            if (!this.attendees.CompanyTypeExists(attendee.CompanyTypeId))
+            if (!await this.attendees.CompanyTypeExists(attendee.CompanyTypeId))
             {
                 this.ModelState.AddModelError(nameof(attendee.CompanyTypeId), "Company type does not exist.");
             }
 
-            if (!this.attendees.CompanySectorExists(attendee.CompanySectorId))
+            if (!await this.attendees.CompanySectorExists(attendee.CompanySectorId))
             {
                 this.ModelState.AddModelError(nameof(attendee.CompanySectorId), "Company sector does not exist.");
             }
 
-            if (!this.attendees.CompanySizeExists(attendee.CompanySizeId))
+            if (!await this.attendees.CompanySizeExists(attendee.CompanySizeId))
             {
                 this.ModelState.AddModelError(nameof(attendee.CompanySizeId), "Company size does not exist.");
             }
@@ -69,25 +70,25 @@
             {
                 return View(new BecomeAttendeeFormModel
                 {
-                    JobTypes = this.attendees.JobTypes(),
-                    CompanyTypes = this.attendees.CompanyTypes(),
-                    CompanySectors = this.attendees.CompanySectors(),
-                    CompanySizes = this.attendees.CompanySizes()
+                    JobTypes = await this.attendees.JobTypes(),
+                    CompanyTypes = await this.attendees.CompanyTypes(),
+                    CompanySectors = await this.attendees.CompanySectors(),
+                    CompanySizes = await this.attendees.CompanySizes()
                 });
             }
 
-            this.attendees.Create(
-                attendee.Name,
-                attendee.PhoneNumber,
-                attendee.WorkEmail,
-                attendee.JobTitle,
-                attendee.CompanyName,
-                attendee.Country,
-                attendee.JobTypeId,
-                attendee.CompanyTypeId,
-                attendee.CompanySectorId,
-                attendee.CompanySizeId,
-                userId);
+            await this.attendees.Create(
+                 attendee.Name,
+                 attendee.PhoneNumber,
+                 attendee.WorkEmail,
+                 attendee.JobTitle,
+                 attendee.CompanyName,
+                 attendee.Country,
+                 attendee.JobTypeId,
+                 attendee.CompanyTypeId,
+                 attendee.CompanySectorId,
+                 attendee.CompanySizeId,
+                 userId);
 
             TempData[GlobalMessageKey] = "Thank you for becomming an attendee!";
 

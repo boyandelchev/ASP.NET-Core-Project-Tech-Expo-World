@@ -10,8 +10,8 @@
     {
         var userId = User.Id();
         var isAdmin = User.IsAdmin();
-        var isAttendee = Attendee.IsAttendee(userId);
-        var isAuthor = Authors.IsAuthor(userId);
+        var isAttendee = await Attendee.IsAttendee(userId);
+        var isAuthor = await Authors.IsAuthor(userId);
 
         if (isAuthor && !isAdmin)
         {

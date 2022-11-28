@@ -1,5 +1,6 @@
 ﻿namespace TechExpoWorld.Areas.Admin.Controllers
 {
+    using System.Threading.Tasks;
     using AutoMapper;
     using Microsoft.AspNetCore.Mvc;
     using TechExpoWorld.Areas.Admin.Models.Events;
@@ -25,7 +26,7 @@
         }
 
         [HttpPost]
-        public IActionResult Add(EventFormModel eventData)
+        public async Task<IActionResult> Add(EventFormModel eventData)
         {
             if (!ModelState.IsValid)
             {
@@ -34,17 +35,17 @@
 
             var userId = this.User.Id();
 
-            this.events.CreateEventWithTickets(
-                eventData.Title,
-                eventData.Content,
-                eventData.Location,
-                eventData.StartDate,
-                eventData.EndDate,
-                eventData.TotalPhysicalTickets,
-                eventData.PhysicalTicketPrice,
-                eventData.TotalVirtualTickets,
-                eventData.VirtualTicketPrice,
-                userId);
+            await this.events.CreateEventWithTickets(
+                 eventData.Title,
+                 eventData.Content,
+                 eventData.Location,
+                 eventData.StartDate,
+                 eventData.EndDate,
+                 eventData.TotalPhysicalTickets,
+                 eventData.PhysicalTicketPrice,
+                 eventData.TotalVirtualTickets,
+                 eventData.VirtualTicketPrice,
+                 userId);
 
             TempData[GlobalMessageKey] = "Your event was added successfully!";
 
@@ -53,9 +54,9 @@
                                     new { area = "" });
         }
 
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
-            var eventData = this.events.Details(id);
+            var eventData = await this.events.Details(id);
 
             if (eventData == null)
             {
@@ -68,9 +69,9 @@
         }
 
         [HttpPost]
-        public IActionResult Edit(int id, EventFormModel eventData)
+        public async Task<IActionResult> Edit(int id, EventFormModel eventData)
         {
-            var eventExists = this.events.EventExists(id);
+            var eventExists = await this.events.EventExists(id);
 
             if (!eventExists)
             {
@@ -82,17 +83,17 @@
                 return View(eventData);
             }
 
-            this.events.Edit(
-                id,
-                eventData.Title,
-                eventData.Content,
-                eventData.Location,
-                eventData.StartDate,
-                eventData.EndDate,
-                eventData.TotalPhysicalTickets,
-                eventData.PhysicalTicketPrice,
-                eventData.TotalVirtualTickets,
-                eventData.VirtualTicketPrice);
+            await this.events.Edit(
+                 id,
+                 eventData.Title,
+                 eventData.Content,
+                 eventData.Location,
+                 eventData.StartDate,
+                 eventData.EndDate,
+                 eventData.TotalPhysicalTickets,
+                 eventData.PhysicalTicketPrice,
+                 eventData.TotalVirtualTickets,
+                 eventData.VirtualTicketPrice);
 
             TempData[GlobalMessageKey] = "Your event was edited successfully!";
 
@@ -101,9 +102,9 @@
                                     new { area = "" });
         }
 
-        public IActionResult DeleteDetails(int id)
+        public async Task<IActionResult> DeleteDetails(int id)
         {
-            var eventData = this.events.Details(id);
+            var eventData = await this.events.Details(id);
 
             if (eventData == null)
             {
@@ -114,16 +115,16 @@
         }
 
         [HttpPost]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var eventExists = this.events.EventExists(id);
+            var eventExists = await this.events.EventExists(id);
 
             if (!eventExists)
             {
                 return NotFound();
             }
 
-            this.events.Delete(id);
+            await this.events.Delete(id);
 
             TempData[GlobalMessageKey] = "Your event was deleted successfully!";
 
