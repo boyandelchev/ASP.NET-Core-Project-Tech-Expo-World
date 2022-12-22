@@ -1,5 +1,6 @@
 ﻿namespace TechExpoWorld.Data.Models
 {
+    using Microsoft.EntityFrameworkCore;
     using System.ComponentModel.DataAnnotations;
 
     using static DataConstants.Ticket;
@@ -12,6 +13,7 @@
         [MaxLength(TypeMaxLength)]
         public string Type { get; set; }
 
+        [Precision(8, 2)]
         public decimal Price { get; set; }
 
         public bool IsSold { get; set; }

@@ -52,8 +52,6 @@
         [Required]
         public string UserId { get; set; }
 
-        public IEnumerable<EventAttendee> EventAttendees { get; set; } = new List<EventAttendee>();
-
         public IEnumerable<Ticket> Tickets { get; set; } = new List<Ticket>();
     }
 }

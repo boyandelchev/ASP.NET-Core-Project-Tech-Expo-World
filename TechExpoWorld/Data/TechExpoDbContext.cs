@@ -27,8 +27,6 @@
 
         public DbSet<Attendee> Attendees { get; init; }
 
-        public DbSet<EventAttendee> EventAttendees { get; init; }
-
         public DbSet<Ticket> Tickets { get; init; }
 
         public DbSet<JobType> JobTypes { get; init; }
@@ -128,29 +126,6 @@
                 .WithMany(cs => cs.Attendees)
                 .HasForeignKey(a => a.CompanySizeId)
                 .OnDelete(DeleteBehavior.Restrict);
-
-            builder
-                .Entity<EventAttendee>()
-                .HasKey(ea => new { ea.EventId, ea.AttendeeId });
-
-            builder
-                .Entity<EventAttendee>()
-                .HasOne(ea => ea.Event)
-                .WithMany(e => e.EventAttendees)
-                .HasForeignKey(ea => ea.EventId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            builder
-                .Entity<EventAttendee>()
-                .HasOne(ea => ea.Attendee)
-                .WithMany(a => a.EventAttendees)
-                .HasForeignKey(ea => ea.AttendeeId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            builder
-                .Entity<Ticket>()
-                .Property(t => t.Price)
-                .HasPrecision(8, 2);
 
             base.OnModelCreating(builder);
         }

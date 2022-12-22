@@ -1,6 +1,8 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
+#nullable disable
+
 namespace TechExpoWorld.Data.Migrations
 {
     public partial class NewsEventsTables : Migration
@@ -220,30 +222,6 @@ namespace TechExpoWorld.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "EventAttendees",
-                columns: table => new
-                {
-                    EventId = table.Column<int>(type: "int", nullable: false),
-                    AttendeeId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_EventAttendees", x => new { x.EventId, x.AttendeeId });
-                    table.ForeignKey(
-                        name: "FK_EventAttendees_Attendees_AttendeeId",
-                        column: x => x.AttendeeId,
-                        principalTable: "Attendees",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_EventAttendees_Events_EventId",
-                        column: x => x.EventId,
-                        principalTable: "Events",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Tickets",
                 columns: table => new
                 {
@@ -262,8 +240,7 @@ namespace TechExpoWorld.Data.Migrations
                         name: "FK_Tickets_Attendees_AttendeeId",
                         column: x => x.AttendeeId,
                         principalTable: "Attendees",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Tickets_Events_EventId",
                         column: x => x.EventId,
@@ -298,8 +275,7 @@ namespace TechExpoWorld.Data.Migrations
                         name: "FK_Comments_Comments_ParentCommentId",
                         column: x => x.ParentCommentId,
                         principalTable: "Comments",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Comments_NewsArticles_NewsArticleId",
                         column: x => x.NewsArticleId,
@@ -380,11 +356,6 @@ namespace TechExpoWorld.Data.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_EventAttendees_AttendeeId",
-                table: "EventAttendees",
-                column: "AttendeeId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Events_UserId",
                 table: "Events",
                 column: "UserId");
@@ -419,9 +390,6 @@ namespace TechExpoWorld.Data.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Comments");
-
-            migrationBuilder.DropTable(
-                name: "EventAttendees");
 
             migrationBuilder.DropTable(
                 name: "NewsArticleTags");

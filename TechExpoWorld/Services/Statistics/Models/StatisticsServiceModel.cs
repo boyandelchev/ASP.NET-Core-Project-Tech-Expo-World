@@ -12,9 +12,9 @@
 
         public int TotalEvents { get; init; }
 
-        public int TotalSpeakers { get; init; }
+        //public int TotalSpeakers { get; init; }
 
-        public int TotalExhibitors { get; init; }
+        //public int TotalExhibitors { get; init; }
 
         public int TotalLocations { get; init; }
     }

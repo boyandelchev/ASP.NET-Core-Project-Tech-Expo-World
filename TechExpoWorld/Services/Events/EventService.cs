@@ -86,7 +86,7 @@
                 UserId = userId
             };
 
-            var tickets = CreateTickets(
+            var tickets = CreateAllTickets(
                 totalPhysicalTickets,
                 physicalTicketPrice,
                 totalVirtualTickets,
@@ -115,7 +115,6 @@
             var eventData = await this.data
                 .Events
                 .Include(e => e.Tickets)
-                .Include(e => e.EventAttendees)
                 .FirstOrDefaultAsync(e => e.Id == eventId);
 
             if (eventData == null)
@@ -142,15 +141,11 @@
 
                 return true;
             }
-            else
-            {
-                eventData.EventAttendees = null;
-            }
 
             eventData.TotalPhysicalTickets = totalPhysicalTickets;
             eventData.TotalVirtualTickets = totalVirtualTickets;
 
-            eventData.Tickets = CreateTickets(
+            eventData.Tickets = CreateAllTickets(
                 totalPhysicalTickets,
                 physicalTicketPrice,
                 totalVirtualTickets,
@@ -165,15 +160,12 @@
         {
             var eventData = await this.data
                 .Events
-                .Include(e => e.EventAttendees)
                 .FirstOrDefaultAsync(e => e.Id == eventId);
 
             if (eventData == null)
             {
                 return false;
             }
-
-            eventData.EventAttendees = null;
 
             this.data.Events.Remove(eventData);
             await this.data.SaveChangesAsync();
@@ -205,22 +197,6 @@
             ticket.AttendeeId = null;
 
             await this.data.SaveChangesAsync();
-
-            bool ticketExists = await TicketExists(eventId, attendeeId);
-
-            if (!ticketExists)
-            {
-                var eventAttendee = await this.data
-                    .EventAttendees
-                    .Where(ea => ea.EventId == eventId && ea.AttendeeId == attendeeId)
-                    .FirstOrDefaultAsync();
-
-                if (eventAttendee != null)
-                {
-                    this.data.EventAttendees.Remove(eventAttendee);
-                    await this.data.SaveChangesAsync();
-                }
-            }
 
             return true;
         }
@@ -272,29 +248,42 @@
             return (isDate, dateTimeThree);
         }
 
-        private static IEnumerable<Ticket> CreateTickets(
+        private static IEnumerable<Ticket> CreateAllTickets(
             int totalPhysicalTickets,
             decimal physicalTicketPrice,
             int totalVirtualTickets,
             decimal virtualTicketPrice)
         {
+            var ticketsAll = new List<Ticket>();
+
+            var physicalTickets = CreateTicketsOfType(
+                totalPhysicalTickets,
+                PhysicalTicketType,
+                physicalTicketPrice);
+            ticketsAll.AddRange(physicalTickets);
+
+            var virtualTickets = CreateTicketsOfType(
+                totalVirtualTickets,
+                VirtualTicketType,
+                virtualTicketPrice);
+            ticketsAll.AddRange(virtualTickets);
+
+            return ticketsAll;
+        }
+
+        private static IEnumerable<Ticket> CreateTicketsOfType(
+            int totalTickets,
+            string ticketType,
+            decimal ticketPrice)
+        {
             var tickets = new List<Ticket>();
 
-            for (int i = 0; i < totalPhysicalTickets; i++)
+            for (int i = 0; i < totalTickets; i++)
             {
                 tickets.Add(new Ticket
                 {
-                    Type = PhysicalTicketType,
-                    Price = physicalTicketPrice
-                });
-            }
-
-            for (int i = 0; i < totalVirtualTickets; i++)
-            {
-                tickets.Add(new Ticket
-                {
-                    Type = VirtualTicketType,
-                    Price = virtualTicketPrice
+                    Type = ticketType,
+                    Price = ticketPrice
                 });
             }
 
@@ -333,33 +322,10 @@
             ticket.IsSold = true;
             ticket.AttendeeId = attendeeId;
 
-            bool eventAttendeeExists = await EventAttendeeExists(eventId, attendeeId);
-
-            if (!eventAttendeeExists)
-            {
-                var eventAttendee = new EventAttendee
-                {
-                    EventId = eventId,
-                    AttendeeId = attendeeId
-                };
-
-                await this.data.EventAttendees.AddAsync(eventAttendee);
-            }
-
             await this.data.SaveChangesAsync();
 
             return true;
         }
-
-        private async Task<bool> EventAttendeeExists(int eventId, int attendeeId)
-            => await this.data
-                .EventAttendees
-                .AnyAsync(ea => ea.EventId == eventId && ea.AttendeeId == attendeeId);
-
-        private async Task<bool> TicketExists(int eventId, int attendeeId)
-            => await this.data
-                .Tickets
-                .AnyAsync(t => t.EventId == eventId && t.AttendeeId == attendeeId);
 
         private async Task<IEnumerable<MyTicketServiceModel>> MyTickets(int attendeeId, string ticketType)
             => await this.data
