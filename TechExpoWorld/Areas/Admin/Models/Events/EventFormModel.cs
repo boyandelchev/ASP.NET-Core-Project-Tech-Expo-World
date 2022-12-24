@@ -1,5 +1,6 @@
 ﻿namespace TechExpoWorld.Areas.Admin.Models.Events
 {
+    using System;
     using System.ComponentModel.DataAnnotations;
 
     using static Data.DataConstants.Event;
@@ -19,14 +20,15 @@
         public string Location { get; init; }
 
         [Required]
-        [ValidDateTime]
+        [IsDateTimeBefore(nameof(EndDate))]
         [Display(Name = "Start Date")]
-        public string StartDate { get; init; }
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm}", ApplyFormatInEditMode = true)]
+        public DateTime? StartDate { get; init; }
 
         [Required]
-        [ValidDateTime]
         [Display(Name = "End Date")]
-        public string EndDate { get; init; }
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm}", ApplyFormatInEditMode = true)]
+        public DateTime? EndDate { get; init; }
 
         [Range(1, 2000)]
         [Display(Name = "Total Physical Tickets")]

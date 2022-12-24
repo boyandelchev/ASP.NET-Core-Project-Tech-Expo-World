@@ -123,10 +123,9 @@
                 Content = content,
                 ImageUrl = imageUrl,
                 NewsCategoryId = categoryId,
+                NewsArticleTags = CreateNewsArticleTags(tagIds),
                 AuthorId = authorId
             };
-
-            newsArticle.NewsArticleTags = CreateNewsArticleTags(tagIds);
 
             await this.data.NewsArticles.AddAsync(newsArticle);
             await this.data.SaveChangesAsync();

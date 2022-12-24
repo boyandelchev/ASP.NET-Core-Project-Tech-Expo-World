@@ -1,5 +1,6 @@
 ﻿namespace TechExpoWorld.Services.Events
 {
+    using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using TechExpoWorld.Services.Events.Models;
@@ -18,8 +19,8 @@
             string title,
             string content,
             string location,
-            string startDate,
-            string endDate,
+            DateTime? startDate,
+            DateTime? endDate,
             int totalPhysicalTickets,
             decimal physicalTicketPrice,
             int totalVirtualTickets,
@@ -31,8 +32,8 @@
             string title,
             string content,
             string location,
-            string startDate,
-            string endDate,
+            DateTime? startDate,
+            DateTime? endDate,
             int totalPhysicalTickets,
             decimal physicalTicketPrice,
             int totalVirtualTickets,

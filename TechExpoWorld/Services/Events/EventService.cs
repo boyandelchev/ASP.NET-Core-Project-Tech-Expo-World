@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
     using System.Linq;
     using System.Threading.Tasks;
     using AutoMapper;
@@ -11,8 +10,6 @@
     using TechExpoWorld.Data;
     using TechExpoWorld.Data.Models;
     using TechExpoWorld.Services.Events.Models;
-
-    using static Data.DataConstants.Event;
 
     public class EventService : IEventService
     {
@@ -63,24 +60,21 @@
             string title,
             string content,
             string location,
-            string startDate,
-            string endDate,
+            DateTime? startDate,
+            DateTime? endDate,
             int totalPhysicalTickets,
             decimal physicalTicketPrice,
             int totalVirtualTickets,
             decimal virtualTicketPrice,
             string userId)
         {
-            var (isStartDate, dateStart) = ValidDate(startDate, DateFormatOne, DateFormatTwo, DateFormatThree);
-            var (isEndDate, dateEnd) = ValidDate(endDate, DateFormatOne, DateFormatTwo, DateFormatThree);
-
             var eventData = new Event
             {
                 Title = title,
                 Content = content,
                 Location = location,
-                StartDate = dateStart,
-                EndDate = dateEnd,
+                StartDate = startDate.Value,
+                EndDate = endDate.Value,
                 TotalPhysicalTickets = totalPhysicalTickets,
                 TotalVirtualTickets = totalVirtualTickets,
                 UserId = userId
@@ -105,8 +99,8 @@
             string title,
             string content,
             string location,
-            string startDate,
-            string endDate,
+            DateTime? startDate,
+            DateTime? endDate,
             int totalPhysicalTickets,
             decimal physicalTicketPrice,
             int totalVirtualTickets,
@@ -125,12 +119,8 @@
             eventData.Title = title;
             eventData.Content = content;
             eventData.Location = location;
-
-            var (isStartDate, dateStart) = ValidDate(startDate, DateFormatOne, DateFormatTwo, DateFormatThree);
-            var (isEndDate, dateEnd) = ValidDate(endDate, DateFormatOne, DateFormatTwo, DateFormatThree);
-
-            eventData.StartDate = dateStart;
-            eventData.EndDate = dateEnd;
+            eventData.StartDate = startDate.Value;
+            eventData.EndDate = endDate.Value;
 
             if (eventData.TotalPhysicalTickets == totalPhysicalTickets &&
                 eventData.TotalVirtualTickets == totalVirtualTickets &&
@@ -211,42 +201,6 @@
 
         public async Task<int> TotalAvailableVirtualTicketsForEvent(int eventId)
             => await TotalAvailableOfTypeTicketsForEvent(eventId, VirtualTicketType);
-
-        private static (bool, DateTime) ValidDate(string date, string dateFormatOne, string dateFormatTwo, string dateFormatThree)
-        {
-            var isDate = DateTime.TryParseExact(
-                date,
-                dateFormatOne,
-                CultureInfo.InvariantCulture,
-                DateTimeStyles.None,
-                out var dateTimeOne);
-
-            if (isDate)
-            {
-                return (isDate, dateTimeOne);
-            }
-
-            isDate = DateTime.TryParseExact(
-                date,
-                dateFormatTwo,
-                CultureInfo.InvariantCulture,
-                DateTimeStyles.None,
-                out var dateTimeTwo);
-
-            if (isDate)
-            {
-                return (isDate, dateTimeTwo);
-            }
-
-            isDate = DateTime.TryParseExact(
-                date,
-                dateFormatThree,
-                CultureInfo.InvariantCulture,
-                DateTimeStyles.None,
-                out var dateTimeThree);
-
-            return (isDate, dateTimeThree);
-        }
 
         private static IEnumerable<Ticket> CreateAllTickets(
             int totalPhysicalTickets,

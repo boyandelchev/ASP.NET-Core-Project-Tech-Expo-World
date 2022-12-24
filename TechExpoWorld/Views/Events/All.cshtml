@@ -22,9 +22,11 @@
                 </div>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">@eventData.Location</li>
-                    <li class="list-group-item">@eventData.StartDate - @eventData.EndDate</li>
+                    <li class="list-group-item font-italic p-4">@eventData.StartDate - @eventData.EndDate</li>
                     <li class="list-group-item">
-                        <a asp-controller="Events" asp-action="Details" asp-route-id="@eventData.Id" asp-route-information="@eventData.GetEventInformation()" class="card-link">See available tickets and information about the event</a>
+                        <a asp-controller="Events" asp-action="Details" asp-route-id="@eventData.Id" asp-route-information="@eventData.GetEventInformation()" class="card-link">
+                            See available tickets and information about the event
+                        </a>
                     </li>
                     @if (User.IsAdmin())
                     {
