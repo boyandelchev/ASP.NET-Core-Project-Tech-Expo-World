@@ -55,7 +55,7 @@
 
             builder
                 .Entity<NewsArticleTag>()
-                .HasKey(nt => new { nt.NewsArticleId, nt.TagId });
+                .HasKey(nat => new { nat.NewsArticleId, nat.TagId });
 
             builder
                 .Entity<NewsArticleTag>()
@@ -92,40 +92,7 @@
                 .HasForeignKey(e => e.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            builder
-                .Entity<Attendee>()
-                .HasOne<User>()
-                .WithOne()
-                .HasForeignKey<Attendee>(a => a.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            builder
-                .Entity<Attendee>()
-                .HasOne(a => a.JobType)
-                .WithMany(jt => jt.Attendees)
-                .HasForeignKey(a => a.JobTypeId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            builder
-                .Entity<Attendee>()
-                .HasOne(a => a.CompanyType)
-                .WithMany(ct => ct.Attendees)
-                .HasForeignKey(a => a.CompanyTypeId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            builder
-                .Entity<Attendee>()
-                .HasOne(a => a.CompanySector)
-                .WithMany(cs => cs.Attendees)
-                .HasForeignKey(a => a.CompanySectorId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            builder
-                .Entity<Attendee>()
-                .HasOne(a => a.CompanySize)
-                .WithMany(cs => cs.Attendees)
-                .HasForeignKey(a => a.CompanySizeId)
-                .OnDelete(DeleteBehavior.Restrict);
+            builder.ApplyConfiguration(new AttendeeConfiguration());
 
             base.OnModelCreating(builder);
         }
