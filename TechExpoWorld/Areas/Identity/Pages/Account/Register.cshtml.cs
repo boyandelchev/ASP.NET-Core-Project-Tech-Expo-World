@@ -8,7 +8,7 @@
     using Microsoft.AspNetCore.Mvc.RazorPages;
     using TechExpoWorld.Data.Models;
 
-    using static Data.DataConstants.User;
+    using static GlobalConstants.User;
 
     [AllowAnonymous]
     public class RegisterModel : PageModel

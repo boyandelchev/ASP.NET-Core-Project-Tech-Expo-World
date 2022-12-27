@@ -4,7 +4,7 @@
     using System.ComponentModel.DataAnnotations;
     using TechExpoWorld.Services.Attendees.Models;
 
-    using static Data.DataConstants.Attendee;
+    using static GlobalConstants.Attendee;
 
     public class BecomeAttendeeFormModel
     {
@@ -14,39 +14,39 @@
 
         [Required]
         [StringLength(PhoneNumberMaxLength, MinimumLength = PhoneNumberMinLength)]
-        [Display(Name = "Phone Number")]
+        [Display(Name = DisplayPhoneNumber)]
         public string PhoneNumber { get; init; }
 
         [Required]
         [StringLength(WorkEmailMaxLength, MinimumLength = WorkEmailMinLength)]
         [EmailAddress]
-        [Display(Name = "Work Email")]
+        [Display(Name = DisplayWorkEmail)]
         public string WorkEmail { get; init; }
 
         [Required]
         [StringLength(JobTitleMaxLength, MinimumLength = JobTitleMinLength)]
-        [Display(Name = "Job Title")]
+        [Display(Name = DisplayJobTitle)]
         public string JobTitle { get; init; }
 
         [Required]
         [StringLength(CompanyNameMaxLength, MinimumLength = CompanyNameMinLength)]
-        [Display(Name = "Company Name")]
+        [Display(Name = DisplayCompanyName)]
         public string CompanyName { get; init; }
 
         [Required]
         [StringLength(CountryMaxLength, MinimumLength = CountryMinLength)]
         public string Country { get; init; }
 
-        [Display(Name = "Job Type")]
+        [Display(Name = DisplayJobType)]
         public int JobTypeId { get; init; }
 
-        [Display(Name = "Company Type")]
+        [Display(Name = DisplayCompanyType)]
         public int CompanyTypeId { get; init; }
 
-        [Display(Name = "Company Sector")]
+        [Display(Name = DisplayCompanySector)]
         public int CompanySectorId { get; init; }
 
-        [Display(Name = "Company Size")]
+        [Display(Name = DisplayCompanySize)]
         public int CompanySizeId { get; init; }
 
         public IEnumerable<JobTypeServiceModel> JobTypes { get; init; }

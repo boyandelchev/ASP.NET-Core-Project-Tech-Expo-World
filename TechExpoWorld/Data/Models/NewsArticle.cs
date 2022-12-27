@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
-    using static DataConstants.NewsArticle;
+    using static GlobalConstants.NewsArticle;
 
     public class NewsArticle
     {

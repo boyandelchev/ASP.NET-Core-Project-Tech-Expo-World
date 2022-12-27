@@ -3,7 +3,7 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
-    using static DataConstants.Attendee;
+    using static GlobalConstants.Attendee;
 
     public class Attendee
     {

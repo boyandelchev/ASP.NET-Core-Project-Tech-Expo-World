@@ -3,7 +3,7 @@
     using System;
     using System.ComponentModel.DataAnnotations;
 
-    using static Data.DataConstants.Event;
+    using static GlobalConstants.Event;
 
     public class EventFormModel
     {
@@ -21,29 +21,29 @@
 
         [Required]
         [IsDateTimeBefore(nameof(EndDate))]
-        [Display(Name = "Start Date")]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm}", ApplyFormatInEditMode = true)]
+        [Display(Name = DisplayStartDate)]
+        [DisplayFormat(DataFormatString = DisplayFormatDateTime, ApplyFormatInEditMode = true)]
         public DateTime? StartDate { get; init; }
 
         [Required]
-        [Display(Name = "End Date")]
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd HH:mm}", ApplyFormatInEditMode = true)]
+        [Display(Name = DisplayEndDate)]
+        [DisplayFormat(DataFormatString = DisplayFormatDateTime, ApplyFormatInEditMode = true)]
         public DateTime? EndDate { get; init; }
 
-        [Range(1, 2000)]
-        [Display(Name = "Total Physical Tickets")]
+        [Range(TicketCountMinRange, TicketCountMaxRange)]
+        [Display(Name = DisplayTotalPhysicalTickets)]
         public int TotalPhysicalTickets { get; init; }
 
-        [Range(1, 2000)]
-        [Display(Name = "Total Virtual Tickets")]
+        [Range(TicketCountMinRange, TicketCountMaxRange)]
+        [Display(Name = DisplayTotalVirtualTickets)]
         public int TotalVirtualTickets { get; init; }
 
-        [Range(0, 100000)]
-        [Display(Name = "Price - Physical")]
+        [Range(TicketPriceMinRange, TicketPriceMaxRange)]
+        [Display(Name = DisplayPricePhysical)]
         public decimal PhysicalTicketPrice { get; init; }
 
-        [Range(0, 100000)]
-        [Display(Name = "Price - Virtual")]
+        [Range(TicketPriceMinRange, TicketPriceMaxRange)]
+        [Display(Name = DisplayPriceVirtual)]
         public decimal VirtualTicketPrice { get; init; }
     }
 }

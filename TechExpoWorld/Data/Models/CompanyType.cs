@@ -3,7 +3,7 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
-    using static DataConstants.CompanyType;
+    using static GlobalConstants.CompanyType;
 
     public class CompanyType
     {

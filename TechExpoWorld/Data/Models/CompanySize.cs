@@ -3,7 +3,7 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
-    using static DataConstants.CompanySize;
+    using static GlobalConstants.CompanySize;
 
     public class CompanySize
     {

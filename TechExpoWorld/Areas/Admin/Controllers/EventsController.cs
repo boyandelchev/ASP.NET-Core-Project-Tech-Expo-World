@@ -7,10 +7,11 @@
     using TechExpoWorld.Infrastructure.Extensions;
     using TechExpoWorld.Services.Events;
 
-    using static WebConstants;
+    using static GlobalConstants.TempData;
 
     public class EventsController : AdminController
     {
+        private const string ControllerEvents = "Events";
         private readonly IEventService events;
         private readonly IMapper mapper;
 
@@ -47,11 +48,11 @@
                  eventData.VirtualTicketPrice,
                  userId);
 
-            TempData[GlobalMessageKey] = "Your event was added successfully!";
+            TempData[GlobalMessageKey] = CreatedEvent;
 
             return RedirectToAction(nameof(TechExpoWorld.Controllers.EventsController.All),
-                                    "Events",
-                                    new { area = "" });
+                                    ControllerEvents,
+                                    new { area = string.Empty });
         }
 
         public async Task<IActionResult> Edit(int id)
@@ -95,11 +96,11 @@
                  eventData.TotalVirtualTickets,
                  eventData.VirtualTicketPrice);
 
-            TempData[GlobalMessageKey] = "Your event was edited successfully!";
+            TempData[GlobalMessageKey] = EditedEvent;
 
             return RedirectToAction(nameof(TechExpoWorld.Controllers.EventsController.All),
-                                    "Events",
-                                    new { area = "" });
+                                    ControllerEvents,
+                                    new { area = string.Empty });
         }
 
         public async Task<IActionResult> DeleteDetails(int id)
@@ -126,11 +127,11 @@
 
             await this.events.Delete(id);
 
-            TempData[GlobalMessageKey] = "Your event was deleted successfully!";
+            TempData[GlobalMessageKey] = DeletedEvent;
 
             return RedirectToAction(nameof(TechExpoWorld.Controllers.EventsController.All),
-                                    "Events",
-                                    new { area = "" });
+                                    ControllerEvents,
+                                    new { area = string.Empty });
         }
     }
 }

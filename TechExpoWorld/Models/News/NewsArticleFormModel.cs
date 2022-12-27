@@ -4,7 +4,7 @@
     using System.ComponentModel.DataAnnotations;
     using TechExpoWorld.Services.News.Models;
 
-    using static Data.DataConstants.NewsArticle;
+    using static GlobalConstants.NewsArticle;
 
     public class NewsArticleFormModel : INewsArticleModel
     {
@@ -18,13 +18,13 @@
 
         [Required]
         [Url]
-        [Display(Name = "Image URL")]
+        [Display(Name = DisplayImageUrl)]
         public string ImageUrl { get; init; }
 
-        [Display(Name = "Select Category")]
+        [Display(Name = DisplaySelectCategory)]
         public int CategoryId { get; init; }
 
-        [Display(Name = "Select Tags")]
+        [Display(Name = DisplaySelectTags)]
         public IEnumerable<int> TagIds { get; init; } = new List<int>();
 
         public IEnumerable<CategoryServiceModel> Categories { get; set; }

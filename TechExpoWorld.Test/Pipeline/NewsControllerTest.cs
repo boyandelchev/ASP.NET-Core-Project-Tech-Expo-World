@@ -10,7 +10,7 @@
     using Xunit;
 
     using static Data.NewsArticles;
-    using static WebConstants;
+    using static GlobalConstants.TempData;
 
     public class NewsControllerTest
     {

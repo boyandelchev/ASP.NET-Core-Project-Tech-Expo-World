@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
-    using static DataConstants.Comment;
+    using static GlobalConstants.Comment;
 
     public class Comment
     {

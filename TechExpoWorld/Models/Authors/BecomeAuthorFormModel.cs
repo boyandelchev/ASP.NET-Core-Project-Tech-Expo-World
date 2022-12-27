@@ -2,7 +2,7 @@
 {
     using System.ComponentModel.DataAnnotations;
 
-    using static Data.DataConstants.Author;
+    using static GlobalConstants.Author;
 
     public class BecomeAuthorFormModel
     {
@@ -12,7 +12,7 @@
 
         [Required]
         [StringLength(PhoneNumberMaxLength, MinimumLength = PhoneNumberMinLength)]
-        [Display(Name = "Phone Number")]
+        [Display(Name = DisplayPhoneNumber)]
         public string PhoneNumber { get; init; }
 
         [Required]
@@ -21,7 +21,7 @@
 
         [Required]
         [Url]
-        [Display(Name = "Photo URL")]
+        [Display(Name = DisplayPhotoUrl)]
         public string PhotoUrl { get; init; }
     }
 }

@@ -3,7 +3,7 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
-    using static DataConstants.Tag;
+    using static GlobalConstants.Tag;
 
     public class Tag
     {

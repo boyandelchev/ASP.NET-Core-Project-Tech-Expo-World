@@ -10,7 +10,7 @@
     using TechExpoWorld.Data;
     using TechExpoWorld.Data.Models;
 
-    using static Areas.Admin.AdminConstants;
+    using static GlobalConstants.Admin;
 
     public static class ApplicationBuilderExtensions
     {
@@ -57,16 +57,13 @@
 
                     await roleManager.CreateAsync(role);
 
-                    const string adminEmail = "admin@tew.com";
-                    const string adminPassword = "admin1";
-
                     var user = new User
                     {
-                        Email = adminEmail,
-                        UserName = adminEmail
+                        Email = AdminEmail,
+                        UserName = AdminEmail
                     };
 
-                    await userManager.CreateAsync(user, adminPassword);
+                    await userManager.CreateAsync(user, AdminPassword);
 
                     await userManager.AddToRoleAsync(user, role.Name);
                 })

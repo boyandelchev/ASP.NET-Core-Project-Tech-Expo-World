@@ -3,7 +3,7 @@
     using System.ComponentModel.DataAnnotations;
     using Microsoft.EntityFrameworkCore;
 
-    using static DataConstants.Ticket;
+    using static GlobalConstants.Ticket;
 
     public class Ticket
     {
@@ -13,7 +13,7 @@
         [MaxLength(TypeMaxLength)]
         public string Type { get; set; }
 
-        [Precision(8, 2)]
+        [Precision(PricePrecision, PriceScale)]
         public decimal Price { get; set; }
 
         public bool IsSold { get; set; }

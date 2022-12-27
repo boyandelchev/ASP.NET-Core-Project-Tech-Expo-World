@@ -3,7 +3,7 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
-    using static DataConstants.NewsCategory;
+    using static GlobalConstants.NewsCategory;
 
     public class NewsCategory
     {

@@ -7,7 +7,7 @@
     using TechExpoWorld.Models.Attendees;
     using Xunit;
 
-    using static WebConstants;
+    using static GlobalConstants.TempData;
 
     public class AttendeesControllerTest
     {

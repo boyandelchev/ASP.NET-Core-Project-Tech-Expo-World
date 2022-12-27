@@ -11,10 +11,12 @@
     using TechExpoWorld.Services.Comments;
     using TechExpoWorld.Services.News;
 
-    using static WebConstants;
+    using static GlobalConstants.NewsArticle;
+    using static GlobalConstants.TempData;
 
     public class NewsController : Controller
     {
+        private const string ControllerAuthors = "Authors";
         private readonly INewsService news;
         private readonly IAuthorService authors;
         private readonly ICommentService comments;
@@ -102,7 +104,7 @@
 
             if (!await this.authors.IsAuthor(this.User.Id()))
             {
-                return RedirectToAction(nameof(AuthorsController.BecomeAuthor), "Authors");
+                return RedirectToAction(nameof(AuthorsController.BecomeAuthor), ControllerAuthors);
             }
 
             return View(new NewsArticleFormModel
@@ -125,17 +127,17 @@
 
             if (authorId == 0)
             {
-                return RedirectToAction(nameof(AuthorsController.BecomeAuthor), "Authors");
+                return RedirectToAction(nameof(AuthorsController.BecomeAuthor), ControllerAuthors);
             }
 
             if (!await this.news.CategoryExists(newsArticle.CategoryId))
             {
-                this.ModelState.AddModelError(nameof(newsArticle.CategoryId), "News category does not exist.");
+                this.ModelState.AddModelError(nameof(newsArticle.CategoryId), ErrorCategory);
             }
 
             if (!this.news.TagsExist(newsArticle.TagIds))
             {
-                this.ModelState.AddModelError(nameof(newsArticle.TagIds), "Tag option does not exist.");
+                this.ModelState.AddModelError(nameof(newsArticle.TagIds), ErrorTag);
             }
 
             if (!ModelState.IsValid)
@@ -154,7 +156,7 @@
                 newsArticle.TagIds,
                 authorId);
 
-            TempData[GlobalMessageKey] = "Your news article was added successfully!";
+            TempData[GlobalMessageKey] = CreatedNewsArticle;
 
             return RedirectToAction(nameof(Details), new { id = newsArticleId, information = newsArticle.GetNewsArticleInformation() });
         }
@@ -166,7 +168,7 @@
 
             if (!await this.authors.IsAuthor(userId) && !this.User.IsAdmin())
             {
-                return RedirectToAction(nameof(AuthorsController.BecomeAuthor), "Authors");
+                return RedirectToAction(nameof(AuthorsController.BecomeAuthor), ControllerAuthors);
             }
 
             var newsArticle = await this.news.DetailsWithNoViewCountIncrement(id);
@@ -197,7 +199,7 @@
 
             if (authorId == 0 && !this.User.IsAdmin())
             {
-                return RedirectToAction(nameof(AuthorsController.BecomeAuthor), "Authors");
+                return RedirectToAction(nameof(AuthorsController.BecomeAuthor), ControllerAuthors);
             }
 
             if (!await this.news.IsByAuthor(id, authorId) && !this.User.IsAdmin())
@@ -207,12 +209,12 @@
 
             if (!await this.news.CategoryExists(newsArticle.CategoryId))
             {
-                this.ModelState.AddModelError(nameof(newsArticle.CategoryId), "News category does not exist.");
+                this.ModelState.AddModelError(nameof(newsArticle.CategoryId), ErrorCategory);
             }
 
             if (!this.news.TagsExist(newsArticle.TagIds))
             {
-                this.ModelState.AddModelError(nameof(newsArticle.TagIds), "Tag option does not exist.");
+                this.ModelState.AddModelError(nameof(newsArticle.TagIds), ErrorTag);
             }
 
             if (!ModelState.IsValid)
@@ -231,7 +233,7 @@
                  newsArticle.CategoryId,
                  newsArticle.TagIds);
 
-            TempData[GlobalMessageKey] = "Your news article was edited successfully!";
+            TempData[GlobalMessageKey] = EditedNewsArticle;
 
             return RedirectToAction(nameof(Details), new { id, information = newsArticle.GetNewsArticleInformation() });
         }
@@ -243,7 +245,7 @@
 
             if (!await this.authors.IsAuthor(userId) && !this.User.IsAdmin())
             {
-                return RedirectToAction(nameof(AuthorsController.BecomeAuthor), "Authors");
+                return RedirectToAction(nameof(AuthorsController.BecomeAuthor), ControllerAuthors);
             }
 
             var newsArticle = await this.news.DetailsWithNoViewCountIncrement(id);
@@ -274,7 +276,7 @@
 
             if (authorId == 0 && !this.User.IsAdmin())
             {
-                return RedirectToAction(nameof(AuthorsController.BecomeAuthor), "Authors");
+                return RedirectToAction(nameof(AuthorsController.BecomeAuthor), ControllerAuthors);
             }
 
             if (!await this.news.IsByAuthor(id, authorId) && !this.User.IsAdmin())
@@ -284,7 +286,7 @@
 
             await this.news.Delete(id);
 
-            TempData[GlobalMessageKey] = "Your news article was deleted successfully!";
+            TempData[GlobalMessageKey] = DeletedNewsArticle;
 
             return RedirectToAction(nameof(All));
         }

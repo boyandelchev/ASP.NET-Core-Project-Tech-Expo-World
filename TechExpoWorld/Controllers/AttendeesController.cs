@@ -7,10 +7,12 @@
     using TechExpoWorld.Models.Attendees;
     using TechExpoWorld.Services.Attendees;
 
-    using static WebConstants;
+    using static GlobalConstants.Attendee;
+    using static GlobalConstants.TempData;
 
     public class AttendeesController : Controller
     {
+        private const string ControllerEvents = "Events";
         private readonly IAttendeeService attendees;
 
         public AttendeesController(IAttendeeService attendees)
@@ -48,22 +50,22 @@
 
             if (!await this.attendees.JobTypeExists(attendee.JobTypeId))
             {
-                this.ModelState.AddModelError(nameof(attendee.JobTypeId), "Job type does not exist.");
+                this.ModelState.AddModelError(nameof(attendee.JobTypeId), ErrorJobType);
             }
 
             if (!await this.attendees.CompanyTypeExists(attendee.CompanyTypeId))
             {
-                this.ModelState.AddModelError(nameof(attendee.CompanyTypeId), "Company type does not exist.");
+                this.ModelState.AddModelError(nameof(attendee.CompanyTypeId), ErrorCompanyType);
             }
 
             if (!await this.attendees.CompanySectorExists(attendee.CompanySectorId))
             {
-                this.ModelState.AddModelError(nameof(attendee.CompanySectorId), "Company sector does not exist.");
+                this.ModelState.AddModelError(nameof(attendee.CompanySectorId), ErrorCompanySector);
             }
 
             if (!await this.attendees.CompanySizeExists(attendee.CompanySizeId))
             {
-                this.ModelState.AddModelError(nameof(attendee.CompanySizeId), "Company size does not exist.");
+                this.ModelState.AddModelError(nameof(attendee.CompanySizeId), ErrorCompanySize);
             }
 
             if (!ModelState.IsValid)
@@ -90,9 +92,9 @@
                  attendee.CompanySizeId,
                  userId);
 
-            TempData[GlobalMessageKey] = "Thank you for becomming an attendee!";
+            TempData[GlobalMessageKey] = CreatedAttendee;
 
-            return RedirectToAction(nameof(EventsController.All), "Events");
+            return RedirectToAction(nameof(EventsController.All), ControllerEvents);
         }
     }
 }

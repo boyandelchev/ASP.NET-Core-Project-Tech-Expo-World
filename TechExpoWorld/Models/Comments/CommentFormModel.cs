@@ -2,13 +2,13 @@
 {
     using System.ComponentModel.DataAnnotations;
 
-    using static Data.DataConstants.Comment;
+    using static GlobalConstants.Comment;
 
     public class CommentFormModel
     {
         [Required]
         [StringLength(ContentMaxLength, MinimumLength = ContentMinLength)]
-        [Display(Name ="Add Comment")]
+        [Display(Name = DisplayAddComment)]
         public string Content { get; init; }
     }
 }

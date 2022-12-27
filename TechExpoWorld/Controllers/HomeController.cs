@@ -9,7 +9,7 @@
     using TechExpoWorld.Services.News;
     using TechExpoWorld.Services.Statistics;
 
-    using static WebConstants.Cache;
+    using static GlobalConstants.Cache;
 
     public class HomeController : Controller
     {

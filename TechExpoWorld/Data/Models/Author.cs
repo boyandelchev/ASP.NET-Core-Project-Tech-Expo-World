@@ -3,7 +3,7 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
-    using static DataConstants.Author;
+    using static GlobalConstants.Author;
 
     public class Author
     {

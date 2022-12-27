@@ -8,7 +8,7 @@
     using TechExpoWorld.Models.News;
     using Xunit;
 
-    using static WebConstants;
+    using static GlobalConstants.TempData;
 
     public class AuthorsControllerTest
     {

@@ -8,10 +8,11 @@
     using TechExpoWorld.Services.Attendees;
     using TechExpoWorld.Services.Events;
 
-    using static WebConstants;
+    using static GlobalConstants.TempData;
 
     public class EventsController : Controller
     {
+        private const string ControllerAttendees = "Attendees";
         private readonly IEventService events;
         private readonly IAttendeeService attendees;
 
@@ -61,7 +62,7 @@
 
             if (attendeeId == 0 && !this.User.IsAdmin())
             {
-                return RedirectToAction(nameof(AttendeesController.BecomeAttendee), "Attendees");
+                return RedirectToAction(nameof(AttendeesController.BecomeAttendee), ControllerAttendees);
             }
 
             return View(new MyTicketsViewModel
@@ -89,12 +90,12 @@
 
             if (attendeeId == 0)
             {
-                return RedirectToAction(nameof(AttendeesController.BecomeAttendee), "Attendees");
+                return RedirectToAction(nameof(AttendeesController.BecomeAttendee), ControllerAttendees);
             }
 
             await this.events.BuyPhysicalTicket(id, attendeeId);
 
-            TempData[GlobalMessageKey] = "Your have booked a ticket successfully!";
+            TempData[GlobalMessageKey] = BookedTicket;
 
             return RedirectToAction(nameof(All));
         }
@@ -117,12 +118,12 @@
 
             if (attendeeId == 0)
             {
-                return RedirectToAction(nameof(AttendeesController.BecomeAttendee), "Attendees");
+                return RedirectToAction(nameof(AttendeesController.BecomeAttendee), ControllerAttendees);
             }
 
             await this.events.BuyVirtualTicket(id, attendeeId);
 
-            TempData[GlobalMessageKey] = "Your have booked a ticket successfully!";
+            TempData[GlobalMessageKey] = BookedTicket;
 
             return RedirectToAction(nameof(All));
         }
@@ -135,7 +136,7 @@
 
             if (attendeeId == 0 && !this.User.IsAdmin())
             {
-                return RedirectToAction(nameof(AttendeesController.BecomeAttendee), "Attendees");
+                return RedirectToAction(nameof(AttendeesController.BecomeAttendee), ControllerAttendees);
             }
 
             var isRevoked = await this.events.RevokeTicket(id, ticketId, attendeeId);
@@ -145,7 +146,7 @@
                 return BadRequest();
             }
 
-            TempData[GlobalMessageKey] = "Your have revoked a ticket successfully!";
+            TempData[GlobalMessageKey] = RevokedTicket;
 
             return RedirectToAction(nameof(MyTickets));
         }

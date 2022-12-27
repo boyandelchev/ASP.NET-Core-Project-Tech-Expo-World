@@ -8,10 +8,11 @@
     using TechExpoWorld.Services.Comments;
     using TechExpoWorld.Services.News;
 
-    using static WebConstants;
+    using static GlobalConstants.TempData;
 
     public class CommentsController : Controller
     {
+        private const string ControllerNews = "News";
         private readonly ICommentService comments;
         private readonly INewsService news;
 
@@ -30,7 +31,7 @@
             if (!ModelState.IsValid)
             {
                 return RedirectToAction(nameof(NewsController.Details),
-                                        "News",
+                                        ControllerNews,
                                         new
                                         {
                                             id,
@@ -42,10 +43,10 @@
 
             await this.comments.Create(id, comment.Content, userId);
 
-            TempData[GlobalMessageKey] = "Your comment was added successfully!";
+            TempData[GlobalMessageKey] = CreatedComment;
 
             return RedirectToAction(nameof(NewsController.Details),
-                                    "News",
+                                    ControllerNews,
                                     new
                                     {
                                         id,

@@ -7,7 +7,7 @@
     using Xunit;
 
     using static Data.NewsArticles;
-    using static WebConstants.Cache;
+    using static GlobalConstants.Cache;
 
     public class HomeControllerTest
     {

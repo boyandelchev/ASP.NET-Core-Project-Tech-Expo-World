@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
-    using static DataConstants.Event;
+    using static GlobalConstants.Event;
 
     public class Event
     {

@@ -3,7 +3,7 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
-    using static DataConstants.CompanySector;
+    using static GlobalConstants.CompanySector;
 
     public class CompanySector
     {

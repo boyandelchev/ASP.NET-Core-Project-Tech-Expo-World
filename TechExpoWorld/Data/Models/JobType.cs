@@ -3,7 +3,7 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
-    using static DataConstants.JobType;
+    using static GlobalConstants.JobType;
 
     public class JobType
     {
