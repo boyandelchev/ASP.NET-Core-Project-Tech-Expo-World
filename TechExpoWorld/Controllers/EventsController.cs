@@ -43,24 +43,28 @@
                 return BadRequest();
             }
 
-            var totalAvailablePhysicalTicketsForEvent = await this.events.TotalAvailablePhysicalTicketsForEvent(id);
-            var totalAvailableVirtualTicketsForEvent = await this.events.TotalAvailableVirtualTicketsForEvent(id);
+            var totalAvailablePhysicalTickets = await this.events.TotalAvailablePhysicalTickets(id);
+            var totalAvailableVirtualTickets = await this.events.TotalAvailableVirtualTickets(id);
 
             return View(new EventDetailsViewModel
             {
                 EventDetails = eventData,
-                TotalAvailablePhysicalTicketsForEvent = totalAvailablePhysicalTicketsForEvent,
-                TotalAvailableVirtualTicketsForEvent = totalAvailableVirtualTicketsForEvent
+                TotalAvailablePhysicalTickets = totalAvailablePhysicalTickets,
+                TotalAvailableVirtualTickets = totalAvailableVirtualTickets
             });
         }
 
         [Authorize]
         public async Task<IActionResult> MyTickets()
         {
-            var userId = this.User.Id();
-            var attendeeId = await this.attendees.AttendeeId(userId);
+            if (this.User.IsAdmin())
+            {
+                return BadRequest();
+            }
 
-            if (attendeeId == 0 && !this.User.IsAdmin())
+            var attendeeId = await this.attendees.AttendeeId(this.User.Id());
+
+            if (attendeeId == 0)
             {
                 return RedirectToAction(nameof(AttendeesController.BecomeAttendee), ControllerAttendees);
             }
@@ -73,27 +77,21 @@
         }
 
         [Authorize]
-        public async Task<IActionResult> BuyPhysicalTicket(int id)
+        public async Task<IActionResult> BookPhysicalTicket(int id)
         {
-            if (!await this.events.EventExists(id))
-            {
-                return NotFound();
-            }
-
             if (this.User.IsAdmin())
             {
                 return BadRequest();
             }
 
-            var userId = this.User.Id();
-            var attendeeId = await this.attendees.AttendeeId(userId);
+            var attendeeId = await this.attendees.AttendeeId(this.User.Id());
 
             if (attendeeId == 0)
             {
                 return RedirectToAction(nameof(AttendeesController.BecomeAttendee), ControllerAttendees);
             }
 
-            await this.events.BuyPhysicalTicket(id, attendeeId);
+            await this.events.BookPhysicalTicket(id, attendeeId);
 
             TempData[GlobalMessageKey] = BookedTicket;
 
@@ -101,27 +99,21 @@
         }
 
         [Authorize]
-        public async Task<IActionResult> BuyVirtualTicket(int id)
+        public async Task<IActionResult> BookVirtualTicket(int id)
         {
-            if (!await this.events.EventExists(id))
-            {
-                return NotFound();
-            }
-
             if (this.User.IsAdmin())
             {
                 return BadRequest();
             }
 
-            var userId = this.User.Id();
-            var attendeeId = await this.attendees.AttendeeId(userId);
+            var attendeeId = await this.attendees.AttendeeId(this.User.Id());
 
             if (attendeeId == 0)
             {
                 return RedirectToAction(nameof(AttendeesController.BecomeAttendee), ControllerAttendees);
             }
 
-            await this.events.BuyVirtualTicket(id, attendeeId);
+            await this.events.BookVirtualTicket(id, attendeeId);
 
             TempData[GlobalMessageKey] = BookedTicket;
 
@@ -131,10 +123,14 @@
         [Authorize]
         public async Task<IActionResult> RevokeTicket(int id, int ticketId)
         {
-            var userId = this.User.Id();
-            var attendeeId = await this.attendees.AttendeeId(userId);
+            if (this.User.IsAdmin())
+            {
+                return BadRequest();
+            }
 
-            if (attendeeId == 0 && !this.User.IsAdmin())
+            var attendeeId = await this.attendees.AttendeeId(this.User.Id());
+
+            if (attendeeId == 0)
             {
                 return RedirectToAction(nameof(AttendeesController.BecomeAttendee), ControllerAttendees);
             }

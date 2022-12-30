@@ -43,8 +43,6 @@
 
             this.CreateMap<NewsArticleDetailsServiceModel, NewsArticleFormModel>();
 
-            this.CreateMap<NewsArticleDetailsServiceModel, NewsArticleDeleteDetailsViewModel>();
-
             this.CreateMap<Comment, CommentServiceModel>()
                 .ForMember(c => c.CreatedOn, cfg => cfg.MapFrom(c => c.CreatedOn.ToString(DateTimeFormat, CultureInfo.InvariantCulture)))
                 .ForMember(c => c.UserName, cfg => cfg.MapFrom(c => c.User.UserName));

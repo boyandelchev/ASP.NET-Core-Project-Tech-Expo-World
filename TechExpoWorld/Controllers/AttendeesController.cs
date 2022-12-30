@@ -21,9 +21,7 @@
         [Authorize]
         public async Task<IActionResult> BecomeAttendee()
         {
-            var userId = this.User.Id();
-
-            if (await this.attendees.IsAttendee(userId) || this.User.IsAdmin())
+            if (await this.attendees.IsAttendee(this.User.Id()) || this.User.IsAdmin())
             {
                 return BadRequest();
             }
@@ -80,17 +78,17 @@
             }
 
             await this.attendees.Create(
-                 attendee.Name,
-                 attendee.PhoneNumber,
-                 attendee.WorkEmail,
-                 attendee.JobTitle,
-                 attendee.CompanyName,
-                 attendee.Country,
-                 attendee.JobTypeId,
-                 attendee.CompanyTypeId,
-                 attendee.CompanySectorId,
-                 attendee.CompanySizeId,
-                 userId);
+                attendee.Name,
+                attendee.PhoneNumber,
+                attendee.WorkEmail,
+                attendee.JobTitle,
+                attendee.CompanyName,
+                attendee.Country,
+                attendee.JobTypeId,
+                attendee.CompanyTypeId,
+                attendee.CompanySectorId,
+                attendee.CompanySizeId,
+                userId);
 
             TempData[GlobalMessageKey] = CreatedAttendee;
 

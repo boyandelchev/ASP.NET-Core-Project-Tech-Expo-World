@@ -1,0 +1,12 @@
+﻿@model EventFormModel
+
+@{
+    ViewBag.Title = "Delete this Event";
+    ViewBag.IsDelete = true;
+}
+
+<partial name="_EventFormPartial" model="Model" />
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

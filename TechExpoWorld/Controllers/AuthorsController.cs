@@ -20,9 +20,7 @@
         [Authorize]
         public async Task<IActionResult> BecomeAuthor()
         {
-            var userId = this.User.Id();
-
-            if (await this.authors.IsAuthor(userId) || this.User.IsAdmin())
+            if (await this.authors.IsAuthor(this.User.Id()) || this.User.IsAdmin())
             {
                 return BadRequest();
             }

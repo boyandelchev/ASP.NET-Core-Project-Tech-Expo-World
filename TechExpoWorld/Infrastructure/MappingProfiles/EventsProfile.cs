@@ -3,8 +3,8 @@
     using System;
     using System.Globalization;
     using AutoMapper;
-    using TechExpoWorld.Areas.Admin.Models.Events;
     using TechExpoWorld.Data.Models;
+    using TechExpoWorld.Models.Events;
     using TechExpoWorld.Services.Attendees.Models;
     using TechExpoWorld.Services.Events.Models;
 

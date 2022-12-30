@@ -6,8 +6,8 @@
     {
         public EventDetailsServiceModel EventDetails { get; init; }
 
-        public int TotalAvailablePhysicalTicketsForEvent { get; init; }
+        public int TotalAvailablePhysicalTickets { get; init; }
 
-        public int TotalAvailableVirtualTicketsForEvent { get; init; }
+        public int TotalAvailableVirtualTickets { get; init; }
     }
 }

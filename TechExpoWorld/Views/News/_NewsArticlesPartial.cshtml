@@ -17,10 +17,10 @@
                     <p class="text-muted">@news.Content</p>
                     <p class="text-primary">@news.CategoryName</p>
                     <a asp-controller="News" asp-action="Details" asp-route-id="@news.Id" asp-route-information="@news.GetNewsArticleInformation()" class="btn btn-primary btn-outline-secondary text-white">Read More</a>
-                    @if (ViewBag.EditDelete == true || User.IsAdmin())
+                    @if (ViewBag.AreMyNewsArticles == true || User.IsAdmin())
                     {
                         <a asp-controller="News" asp-action="Edit" asp-route-id="@news.Id" class="btn btn-info btn-outline-warning">Edit</a>
-                        <a asp-controller="News" asp-action="DeleteDetails" asp-route-id="@news.Id" class="btn btn-danger btn-outline-dark">Delete</a>
+                        <a asp-controller="News" asp-action="Delete" asp-route-id="@news.Id" class="btn btn-danger btn-outline-dark">Delete</a>
                     }
                 </div>
             </div>

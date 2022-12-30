@@ -1,4 +1,4 @@
-﻿namespace TechExpoWorld.Areas.Admin.Models
+﻿namespace TechExpoWorld.Models
 {
     using System;
     using System.Collections.Generic;
@@ -17,7 +17,7 @@
 
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            var endDateProperty = validationContext.ObjectType.GetProperty(this.endDate);
+            var endDateProperty = validationContext.ObjectType.GetProperty(endDate);
 
             if (endDateProperty == null)
             {

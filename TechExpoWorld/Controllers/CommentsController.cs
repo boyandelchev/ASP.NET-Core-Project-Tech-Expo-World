@@ -28,15 +28,14 @@
         {
             var newsArticle = await this.news.DetailsWithNoViewCountIncrement(id);
 
+            var redirectToAction = RedirectToAction(
+                    nameof(NewsController.Details),
+                    ControllerNews,
+                    new { id, information = newsArticle.GetNewsArticleInformation() });
+
             if (!ModelState.IsValid)
             {
-                return RedirectToAction(nameof(NewsController.Details),
-                                        ControllerNews,
-                                        new
-                                        {
-                                            id,
-                                            information = newsArticle.GetNewsArticleInformation()
-                                        });
+                return redirectToAction;
             }
 
             var userId = this.User.Id();
@@ -45,13 +44,7 @@
 
             TempData[GlobalMessageKey] = CreatedComment;
 
-            return RedirectToAction(nameof(NewsController.Details),
-                                    ControllerNews,
-                                    new
-                                    {
-                                        id,
-                                        information = newsArticle.GetNewsArticleInformation()
-                                    });
+            return redirectToAction;
         }
     }
 }

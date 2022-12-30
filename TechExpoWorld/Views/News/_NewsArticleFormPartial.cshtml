@@ -7,22 +7,22 @@
         <form method="post">
             <div class="form-group">
                 <label asp-for="Title"></label>
-                <input asp-for="Title" class="form-control" placeholder="The potential of IoT and Cloud Computing...">
+                <input asp-for="Title" class="form-control" readonly="@ViewBag.IsDelete" placeholder="The potential of IoT and Cloud Computing...">
                 <span asp-validation-for="Title" class="small text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Content"></label>
-                <textarea asp-for="Content" rows="10" class="form-control" placeholder="The Internet of Things (IoT) and Cloud Computing are quite the rage these days in the world of information..."></textarea>
+                <textarea asp-for="Content" rows="10" class="form-control" readonly="@ViewBag.IsDelete" placeholder="The Internet of Things (IoT) and Cloud Computing are quite the rage these days in the world of information..."></textarea>
                 <span asp-validation-for="Content" class="small text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="ImageUrl"></label>
-                <input asp-for="ImageUrl" class="form-control" placeholder="Add a URL for picture here...">
+                <input asp-for="ImageUrl" class="form-control" readonly="@ViewBag.IsDelete" placeholder="Add a URL for picture here...">
                 <span asp-validation-for="ImageUrl" class="small text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="CategoryId"></label>
-                <select asp-for="CategoryId" class="form-control">
+                <select asp-for="CategoryId" class="form-control" readonly="@ViewBag.IsDelete">
                     @foreach (var newsCategory in Model.Categories)
                     {
                         <option value="@newsCategory.Id">@newsCategory.Name</option>
@@ -32,7 +32,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="TagIds"></label>
-                <select asp-for="TagIds" multiple class="form-control">
+                <select asp-for="TagIds" multiple class="form-control" readonly="@ViewBag.IsDelete">
                     @foreach (var tag in Model.Tags)
                     {
                         <option value="@tag.Id">@tag.Name</option>
@@ -41,8 +41,15 @@
                 <span asp-validation-for="TagIds" class="small text-danger"></span>
             </div>
 
-            <input class="btn btn-primary mt-3" type="submit" value="Submit" />
-            <input class="btn btn-secondary mt-3 float-right" type="reset" value="Clear" />
+            @if (ViewBag.IsDelete == true)
+            {
+                <input class="btn btn-danger mt-3" type="submit" value="Delete" />
+            }
+            else
+            {
+                <input class="btn btn-primary mt-3" type="submit" value="Submit" />
+                <input class="btn btn-secondary mt-3 float-right" type="reset" value="Clear" />
+            }
         </form>
     </div>
 </div>

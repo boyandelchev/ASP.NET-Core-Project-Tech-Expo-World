@@ -1,0 +1,12 @@
+﻿@model NewsArticleFormModel
+
+@{
+    ViewBag.Title = "Delete this News Article";
+    ViewBag.IsDelete = true;
+}
+
+<partial name="_NewsArticleFormPartial" model="Model" />
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -158,7 +158,9 @@
 
             TempData[GlobalMessageKey] = CreatedNewsArticle;
 
-            return RedirectToAction(nameof(Details), new { id = newsArticleId, information = newsArticle.GetNewsArticleInformation() });
+            return RedirectToAction(
+                nameof(Details),
+                new { id = newsArticleId, information = newsArticle.GetNewsArticleInformation() });
         }
 
         [Authorize]
@@ -183,12 +185,12 @@
                 return Unauthorized();
             }
 
-            var newsArticleForm = this.mapper.Map<NewsArticleFormModel>(newsArticle);
+            var newsArticleData = this.mapper.Map<NewsArticleFormModel>(newsArticle);
 
-            newsArticleForm.Categories = await this.news.Categories();
-            newsArticleForm.Tags = await this.news.Tags();
+            newsArticleData.Categories = await this.news.Categories();
+            newsArticleData.Tags = await this.news.Tags();
 
-            return View(newsArticleForm);
+            return View(newsArticleData);
         }
 
         [HttpPost]
@@ -204,7 +206,7 @@
 
             if (!await this.news.IsByAuthor(id, authorId) && !this.User.IsAdmin())
             {
-                return BadRequest();
+                return Unauthorized();
             }
 
             if (!await this.news.CategoryExists(newsArticle.CategoryId))
@@ -226,51 +228,27 @@
             }
 
             await this.news.Edit(
-                 id,
-                 newsArticle.Title,
-                 newsArticle.Content,
-                 newsArticle.ImageUrl,
-                 newsArticle.CategoryId,
-                 newsArticle.TagIds);
+                id,
+                newsArticle.Title,
+                newsArticle.Content,
+                newsArticle.ImageUrl,
+                newsArticle.CategoryId,
+                newsArticle.TagIds);
 
             TempData[GlobalMessageKey] = EditedNewsArticle;
 
-            return RedirectToAction(nameof(Details), new { id, information = newsArticle.GetNewsArticleInformation() });
+            return RedirectToAction(
+                nameof(Details),
+                new { id, information = newsArticle.GetNewsArticleInformation() });
         }
 
         [Authorize]
-        public async Task<IActionResult> DeleteDetails(int id)
-        {
-            var userId = this.User.Id();
+        public async Task<IActionResult> Delete(int id) => await Edit(id);
 
-            if (!await this.authors.IsAuthor(userId) && !this.User.IsAdmin())
-            {
-                return RedirectToAction(nameof(AuthorsController.BecomeAuthor), ControllerAuthors);
-            }
-
-            var newsArticle = await this.news.DetailsWithNoViewCountIncrement(id);
-
-            if (newsArticle == null)
-            {
-                return NotFound();
-            }
-
-            if (newsArticle.UserId != userId && !this.User.IsAdmin())
-            {
-                return Unauthorized();
-            }
-
-            var newsArticleData = this.mapper.Map<NewsArticleDeleteDetailsViewModel>(newsArticle);
-
-            newsArticleData.Categories = await this.news.Categories();
-            newsArticleData.Tags = await this.news.Tags();
-
-            return View(newsArticleData);
-        }
-
+        [ActionName(nameof(Delete))]
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var authorId = await this.authors.AuthorId(this.User.Id());
 
@@ -281,7 +259,7 @@
 
             if (!await this.news.IsByAuthor(id, authorId) && !this.User.IsAdmin())
             {
-                return BadRequest();
+                return Unauthorized();
             }
 
             await this.news.Delete(id);

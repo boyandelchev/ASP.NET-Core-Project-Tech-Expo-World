@@ -88,7 +88,7 @@
             public const int ContentMinLength = 2;
             public const int ContentMaxLength = 500;
 
-            public const string DisplayAddComment = "Add Comment";
+            public const string DisplayAddAComment = "Add a comment";
         }
 
         public class Event

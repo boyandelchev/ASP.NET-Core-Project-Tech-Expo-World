@@ -41,16 +41,14 @@
 
         Task<bool> Delete(int eventId);
 
-        Task<bool> BuyPhysicalTicket(int eventId, int attendeeId);
+        Task<bool> BookPhysicalTicket(int eventId, int attendeeId);
 
-        Task<bool> BuyVirtualTicket(int eventId, int attendeeId);
+        Task<bool> BookVirtualTicket(int eventId, int attendeeId);
 
         Task<bool> RevokeTicket(int eventId, int ticketId, int attendeeId);
 
-        Task<bool> EventExists(int eventId);
+        Task<int> TotalAvailablePhysicalTickets(int eventId);
 
-        Task<int> TotalAvailablePhysicalTicketsForEvent(int eventId);
-
-        Task<int> TotalAvailableVirtualTicketsForEvent(int eventId);
+        Task<int> TotalAvailableVirtualTickets(int eventId);
     }
 }

@@ -163,11 +163,11 @@
             return true;
         }
 
-        public async Task<bool> BuyPhysicalTicket(int eventId, int attendeeId)
-            => await BuyTicket(eventId, attendeeId, PhysicalTicketType);
+        public async Task<bool> BookPhysicalTicket(int eventId, int attendeeId)
+            => await BookTicket(eventId, attendeeId, PhysicalTicketType);
 
-        public async Task<bool> BuyVirtualTicket(int eventId, int attendeeId)
-            => await BuyTicket(eventId, attendeeId, VirtualTicketType);
+        public async Task<bool> BookVirtualTicket(int eventId, int attendeeId)
+            => await BookTicket(eventId, attendeeId, VirtualTicketType);
 
         public async Task<bool> RevokeTicket(int eventId, int ticketId, int attendeeId)
         {
@@ -191,16 +191,11 @@
             return true;
         }
 
-        public async Task<bool> EventExists(int eventId)
-            => await this.data
-                .Events
-                .AnyAsync(e => e.Id == eventId);
+        public async Task<int> TotalAvailablePhysicalTickets(int eventId)
+            => await TotalAvailableOfTypeTickets(eventId, PhysicalTicketType);
 
-        public async Task<int> TotalAvailablePhysicalTicketsForEvent(int eventId)
-            => await TotalAvailableOfTypeTicketsForEvent(eventId, PhysicalTicketType);
-
-        public async Task<int> TotalAvailableVirtualTicketsForEvent(int eventId)
-            => await TotalAvailableOfTypeTicketsForEvent(eventId, VirtualTicketType);
+        public async Task<int> TotalAvailableVirtualTickets(int eventId)
+            => await TotalAvailableOfTypeTickets(eventId, VirtualTicketType);
 
         private static IEnumerable<Ticket> CreateAllTickets(
             int totalPhysicalTickets,
@@ -251,7 +246,7 @@
                 .Select(t => t.Price)
                 .FirstOrDefaultAsync();
 
-        private async Task<int> TotalAvailableOfTypeTicketsForEvent(int eventId, string ticketType)
+        private async Task<int> TotalAvailableOfTypeTickets(int eventId, string ticketType)
             => await this.data
                 .Tickets
                 .Where(t => t.EventId == eventId &&
@@ -259,7 +254,7 @@
                             t.Type == ticketType)
                 .CountAsync();
 
-        private async Task<bool> BuyTicket(int eventId, int attendeeId, string ticketType)
+        private async Task<bool> BookTicket(int eventId, int attendeeId, string ticketType)
         {
             var ticket = await this.data
                 .Tickets

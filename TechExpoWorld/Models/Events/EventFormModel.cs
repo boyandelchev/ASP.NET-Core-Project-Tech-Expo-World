@@ -1,4 +1,4 @@
-﻿namespace TechExpoWorld.Areas.Admin.Models.Events
+﻿namespace TechExpoWorld.Models.Events
 {
     using System;
     using System.ComponentModel.DataAnnotations;

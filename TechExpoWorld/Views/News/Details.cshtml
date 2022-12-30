@@ -1,6 +1,6 @@
 ﻿@model NewsArticleWithCommentsViewModel
 
-@{ 
+@{
     ViewBag.Title = Model.NewsArticle.Title;
 }
 
@@ -32,7 +32,7 @@
 
 <div id="comments"></div>
 <div class="text-center" id="add-comment-button">
-    <button class="btn btn-primary">Add Comment</button>
+    <button class="btn btn-primary">Add a comment</button>
 </div>
 
 <div class="d-none text-center" id="add-comment-area">
@@ -45,6 +45,7 @@
             </div>
 
             <input class="btn btn-primary mt-3" type="submit" value="Add" />
+            <button class="btn btn-secondary mt-3 float-right">Hide</button>
         </form>
     </section>
 </div>
@@ -55,7 +56,8 @@
         <div class="media">
             <img class="mr-3" src="/profile-image-32x32.png" alt="profile image">
             <div class="media-body">
-                <h5 class="mt-0">@comment.UserName
+                <h5 class="mt-0">
+                    @comment.UserName
                     <span class="float-right text-secondary">@comment.CreatedOn</span>
                 </h5>
                 @comment.Content
@@ -68,9 +70,18 @@
     <partial name="_ValidationScriptsPartial" />
 
     <script>
-        $('#add-comment-button').on('click', event => {
-            $('#add-comment-area').removeClass('d-none');
-            $('#add-comment-button').hide();
-        });
+        document.getElementById('add-comment-button')
+            .addEventListener('click', (e) => {
+                document.getElementById('add-comment-area').classList.remove('d-none');
+                document.getElementById('add-comment-button').classList.add('d-none');
+
+                document.querySelector('#add-comment-area button')
+                    .addEventListener('click', (e) => {
+                        e.preventDefault();
+
+                        document.getElementById('add-comment-area').classList.add('d-none');
+                        document.getElementById('add-comment-button').classList.remove('d-none');
+                    });
+            });
     </script>
 }

@@ -8,7 +8,7 @@
     {
         [Required]
         [StringLength(ContentMaxLength, MinimumLength = ContentMinLength)]
-        [Display(Name = DisplayAddComment)]
+        [Display(Name = DisplayAddAComment)]
         public string Content { get; init; }
     }
 }

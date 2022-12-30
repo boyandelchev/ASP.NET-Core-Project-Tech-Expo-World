@@ -14,14 +14,14 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="card text-white bg-primary mb-3 text-center">
-                        <div class="card-header text-uppercase">Physical Tickets - @Model.TotalAvailablePhysicalTicketsForEvent/@Model.EventDetails.TotalPhysicalTickets available</div>
-                        @if (Model.TotalAvailablePhysicalTicketsForEvent > 0)
+                        <div class="card-header text-uppercase">Physical Tickets - @Model.TotalAvailablePhysicalTickets/@Model.EventDetails.TotalPhysicalTickets available</div>
+                        @if (Model.TotalAvailablePhysicalTickets > 0)
                         {
                             <div class="card-body btn-outline-dark">
-                                <a asp-controller="Events" asp-action="BuyPhysicalTicket" asp-route-id="@Model.EventDetails.Id" class="text-white">
-                                    <h5 class="card-title">Buy a Ticket</h5>
+                                <a asp-controller="Events" asp-action="BookPhysicalTicket" asp-route-id="@Model.EventDetails.Id" class="text-white">
+                                    <h5 class="card-title">Book a Ticket</h5>
                                     <p class="card-text">£@Model.EventDetails.PhysicalTicketPrice</p>
-                                    <p class="card-text">Click here to buy 1 physical ticket</p>
+                                    <p class="card-text">Click here to book 1 physical ticket</p>
                                 </a>
                             </div>
                         }
@@ -29,14 +29,14 @@
                 </div>
                 <div class="col-md-6">
                     <div class="card text-white bg-secondary mb-3 text-center">
-                        <div class="card-header text-uppercase">Virtual Tickets - @Model.TotalAvailableVirtualTicketsForEvent/@Model.EventDetails.TotalVirtualTickets available</div>
-                        @if (Model.TotalAvailableVirtualTicketsForEvent > 0)
+                        <div class="card-header text-uppercase">Virtual Tickets - @Model.TotalAvailableVirtualTickets/@Model.EventDetails.TotalVirtualTickets available</div>
+                        @if (Model.TotalAvailableVirtualTickets > 0)
                         {
                             <div class="card-body btn-outline-dark">
-                                <a asp-controller="Events" asp-action="BuyVirtualTicket" asp-route-id="@Model.EventDetails.Id" class="text-white">
-                                    <h5 class="card-title">Buy a Ticket</h5>
+                                <a asp-controller="Events" asp-action="BookVirtualTicket" asp-route-id="@Model.EventDetails.Id" class="text-white">
+                                    <h5 class="card-title">Book a Ticket</h5>
                                     <p class="card-text">£@Model.EventDetails.VirtualTicketPrice</p>
-                                    <p class="card-text">Click here to buy 1 virtual ticket</p>
+                                    <p class="card-text">Click here to book 1 virtual ticket</p>
                                 </a>
                             </div>
                         }
