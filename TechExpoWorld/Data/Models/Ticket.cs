@@ -11,18 +11,18 @@
 
         [Required]
         [MaxLength(TypeMaxLength)]
-        public string Type { get; set; }
+        public string Type { get; init; }
 
         [Precision(PricePrecision, PriceScale)]
-        public decimal Price { get; set; }
+        public decimal Price { get; init; }
 
-        public bool IsSold { get; set; }
+        public bool IsBooked { get; set; }
 
-        public int EventId { get; set; }
+        public int? EventId { get; set; }
 
         public Event Event { get; set; }
 
-        public int? AttendeeId { get; set; }
+        public string AttendeeId { get; set; }
 
         public Attendee Attendee { get; set; }
     }

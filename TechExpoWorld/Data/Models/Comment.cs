@@ -18,7 +18,7 @@
 
         public DateTime? LastModifiedOn { get; set; }
 
-        public int NewsArticleId { get; init; }
+        public int? NewsArticleId { get; init; }
 
         public NewsArticle NewsArticle { get; init; }
 
@@ -27,10 +27,10 @@
 
         public User User { get; set; }
 
-        public int? ParentCommentId { get; set; }
+        public int? ParentCommentId { get; init; }
 
-        public Comment ParentComment { get; set; }
+        public Comment ParentComment { get; init; }
 
-        public IEnumerable<Comment> ChildrenComments { get; set; } = new List<Comment>();
+        public IEnumerable<Comment> ChildrenComments { get; init; } = new List<Comment>();
     }
 }

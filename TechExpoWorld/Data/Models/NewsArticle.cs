@@ -31,7 +31,9 @@
 
         public NewsCategory NewsCategory { get; set; }
 
-        public int AuthorId { get; init; }
+        [Required]
+        [MaxLength(AuthorIdLength)]
+        public string AuthorId { get; init; }
 
         public Author Author { get; init; }
 

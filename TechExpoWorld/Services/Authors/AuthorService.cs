@@ -18,14 +18,14 @@
                 .Authors
                 .AnyAsync(a => a.UserId == userId);
 
-        public async Task<int> AuthorId(string userId)
+        public async Task<string> AuthorId(string userId)
             => await this.data
                 .Authors
                 .Where(a => a.UserId == userId)
                 .Select(a => a.Id)
                 .FirstOrDefaultAsync();
 
-        public async Task<int> Create(
+        public async Task<string> Create(
             string name,
             string phoneNumber,
             string address,

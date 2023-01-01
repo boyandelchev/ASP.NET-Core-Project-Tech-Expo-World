@@ -74,18 +74,18 @@
             };
         }
 
-        public async Task<IEnumerable<NewsArticleServiceModel>> NewsArticlesByUser(string userId)
+        public async Task<IEnumerable<NewsArticleServiceModel>> NewsArticlesByAuthor(string authorId)
             => await GetNewsArticles(this.data
                 .NewsArticles
-                .Where(na => na.Author.UserId == userId)
+                .Where(na => na.AuthorId == authorId)
                 .OrderByDescending(na => na.Id));
 
         public async Task<IList<LatestNewsArticleServiceModel>> LatestNewsArticles()
             => await this.data
                 .NewsArticles
                 .OrderByDescending(c => c.Id)
-                .ProjectTo<LatestNewsArticleServiceModel>(this.mapper.ConfigurationProvider)
                 .Take(3)
+                .ProjectTo<LatestNewsArticleServiceModel>(this.mapper.ConfigurationProvider)
                 .ToListAsync();
 
         public async Task<NewsArticleDetailsServiceModel> Details(int newsArticleId)
@@ -115,7 +115,7 @@
             string imageUrl,
             int categoryId,
             IEnumerable<int> tagIds,
-            int authorId)
+            string authorId)
         {
             var newsArticle = new NewsArticle
             {
@@ -168,6 +168,7 @@
             var newsArticle = await this.data
                 .NewsArticles
                 .Include(na => na.NewsArticleTags)
+                .Include(na => na.Comments)
                 .FirstOrDefaultAsync(na => na.Id == newsArticleId);
 
             if (newsArticle == null)
@@ -176,6 +177,7 @@
             }
 
             newsArticle.NewsArticleTags = null;
+            newsArticle.Comments = null;
 
             this.data.NewsArticles.Remove(newsArticle);
             await this.data.SaveChangesAsync();
@@ -183,7 +185,7 @@
             return true;
         }
 
-        public async Task<bool> IsByAuthor(int newsArticleId, int authorId)
+        public async Task<bool> IsByAuthor(int newsArticleId, string authorId)
             => await this.data
                 .NewsArticles
                 .AnyAsync(na => na.Id == newsArticleId && na.AuthorId == authorId);
@@ -192,14 +194,12 @@
             => await this.data
                 .NewsCategories
                 .ProjectTo<CategoryServiceModel>(this.mapper.ConfigurationProvider)
-                .OrderBy(c => c.Name)
                 .ToListAsync();
 
         public async Task<IEnumerable<string>> CategoryNames()
             => await this.data
                 .NewsCategories
                 .Select(nc => nc.Name)
-                .OrderBy(name => name)
                 .ToListAsync();
 
         public async Task<bool> CategoryExists(int categoryId)
@@ -211,14 +211,12 @@
             => await this.data
                 .Tags
                 .ProjectTo<TagServiceModel>(this.mapper.ConfigurationProvider)
-                .OrderBy(t => t.Name)
                 .ToListAsync();
 
         public async Task<IEnumerable<string>> TagNames()
             => await this.data
                 .Tags
-                .Select(t => t.Name.ToLower())
-                .OrderBy(name => name)
+                .Select(t => t.Name)
                 .ToListAsync();
 
         public bool TagsExist(IEnumerable<int> tagIds)
@@ -228,12 +226,9 @@
         {
             var newsArticleTags = new List<NewsArticleTag>();
 
-            if (tagIds.Any())
+            foreach (var tagId in tagIds)
             {
-                foreach (var tagId in tagIds)
-                {
-                    newsArticleTags.Add(new NewsArticleTag { TagId = tagId });
-                }
+                newsArticleTags.Add(new NewsArticleTag { TagId = tagId });
             }
 
             return newsArticleTags;

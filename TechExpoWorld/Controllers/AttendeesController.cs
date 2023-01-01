@@ -68,13 +68,12 @@
 
             if (!ModelState.IsValid)
             {
-                return View(new BecomeAttendeeFormModel
-                {
-                    JobTypes = await this.attendees.JobTypes(),
-                    CompanyTypes = await this.attendees.CompanyTypes(),
-                    CompanySectors = await this.attendees.CompanySectors(),
-                    CompanySizes = await this.attendees.CompanySizes()
-                });
+                attendee.JobTypes = await this.attendees.JobTypes();
+                attendee.CompanyTypes = await this.attendees.CompanyTypes();
+                attendee.CompanySectors = await this.attendees.CompanySectors();
+                attendee.CompanySizes = await this.attendees.CompanySizes();
+
+                return View(attendee);
             }
 
             await this.attendees.Create(

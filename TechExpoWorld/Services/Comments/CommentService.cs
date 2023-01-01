@@ -23,9 +23,8 @@
 
         public async Task<IEnumerable<CommentServiceModel>> CommentsOnNewsArticle(int newsArticleId)
             => await this.data
-                .NewsArticles
-                .Where(na => na.Id == newsArticleId)
-                .SelectMany(na => na.Comments)
+                .Comments
+                .Where(c => c.NewsArticleId == newsArticleId)
                 .ProjectTo<CommentServiceModel>(this.mapper.ConfigurationProvider)
                 .ToListAsync();
 

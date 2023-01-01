@@ -26,14 +26,14 @@
                 .Attendees
                 .AnyAsync(a => a.UserId == userId);
 
-        public async Task<int> AttendeeId(string userId)
+        public async Task<string> AttendeeId(string userId)
             => await this.data
                 .Attendees
                 .Where(a => a.UserId == userId)
                 .Select(a => a.Id)
                 .FirstOrDefaultAsync();
 
-        public async Task<int> Create(
+        public async Task<string> Create(
             string name,
             string phoneNumber,
             string workEmail,
@@ -71,7 +71,6 @@
             => await this.data
                 .JobTypes
                 .ProjectTo<JobTypeServiceModel>(this.mapper.ConfigurationProvider)
-                .OrderBy(jt => jt.Name)
                 .ToListAsync();
 
         public async Task<bool> JobTypeExists(int jobTypeId)
@@ -83,7 +82,6 @@
             => await this.data
                 .CompanyTypes
                 .ProjectTo<CompanyTypeServiceModel>(this.mapper.ConfigurationProvider)
-                .OrderBy(ct => ct.Name)
                 .ToListAsync();
 
         public async Task<bool> CompanyTypeExists(int companyTypeId)
@@ -95,7 +93,6 @@
             => await this.data
                 .CompanySectors
                 .ProjectTo<CompanySectorServiceModel>(this.mapper.ConfigurationProvider)
-                .OrderBy(cs => cs.Name)
                 .ToListAsync();
 
         public async Task<bool> CompanySectorExists(int companySectorId)

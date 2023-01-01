@@ -1,5 +1,6 @@
 ﻿namespace TechExpoWorld.Data.Models
 {
+    using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
@@ -7,7 +8,9 @@
 
     public class Attendee
     {
-        public int Id { get; init; }
+        [Required]
+        [MaxLength(IdLength)]
+        public string Id { get; init; } = Guid.NewGuid().ToString();
 
         [Required]
         [MaxLength(NameMaxLength)]

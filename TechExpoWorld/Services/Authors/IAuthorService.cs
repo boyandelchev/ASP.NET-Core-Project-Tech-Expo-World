@@ -6,9 +6,9 @@
     {
         Task<bool> IsAuthor(string userId);
 
-        Task<int> AuthorId(string userId);
+        Task<string> AuthorId(string userId);
 
-        Task<int> Create(
+        Task<string> Create(
             string name,
             string phoneNumber,
             string address,

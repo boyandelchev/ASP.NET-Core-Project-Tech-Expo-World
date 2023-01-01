@@ -1,9 +1,6 @@
 ﻿namespace TechExpoWorld.Services.Attendees.Models
 {
-    public class JobTypeServiceModel
+    public class JobTypeServiceModel : AttendeeWorkDetailsServiceModel
     {
-        public int Id { get; init; }
-
-        public string Name { get; init; }
     }
 }

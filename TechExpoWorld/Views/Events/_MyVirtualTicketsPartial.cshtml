@@ -15,8 +15,8 @@
                 <th scope="row">@(ViewBag.CountVirtualTickets++)</th>
                 <td>@myVirtualTicket.EventTitle</td>
                 <td>
-                    <a asp-controller="Events" asp-action="RevokeTicket" asp-route-id="@myVirtualTicket.EventId" asp-route-ticketId="@myVirtualTicket.TicketId">
-                        <span class="btn btn-secondary btn-outline-dark float-right text-white">Revoke this Ticket</span>
+                    <a asp-controller="Events" asp-action="CancelTicket" asp-route-id="@myVirtualTicket.EventId" asp-route-ticketId="@myVirtualTicket.TicketId">
+                        <span class="btn btn-secondary btn-outline-dark float-right text-white">Cancel this Ticket</span>
                     </a>
                 </td>
             </tr>

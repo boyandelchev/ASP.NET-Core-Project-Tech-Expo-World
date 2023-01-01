@@ -21,7 +21,7 @@
             this.mapper = mapper;
         }
 
-        public IActionResult Add() => View(new EventFormModel());
+        public IActionResult Add() => View();
 
         [HttpPost]
         public async Task<IActionResult> Add(EventFormModel eventData)

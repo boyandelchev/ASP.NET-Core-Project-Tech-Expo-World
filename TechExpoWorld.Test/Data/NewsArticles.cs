@@ -25,8 +25,8 @@
                 ViewCount = 0,
                 NewsCategoryId = 1,
                 NewsCategory = new NewsCategory { Id = 1, Name = "AI" },
-                AuthorId = 1,
-                Author = new Author { Id = 1 }
+                AuthorId = "1",
+                Author = new Author { Id = "1" }
             };
     }
 }

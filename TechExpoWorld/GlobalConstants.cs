@@ -21,7 +21,7 @@
             public const string CreatedAttendee = "Thank you for becomming an attendee!";
 
             public const string BookedTicket = "You have booked a ticket successfully!";
-            public const string RevokedTicket = "You have revoked a ticket successfully!";
+            public const string CancelledTicket = "You have cancelled a ticket successfully!";
         }
 
         public class Cache
@@ -49,6 +49,7 @@
             public const int TitleMaxLength = 100;
             public const int ContentMinLength = 10;
             public const int ContentMaxLength = 50000;
+            public const int AuthorIdLength = 36;
 
             public const string DisplaySearchByText = "Search by text";
             public const string DisplaySortByDate = "Sort by date";
@@ -72,6 +73,7 @@
 
         public class Author
         {
+            public const int IdLength = 36;
             public const int NameMinLength = 2;
             public const int NameMaxLength = 60;
             public const int PhoneNumberMinLength = 6;
@@ -117,6 +119,7 @@
 
         public class Attendee
         {
+            public const int IdLength = 36;
             public const int NameMinLength = 2;
             public const int NameMaxLength = 60;
             public const int PhoneNumberMinLength = 6;

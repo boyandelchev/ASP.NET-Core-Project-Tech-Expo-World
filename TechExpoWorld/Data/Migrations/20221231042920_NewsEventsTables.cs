@@ -13,8 +13,7 @@ namespace TechExpoWorld.Data.Migrations
                 name: "Authors",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: false),
                     Name = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
                     Address = table.Column<string>(type: "nvarchar(80)", maxLength: 80, nullable: false),
@@ -140,8 +139,7 @@ namespace TechExpoWorld.Data.Migrations
                 name: "Attendees",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: false),
                     Name = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
                     WorkEmail = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false),
@@ -202,7 +200,7 @@ namespace TechExpoWorld.Data.Migrations
                     LastModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ViewCount = table.Column<int>(type: "int", nullable: false),
                     NewsCategoryId = table.Column<int>(type: "int", nullable: false),
-                    AuthorId = table.Column<int>(type: "int", nullable: false)
+                    AuthorId = table.Column<string>(type: "nvarchar(36)", maxLength: 36, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -229,9 +227,9 @@ namespace TechExpoWorld.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Type = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     Price = table.Column<decimal>(type: "decimal(8,2)", precision: 8, scale: 2, nullable: false),
-                    IsSold = table.Column<bool>(type: "bit", nullable: false),
-                    EventId = table.Column<int>(type: "int", nullable: false),
-                    AttendeeId = table.Column<int>(type: "int", nullable: true)
+                    IsBooked = table.Column<bool>(type: "bit", nullable: false),
+                    EventId = table.Column<int>(type: "int", nullable: true),
+                    AttendeeId = table.Column<string>(type: "nvarchar(36)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -246,7 +244,7 @@ namespace TechExpoWorld.Data.Migrations
                         column: x => x.EventId,
                         principalTable: "Events",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -258,7 +256,7 @@ namespace TechExpoWorld.Data.Migrations
                     Content = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     LastModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    NewsArticleId = table.Column<int>(type: "int", nullable: false),
+                    NewsArticleId = table.Column<int>(type: "int", nullable: true),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ParentCommentId = table.Column<int>(type: "int", nullable: true)
                 },
@@ -281,7 +279,7 @@ namespace TechExpoWorld.Data.Migrations
                         column: x => x.NewsArticleId,
                         principalTable: "NewsArticles",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(

@@ -89,7 +89,9 @@
                 return BadRequest();
             }
 
-            var myNewsArticles = await this.news.NewsArticlesByUser(this.User.Id());
+            var authorId = await this.authors.AuthorId(this.User.Id());
+
+            var myNewsArticles = await this.news.NewsArticlesByAuthor(authorId);
 
             return View(myNewsArticles);
         }
@@ -125,7 +127,7 @@
 
             var authorId = await this.authors.AuthorId(this.User.Id());
 
-            if (authorId == 0)
+            if (authorId == null)
             {
                 return RedirectToAction(nameof(AuthorsController.BecomeAuthor), ControllerAuthors);
             }
@@ -166,9 +168,9 @@
         [Authorize]
         public async Task<IActionResult> Edit(int id)
         {
-            var userId = this.User.Id();
+            var authorId = await this.authors.AuthorId(this.User.Id());
 
-            if (!await this.authors.IsAuthor(userId) && !this.User.IsAdmin())
+            if (authorId == null && !this.User.IsAdmin())
             {
                 return RedirectToAction(nameof(AuthorsController.BecomeAuthor), ControllerAuthors);
             }
@@ -180,7 +182,7 @@
                 return NotFound();
             }
 
-            if (newsArticle.UserId != userId && !this.User.IsAdmin())
+            if (newsArticle.AuthorId != authorId && !this.User.IsAdmin())
             {
                 return Unauthorized();
             }
@@ -199,7 +201,7 @@
         {
             var authorId = await this.authors.AuthorId(this.User.Id());
 
-            if (authorId == 0 && !this.User.IsAdmin())
+            if (authorId == null && !this.User.IsAdmin())
             {
                 return RedirectToAction(nameof(AuthorsController.BecomeAuthor), ControllerAuthors);
             }
@@ -252,7 +254,7 @@
         {
             var authorId = await this.authors.AuthorId(this.User.Id());
 
-            if (authorId == 0 && !this.User.IsAdmin())
+            if (authorId == null && !this.User.IsAdmin())
             {
                 return RedirectToAction(nameof(AuthorsController.BecomeAuthor), ControllerAuthors);
             }

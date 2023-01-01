@@ -8,9 +8,9 @@
     {
         Task<bool> IsAttendee(string userId);
 
-        Task<int> AttendeeId(string userId);
+        Task<string> AttendeeId(string userId);
 
-        Task<int> Create(
+        Task<string> Create(
             string name,
             string phoneNumber,
             string workEmail,

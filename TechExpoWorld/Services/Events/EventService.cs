@@ -27,8 +27,8 @@
         public async Task<IEnumerable<EventServiceModel>> All()
             => await this.data
                 .Events
-                .ProjectTo<EventServiceModel>(this.mapper.ConfigurationProvider)
                 .OrderByDescending(e => e.Id)
+                .ProjectTo<EventServiceModel>(this.mapper.ConfigurationProvider)
                 .ToListAsync();
 
         public async Task<EventDetailsServiceModel> Details(int eventId)
@@ -50,10 +50,10 @@
             return eventData;
         }
 
-        public async Task<IEnumerable<MyTicketServiceModel>> MyPhysicalTickets(int attendeeId)
+        public async Task<IEnumerable<MyTicketServiceModel>> MyPhysicalTickets(string attendeeId)
             => await MyTickets(attendeeId, PhysicalTicketType);
 
-        public async Task<IEnumerable<MyTicketServiceModel>> MyVirtualTickets(int attendeeId)
+        public async Task<IEnumerable<MyTicketServiceModel>> MyVirtualTickets(string attendeeId)
             => await MyTickets(attendeeId, VirtualTicketType);
 
         public async Task<int> CreateEventWithTickets(
@@ -80,13 +80,11 @@
                 UserId = userId
             };
 
-            var tickets = CreateAllTickets(
+            eventData.Tickets = CreateAllTickets(
                 totalPhysicalTickets,
                 physicalTicketPrice,
                 totalVirtualTickets,
                 virtualTicketPrice);
-
-            eventData.Tickets = tickets;
 
             await this.data.Events.AddAsync(eventData);
             await this.data.SaveChangesAsync();
@@ -132,6 +130,8 @@
                 return true;
             }
 
+            RevokeTickets(eventData.Tickets);
+
             eventData.TotalPhysicalTickets = totalPhysicalTickets;
             eventData.TotalVirtualTickets = totalVirtualTickets;
 
@@ -150,6 +150,7 @@
         {
             var eventData = await this.data
                 .Events
+                .Include(e => e.Tickets)
                 .FirstOrDefaultAsync(e => e.Id == eventId);
 
             if (eventData == null)
@@ -157,19 +158,21 @@
                 return false;
             }
 
+            RevokeTickets(eventData.Tickets);
+
             this.data.Events.Remove(eventData);
             await this.data.SaveChangesAsync();
 
             return true;
         }
 
-        public async Task<bool> BookPhysicalTicket(int eventId, int attendeeId)
+        public async Task<bool> BookPhysicalTicket(int eventId, string attendeeId)
             => await BookTicket(eventId, attendeeId, PhysicalTicketType);
 
-        public async Task<bool> BookVirtualTicket(int eventId, int attendeeId)
+        public async Task<bool> BookVirtualTicket(int eventId, string attendeeId)
             => await BookTicket(eventId, attendeeId, VirtualTicketType);
 
-        public async Task<bool> RevokeTicket(int eventId, int ticketId, int attendeeId)
+        public async Task<bool> CancelTicket(int eventId, int ticketId, string attendeeId)
         {
             var ticket = await this.data
                 .Tickets
@@ -183,7 +186,7 @@
                 return false;
             }
 
-            ticket.IsSold = false;
+            ticket.IsBooked = false;
             ticket.AttendeeId = null;
 
             await this.data.SaveChangesAsync();
@@ -239,6 +242,16 @@
             return tickets;
         }
 
+        private static void RevokeTickets(IEnumerable<Ticket> tickets)
+        {
+            foreach (var ticket in tickets)
+            {
+                ticket.IsBooked = false;
+                ticket.EventId = null;
+                ticket.AttendeeId = null;
+            }
+        }
+
         private async Task<decimal> TicketPrice(int eventId, string ticketType)
             => await this.data
                 .Tickets
@@ -247,20 +260,12 @@
                 .FirstOrDefaultAsync();
 
         private async Task<int> TotalAvailableOfTypeTickets(int eventId, string ticketType)
-            => await this.data
-                .Tickets
-                .Where(t => t.EventId == eventId &&
-                            t.IsSold == false &&
-                            t.Type == ticketType)
+            => await AvailableOfTypeTicketsQuery(eventId, ticketType)
                 .CountAsync();
 
-        private async Task<bool> BookTicket(int eventId, int attendeeId, string ticketType)
+        private async Task<bool> BookTicket(int eventId, string attendeeId, string ticketType)
         {
-            var ticket = await this.data
-                .Tickets
-                .Where(t => t.EventId == eventId &&
-                            t.IsSold == false &&
-                            t.Type == ticketType)
+            var ticket = await AvailableOfTypeTicketsQuery(eventId, ticketType)
                 .FirstOrDefaultAsync();
 
             if (ticket == null)
@@ -268,7 +273,7 @@
                 return false;
             }
 
-            ticket.IsSold = true;
+            ticket.IsBooked = true;
             ticket.AttendeeId = attendeeId;
 
             await this.data.SaveChangesAsync();
@@ -276,7 +281,7 @@
             return true;
         }
 
-        private async Task<IEnumerable<MyTicketServiceModel>> MyTickets(int attendeeId, string ticketType)
+        private async Task<IEnumerable<MyTicketServiceModel>> MyTickets(string attendeeId, string ticketType)
             => await this.data
                 .Attendees
                 .Where(a => a.Id == attendeeId)
@@ -284,5 +289,13 @@
                 .Where(t => t.Type == ticketType)
                 .ProjectTo<MyTicketServiceModel>(this.mapper.ConfigurationProvider)
                 .ToListAsync();
+
+        private IQueryable<Ticket> AvailableOfTypeTicketsQuery(int eventId, string ticketType)
+            => this.data
+                .Tickets
+                .Where(t => t.EventId == eventId &&
+                            t.IsBooked == false &&
+                            t.Type == ticketType)
+                .AsQueryable();
     }
 }

@@ -64,7 +64,7 @@
 
             var attendeeId = await this.attendees.AttendeeId(this.User.Id());
 
-            if (attendeeId == 0)
+            if (attendeeId == null)
             {
                 return RedirectToAction(nameof(AttendeesController.BecomeAttendee), ControllerAttendees);
             }
@@ -86,7 +86,7 @@
 
             var attendeeId = await this.attendees.AttendeeId(this.User.Id());
 
-            if (attendeeId == 0)
+            if (attendeeId == null)
             {
                 return RedirectToAction(nameof(AttendeesController.BecomeAttendee), ControllerAttendees);
             }
@@ -108,7 +108,7 @@
 
             var attendeeId = await this.attendees.AttendeeId(this.User.Id());
 
-            if (attendeeId == 0)
+            if (attendeeId == null)
             {
                 return RedirectToAction(nameof(AttendeesController.BecomeAttendee), ControllerAttendees);
             }
@@ -121,7 +121,7 @@
         }
 
         [Authorize]
-        public async Task<IActionResult> RevokeTicket(int id, int ticketId)
+        public async Task<IActionResult> CancelTicket(int id, int ticketId)
         {
             if (this.User.IsAdmin())
             {
@@ -130,19 +130,19 @@
 
             var attendeeId = await this.attendees.AttendeeId(this.User.Id());
 
-            if (attendeeId == 0)
+            if (attendeeId == null)
             {
                 return RedirectToAction(nameof(AttendeesController.BecomeAttendee), ControllerAttendees);
             }
 
-            var isRevoked = await this.events.RevokeTicket(id, ticketId, attendeeId);
+            var isCancelled = await this.events.CancelTicket(id, ticketId, attendeeId);
 
-            if (!isRevoked)
+            if (!isCancelled)
             {
                 return BadRequest();
             }
 
-            TempData[GlobalMessageKey] = RevokedTicket;
+            TempData[GlobalMessageKey] = CancelledTicket;
 
             return RedirectToAction(nameof(MyTickets));
         }

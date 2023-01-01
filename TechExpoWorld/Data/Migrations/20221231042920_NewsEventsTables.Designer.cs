@@ -12,7 +12,7 @@ using TechExpoWorld.Data;
 namespace TechExpoWorld.Data.Migrations
 {
     [DbContext(typeof(TechExpoDbContext))]
-    [Migration("20221222215458_NewsEventsTables")]
+    [Migration("20221231042920_NewsEventsTables")]
     partial class NewsEventsTables
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -163,11 +163,9 @@ namespace TechExpoWorld.Data.Migrations
 
             modelBuilder.Entity("TechExpoWorld.Data.Models.Attendee", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    b.Property<string>("Id")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
 
                     b.Property<string>("CompanyName")
                         .IsRequired()
@@ -233,11 +231,9 @@ namespace TechExpoWorld.Data.Migrations
 
             modelBuilder.Entity("TechExpoWorld.Data.Models.Author", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    b.Property<string>("Id")
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
 
                     b.Property<string>("Address")
                         .IsRequired()
@@ -289,7 +285,7 @@ namespace TechExpoWorld.Data.Migrations
                     b.Property<DateTime?>("LastModifiedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("NewsArticleId")
+                    b.Property<int?>("NewsArticleId")
                         .HasColumnType("int");
 
                     b.Property<int?>("ParentCommentId")
@@ -436,8 +432,10 @@ namespace TechExpoWorld.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("AuthorId")
-                        .HasColumnType("int");
+                    b.Property<string>("AuthorId")
+                        .IsRequired()
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
 
                     b.Property<string>("Content")
                         .IsRequired()
@@ -533,13 +531,13 @@ namespace TechExpoWorld.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int?>("AttendeeId")
+                    b.Property<string>("AttendeeId")
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<int?>("EventId")
                         .HasColumnType("int");
 
-                    b.Property<int>("EventId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsSold")
+                    b.Property<bool>("IsBooked")
                         .HasColumnType("bit");
 
                     b.Property<decimal>("Price")
@@ -731,8 +729,7 @@ namespace TechExpoWorld.Data.Migrations
                     b.HasOne("TechExpoWorld.Data.Models.NewsArticle", "NewsArticle")
                         .WithMany("Comments")
                         .HasForeignKey("NewsArticleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("TechExpoWorld.Data.Models.Comment", "ParentComment")
                         .WithMany("ChildrenComments")
@@ -809,8 +806,7 @@ namespace TechExpoWorld.Data.Migrations
                     b.HasOne("TechExpoWorld.Data.Models.Event", "Event")
                         .WithMany("Tickets")
                         .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Attendee");
 

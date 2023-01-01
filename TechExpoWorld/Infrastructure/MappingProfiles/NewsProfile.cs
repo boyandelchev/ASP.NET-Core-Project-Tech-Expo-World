@@ -32,8 +32,7 @@
                 .ForMember(na => na.CategoryId, cfg => cfg.MapFrom(na => na.NewsCategoryId))
                 .ForMember(na => na.CategoryName, cfg => cfg.MapFrom(na => na.NewsCategory.Name))
                 .ForMember(na => na.TagIds, cfg => cfg.MapFrom(na => na.NewsArticleTags.Select(nat => nat.TagId)))
-                .ForMember(na => na.TagNames, cfg => cfg.MapFrom(na => na.NewsArticleTags.Select(nat => nat.Tag.Name)))
-                .ForMember(na => na.UserId, cfg => cfg.MapFrom(na => na.Author.UserId));
+                .ForMember(na => na.TagNames, cfg => cfg.MapFrom(na => na.NewsArticleTags.Select(nat => nat.Tag.Name)));
 
             this.CreateMap<NewsCategory, CategoryServiceModel>();
 

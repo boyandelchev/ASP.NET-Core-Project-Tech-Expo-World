@@ -60,9 +60,9 @@
             => MyPipeline
                 .Configuration()
                 .ShouldMap(request => request
-                    .WithPath("/Events/BuyPhysicalTicket/1")
+                    .WithPath("/Events/BookPhysicalTicket/1")
                     .WithUser())
-                .To<EventsController>(c => c.BuyPhysicalTicket(1))
+                .To<EventsController>(c => c.BookPhysicalTicket(1))
                 .Which(controller => controller
                     .WithData(new Ticket
                     {
@@ -78,9 +78,9 @@
             => MyPipeline
                 .Configuration()
                 .ShouldMap(request => request
-                    .WithPath("/Events/BuyVirtualTicket/1")
+                    .WithPath("/Events/BookVirtualTicket/1")
                     .WithUser())
-                .To<EventsController>(c => c.BuyVirtualTicket(1))
+                .To<EventsController>(c => c.BookVirtualTicket(1))
                 .Which(controller => controller
                     .WithData(new Ticket
                     {

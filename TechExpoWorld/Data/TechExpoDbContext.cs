@@ -86,10 +86,24 @@
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder
+                .Entity<Comment>()
+                .HasOne(c => c.NewsArticle)
+                .WithMany(na => na.Comments)
+                .HasForeignKey(c => c.NewsArticleId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder
                 .Entity<Event>()
                 .HasOne(e => e.User)
                 .WithMany(u => u.Events)
                 .HasForeignKey(e => e.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder
+                .Entity<Ticket>()
+                .HasOne(t => t.Event)
+                .WithMany(e => e.Tickets)
+                .HasForeignKey(t => t.EventId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.ApplyConfiguration(new AttendeeConfiguration());

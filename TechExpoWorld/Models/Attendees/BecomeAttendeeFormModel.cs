@@ -49,12 +49,12 @@
         [Display(Name = DisplayCompanySize)]
         public int CompanySizeId { get; init; }
 
-        public IEnumerable<JobTypeServiceModel> JobTypes { get; init; }
+        public IEnumerable<JobTypeServiceModel> JobTypes { get; set; }
 
-        public IEnumerable<CompanyTypeServiceModel> CompanyTypes { get; init; }
+        public IEnumerable<CompanyTypeServiceModel> CompanyTypes { get; set; }
 
-        public IEnumerable<CompanySectorServiceModel> CompanySectors { get; init; }
+        public IEnumerable<CompanySectorServiceModel> CompanySectors { get; set; }
 
-        public IEnumerable<CompanySizeServiceModel> CompanySizes { get; init; }
+        public IEnumerable<CompanySizeServiceModel> CompanySizes { get; set; }
     }
 }

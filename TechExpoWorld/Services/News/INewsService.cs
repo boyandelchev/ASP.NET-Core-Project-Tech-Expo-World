@@ -15,7 +15,7 @@
             int currentPage,
             int newsArticlesPerPage);
 
-        Task<IEnumerable<NewsArticleServiceModel>> NewsArticlesByUser(string userId);
+        Task<IEnumerable<NewsArticleServiceModel>> NewsArticlesByAuthor(string authorId);
 
         Task<IList<LatestNewsArticleServiceModel>> LatestNewsArticles();
 
@@ -29,7 +29,7 @@
             string imageUrl,
             int categoryId,
             IEnumerable<int> tagIds,
-            int authorId);
+            string authorId);
 
         Task<bool> Edit(
             int newsArticleId,
@@ -41,7 +41,7 @@
 
         Task<bool> Delete(int newsArticleId);
 
-        Task<bool> IsByAuthor(int newsArticleId, int authorId);
+        Task<bool> IsByAuthor(int newsArticleId, string authorId);
 
         Task<IEnumerable<CategoryServiceModel>> Categories();
 
