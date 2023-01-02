@@ -88,7 +88,7 @@ namespace TechExpoWorld
                 endpoints.MapDefaultAreaRoute();
                 endpoints.MapNewsArticleDetailsControllerRoute();
                 endpoints.MapEventDetailsControllerRoute();
-                endpoints.MapRevokeTicketsControllerRoute();
+                endpoints.MapCancelTicketsControllerRoute();
                 endpoints.MapDefaultControllerRoute();
                 endpoints.MapRazorPages();
             });

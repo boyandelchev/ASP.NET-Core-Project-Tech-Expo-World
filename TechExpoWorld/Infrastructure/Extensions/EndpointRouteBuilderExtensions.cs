@@ -31,9 +31,9 @@
                     action = nameof(EventsController.Details)
                 });
 
-        public static void MapRevokeTicketsControllerRoute(this IEndpointRouteBuilder endpoints)
+        public static void MapCancelTicketsControllerRoute(this IEndpointRouteBuilder endpoints)
             => endpoints.MapControllerRoute(
-                name: "Revoke Tickets",
+                name: "Cancel Tickets",
                 pattern: "{controller=Home}/{action=Index}/{id}/{ticketId}");
     }
 }

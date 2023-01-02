@@ -3,6 +3,7 @@
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using TechExpoWorld.Infrastructure.ActionFilters;
     using TechExpoWorld.Infrastructure.Extensions;
     using TechExpoWorld.Models.Events;
     using TechExpoWorld.Services.Attendees;
@@ -55,19 +56,11 @@
         }
 
         [Authorize]
+        [TypeFilter(typeof(IsAttendeeFilter))]
         public async Task<IActionResult> MyTickets()
         {
-            if (this.User.IsAdmin())
-            {
-                return BadRequest();
-            }
-
-            var attendeeId = await this.attendees.AttendeeId(this.User.Id());
-
-            if (attendeeId == null)
-            {
-                return RedirectToAction(nameof(AttendeesController.BecomeAttendee), ControllerAttendees);
-            }
+            string attendeeId;
+            attendeeId = this.HttpContext.Items[nameof(attendeeId)] as string;
 
             return View(new MyTicketsViewModel
             {
@@ -77,19 +70,11 @@
         }
 
         [Authorize]
+        [TypeFilter(typeof(IsAttendeeFilter))]
         public async Task<IActionResult> BookPhysicalTicket(int id)
         {
-            if (this.User.IsAdmin())
-            {
-                return BadRequest();
-            }
-
-            var attendeeId = await this.attendees.AttendeeId(this.User.Id());
-
-            if (attendeeId == null)
-            {
-                return RedirectToAction(nameof(AttendeesController.BecomeAttendee), ControllerAttendees);
-            }
+            string attendeeId;
+            attendeeId = this.HttpContext.Items[nameof(attendeeId)] as string;
 
             await this.events.BookPhysicalTicket(id, attendeeId);
 
@@ -99,19 +84,11 @@
         }
 
         [Authorize]
+        [TypeFilter(typeof(IsAttendeeFilter))]
         public async Task<IActionResult> BookVirtualTicket(int id)
         {
-            if (this.User.IsAdmin())
-            {
-                return BadRequest();
-            }
-
-            var attendeeId = await this.attendees.AttendeeId(this.User.Id());
-
-            if (attendeeId == null)
-            {
-                return RedirectToAction(nameof(AttendeesController.BecomeAttendee), ControllerAttendees);
-            }
+            string attendeeId;
+            attendeeId = this.HttpContext.Items[nameof(attendeeId)] as string;
 
             await this.events.BookVirtualTicket(id, attendeeId);
 
@@ -121,19 +98,11 @@
         }
 
         [Authorize]
+        [TypeFilter(typeof(IsAttendeeFilter))]
         public async Task<IActionResult> CancelTicket(int id, int ticketId)
         {
-            if (this.User.IsAdmin())
-            {
-                return BadRequest();
-            }
-
-            var attendeeId = await this.attendees.AttendeeId(this.User.Id());
-
-            if (attendeeId == null)
-            {
-                return RedirectToAction(nameof(AttendeesController.BecomeAttendee), ControllerAttendees);
-            }
+            string attendeeId;
+            attendeeId = this.HttpContext.Items[nameof(attendeeId)] as string;
 
             var isCancelled = await this.events.CancelTicket(id, ticketId, attendeeId);
 
