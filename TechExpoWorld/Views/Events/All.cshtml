@@ -9,22 +9,22 @@
     <h2 class="text-center">No event announcements!</h2>
 }
 
-<div class="row text-center">
+<div class="row row-cols-1 row-cols-md-4 g-4 text-center mt-3">
     @foreach (var eventData in Model)
     {
-        <div class="col-md-3 mt-3">
-            <div class="card">
+        <div class="col">
+            <div class="card h-100">
                 <a asp-controller="Events" asp-action="Details" asp-route-id="@eventData.Id" asp-route-information="@eventData.GetEventInformation()">
-                    <img class="card-img-top" src="/event-image.jpg" alt="image">
+                    <img src="/event-image.jpg" class="card-img-top" alt="event image">
                 </a>
                 <div class="card-body">
                     <h5 class="card-title">@eventData.Title</h5>
                 </div>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">@eventData.Location</li>
-                    <li class="list-group-item font-italic p-4">@eventData.StartDate - @eventData.EndDate</li>
+                    <li class="list-group-item fst-italic">@eventData.StartDate - @eventData.EndDate</li>
                     <li class="list-group-item">
-                        <a asp-controller="Events" asp-action="Details" asp-route-id="@eventData.Id" asp-route-information="@eventData.GetEventInformation()" class="card-link">
+                        <a asp-controller="Events" asp-action="Details" asp-route-id="@eventData.Id" asp-route-information="@eventData.GetEventInformation()">
                             See available tickets and information about the event
                         </a>
                     </li>

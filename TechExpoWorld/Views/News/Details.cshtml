@@ -5,64 +5,74 @@
 }
 
 <section>
-    <article>
-        <h2>@Model.NewsArticle.Title</h2>
-        <div>
+    <h2>@Model.NewsArticle.Title</h2>
+    <article class="d-flex justify-content-between">
+        <p class="m-0">
             <span class="text-info">@Model.NewsArticle.AuthorName - </span>
             <span class="text-dark">@Model.NewsArticle.CreatedOn</span>
-            <span class="float-right">Views: @Model.NewsArticle.ViewCount <a href="#comments">Comments: @Model.TotalComments</a></span>
-        </div>
-        @if (Model.NewsArticle.LastModifiedOn != null)
-        {
-            <div>Last Edit: @Model.NewsArticle.LastModifiedOn</div>
-        }
-        <div class="float-right">
+        </p>
+        <p class="m-0">
+            <span>Views: @Model.NewsArticle.ViewCount |</span>
+            <a href="#add-comment-button">Comments: @Model.TotalComments</a>
+        </p>
+    </article>
+    <article class="d-flex justify-content-between">
+        <p>
+            @if (Model.NewsArticle.LastModifiedOn != null)
+            {
+                <span>Last Edit: @Model.NewsArticle.LastModifiedOn</span>
+            }
+        </p>
+        <p class="text-end">
             Category:
-            <a asp-controller="News" asp-action="All" asp-route-category="@Model.NewsArticle.CategoryName"><span class="font-weight-bold">@Model.NewsArticle.CategoryName</span></a>
-        </div>
-        <img class="img-fluid" src="@Model.NewsArticle.ImageUrl" alt="@Model.NewsArticle.Title (@Model.NewsArticle.CategoryName)" />
-        <p>@Model.NewsArticle.Content</p>
-        <span>Tags: </span>
+            <a asp-controller="News" asp-action="All" asp-route-category="@Model.NewsArticle.CategoryName" class="fw-bold">
+                @Model.NewsArticle.CategoryName
+            </a>
+        </p>
+    </article>
+    <article>
+        <article class="article-img">
+            <img src="@Model.NewsArticle.ImageUrl" alt="@Model.NewsArticle.Title (@Model.NewsArticle.CategoryName)" class="img-fluid w-100" />
+        </article>
+        <p class="p-3">@Model.NewsArticle.Content</p>
+        <span>Tags:</span>
         @foreach (var tag in Model.NewsArticle.TagNames)
         {
-            <a asp-controller="News" asp-action="All" asp-route-tag="@tag"><span class="font-italic">@tag</span></a>
+            <a asp-controller="News" asp-action="All" asp-route-tag="@tag" class="fst-italic">@tag/</a>
         }
     </article>
 </section>
 
-<div id="comments"></div>
 <div class="text-center" id="add-comment-button">
     <button class="btn btn-primary">Add a comment</button>
 </div>
 
-<div class="d-none text-center" id="add-comment-area">
-    <section class="mt-3">
-        <form asp-controller="Comments" asp-action="Add" asp-route-id="@Model.NewsArticleId" method="post">
-            <div class="form-group">
-                <label asp-for="@Model.Comment.Content"></label>
-                <textarea asp-for="@Model.Comment.Content" rows="5" class="form-control" placeholder="Add comment"></textarea>
-                <span asp-validation-for="@Model.Comment.Content" class="small text-danger"></span>
-            </div>
+<section class="d-none text-center mt-3" id="add-comment-area">
+    <form asp-controller="Comments" asp-action="Add" asp-route-id="@Model.NewsArticleId" method="post">
+        <div class="mb-0">
+            <label asp-for="@Model.Comment.Content" class="form-label"></label>
+            <textarea asp-for="@Model.Comment.Content" class="form-control" rows="5" placeholder="Add a comment"></textarea>
+            <span asp-validation-for="@Model.Comment.Content" class="small text-danger"></span>
+        </div>
 
-            <input class="btn btn-primary mt-3" type="submit" value="Add" />
-            <button class="btn btn-secondary mt-3 float-right">Hide</button>
-        </form>
-    </section>
-</div>
+        <input type="submit" class="btn btn-primary mt-3" value="Add" />
+        <button class="btn btn-secondary mt-3 float-end">Hide</button>
+    </form>
+</section>
 
 <section class="mt-5">
     @foreach (var comment in Model.Comments)
     {
-        <div class="media">
-            <img class="mr-3" src="/profile-image-32x32.png" alt="profile image">
-            <div class="media-body">
-                <h5 class="mt-0">
-                    @comment.UserName
-                    <span class="float-right text-secondary">@comment.CreatedOn</span>
-                </h5>
-                @comment.Content
+        <div class="d-flex">
+            <div>
+                <img src="/profile-image-32x32.png" alt="profile image">
+            </div>
+            <div class="d-flex justify-content-between flex-grow-1 fw-bold ms-3">
+                <p>@comment.UserName</p>
+                <p class="text-secondary">@comment.CreatedOn</p>
             </div>
         </div>
+        <p>@comment.Content</p>
     }
 </section>
 

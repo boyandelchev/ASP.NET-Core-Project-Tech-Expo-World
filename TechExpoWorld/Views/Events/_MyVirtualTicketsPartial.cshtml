@@ -5,7 +5,7 @@
         <tr>
             <th scope="col">#</th>
             <th scope="col">Event</th>
-            <th scope="col" class="text-right">Virtual Tickets</th>
+            <th scope="col" class="text-end">Virtual Tickets</th>
         </tr>
     </thead>
     <tbody>
@@ -16,7 +16,7 @@
                 <td>@myVirtualTicket.EventTitle</td>
                 <td>
                     <a asp-controller="Events" asp-action="CancelTicket" asp-route-id="@myVirtualTicket.EventId" asp-route-ticketId="@myVirtualTicket.TicketId">
-                        <span class="btn btn-secondary btn-outline-dark float-right text-white">Cancel this Ticket</span>
+                        <span class="btn btn-secondary btn-outline-dark text-white float-end">Cancel this Ticket</span>
                     </a>
                 </td>
             </tr>

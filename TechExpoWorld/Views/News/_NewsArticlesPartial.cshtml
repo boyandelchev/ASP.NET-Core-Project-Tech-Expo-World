@@ -1,21 +1,23 @@
 ﻿@model IEnumerable<NewsArticleServiceModel>
 
-<div class="row mt-3">
+<div class="row row-cols-1 row-cols-md-3 g-4 text-center mb-3">
     @foreach (var news in Model)
     {
-        <div class="col-md-4">
-            <div class="card mb-3">
+        <div class="col">
+            <div class="card h-100">
                 <a asp-controller="News" asp-action="Details" asp-route-id="@news.Id" asp-route-information="@news.GetNewsArticleInformation()">
-                    <img class="card-img-top" src="@news.ImageUrl" alt="@news.Title (@news.CategoryName)">
+                    <article class="card-article-img">
+                        <img src="@news.ImageUrl" class="card-img-top" alt="@news.Title (@news.CategoryName)">
+                    </article>
                 </a>
-                <div class="card-body text-center">
+                <div class="card-body">
                     <h5 class="card-title">@news.Title</h5>
-                    <div>
-                        <span class="text-left text-info">@news.AuthorName - </span>
-                        <span class="text-left text-dark">@news.CreatedOn</span>
-                    </div>
-                    <p class="text-muted">@news.Content</p>
-                    <p class="text-primary">@news.CategoryName</p>
+                    <p class="card-text">
+                        <span class="text-info">@news.AuthorName - </span>
+                        <span class="text-dark">@news.CreatedOn</span>
+                    </p>
+                    <p class="card-text text-secondary">@news.Content</p>
+                    <p class="card-text text-primary">@news.CategoryName</p>
                     <a asp-controller="News" asp-action="Details" asp-route-id="@news.Id" asp-route-information="@news.GetNewsArticleInformation()" class="btn btn-primary btn-outline-secondary text-white">Read More</a>
                     @if (ViewBag.AreMyNewsArticles == true || User.IsAdmin())
                     {

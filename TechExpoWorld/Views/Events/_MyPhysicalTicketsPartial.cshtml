@@ -5,7 +5,7 @@
         <tr>
             <th scope="col">#</th>
             <th scope="col">Event</th>
-            <th scope="col" class="text-right">Physical Tickets</th>
+            <th scope="col" class="text-end">Physical Tickets</th>
         </tr>
     </thead>
     <tbody>
@@ -16,7 +16,7 @@
                 <td>@myPhysicalTicket.EventTitle</td>
                 <td>
                     <a asp-controller="Events" asp-action="CancelTicket" asp-route-id="@myPhysicalTicket.EventId" asp-route-ticketId="@myPhysicalTicket.TicketId">
-                        <span class="btn btn-primary btn-outline-dark float-right text-white">Cancel this Ticket</span>
+                        <span class="btn btn-primary btn-outline-dark text-white float-end">Cancel this Ticket</span>
                     </a>
                 </td>
             </tr>

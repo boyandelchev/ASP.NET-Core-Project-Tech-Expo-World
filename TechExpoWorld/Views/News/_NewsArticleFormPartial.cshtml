@@ -2,27 +2,27 @@
 
 <div class="row">
     <div class="col-sm-12 offset-md-1 col-md-10 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
-        <h2 class="heading-margin text-center">@ViewBag.Title</h2>
+        <h2 class="text-center">@ViewBag.Title</h2>
 
         <form method="post">
-            <div class="form-group">
-                <label asp-for="Title"></label>
+            <div class="mb-3">
+                <label asp-for="Title" class="form-label"></label>
                 <input asp-for="Title" class="form-control" readonly="@ViewBag.IsDelete" placeholder="The potential of IoT and Cloud Computing...">
                 <span asp-validation-for="Title" class="small text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Content"></label>
-                <textarea asp-for="Content" rows="10" class="form-control" readonly="@ViewBag.IsDelete" placeholder="The Internet of Things (IoT) and Cloud Computing are quite the rage these days in the world of information..."></textarea>
+            <div class="mb-3">
+                <label asp-for="Content" class="form-label"></label>
+                <textarea asp-for="Content" class="form-control" rows="10" readonly="@ViewBag.IsDelete" placeholder="The Internet of Things (IoT) and Cloud Computing are quite the rage these days in the world of information..."></textarea>
                 <span asp-validation-for="Content" class="small text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="ImageUrl"></label>
+            <div class="mb-3">
+                <label asp-for="ImageUrl" class="form-label"></label>
                 <input asp-for="ImageUrl" class="form-control" readonly="@ViewBag.IsDelete" placeholder="Add a URL for picture here...">
                 <span asp-validation-for="ImageUrl" class="small text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="CategoryId"></label>
-                <select asp-for="CategoryId" class="form-control" readonly="@ViewBag.IsDelete">
+            <div class="mb-3">
+                <label asp-for="CategoryId" class="form-label"></label>
+                <select asp-for="CategoryId" class="form-select" readonly="@ViewBag.IsDelete">
                     @foreach (var newsCategory in Model.Categories)
                     {
                         <option value="@newsCategory.Id">@newsCategory.Name</option>
@@ -30,9 +30,9 @@
                 </select>
                 <span asp-validation-for="CategoryId" class="small text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="TagIds"></label>
-                <select asp-for="TagIds" multiple class="form-control" readonly="@ViewBag.IsDelete">
+            <div class="mb-3">
+                <label asp-for="TagIds" class="form-label"></label>
+                <select asp-for="TagIds" class="form-select" multiple size="6" readonly="@ViewBag.IsDelete">
                     @foreach (var tag in Model.Tags)
                     {
                         <option value="@tag.Id">@tag.Name</option>
@@ -43,12 +43,12 @@
 
             @if (ViewBag.IsDelete == true)
             {
-                <input class="btn btn-danger mt-3" type="submit" value="Delete" />
+                <input type="submit" class="btn btn-danger mt-3" value="Delete" />
             }
             else
             {
-                <input class="btn btn-primary mt-3" type="submit" value="Submit" />
-                <input class="btn btn-secondary mt-3 float-right" type="reset" value="Clear" />
+                <input type="submit" class="btn btn-primary mt-3" value="Submit" />
+                <input type="reset" class="btn btn-secondary mt-3 float-end" value="Clear" />
             }
         </form>
     </div>
