@@ -1,4 +1,6 @@
-﻿html {
+﻿@import "mediaQueries.css";
+
+html {
     font-size: 14px;
 }
 
@@ -19,68 +21,6 @@ body {
 
 a {
     text-decoration: none;
-}
-
-.article-img,
-.carousel-article-img {
-    max-height: 150px;
-    overflow: hidden;
-}
-
-@media (min-width: 320px) {
-    .article-img,
-    .carousel-article-img {
-        max-height: 200px;
-        overflow: hidden;
-    }
-}
-
-@media (min-width: 480px) {
-    .article-img,
-    .carousel-article-img {
-        max-height: 250px;
-        overflow: hidden;
-    }
-}
-
-@media (min-width: 576px) {
-    .article-img,
-    .carousel-article-img {
-        max-height: 275px;
-        overflow: hidden;
-    }
-}
-
-@media (min-width: 768px) {
-    .article-img,
-    .carousel-article-img {
-        max-height: 375px;
-        overflow: hidden;
-    }
-}
-
-@media (min-width: 992px) {
-    .article-img,
-    .carousel-article-img {
-        max-height: 500px;
-        overflow: hidden;
-    }
-}
-
-@media (min-width: 1200px) {
-    .article-img,
-    .carousel-article-img {
-        max-height: 600px;
-        overflow: hidden;
-    }
-}
-
-@media (min-width: 1400px) {
-    .article-img,
-    .carousel-article-img {
-        max-height: 700px;
-        overflow: hidden;
-    }
 }
 
 .card-article-img {

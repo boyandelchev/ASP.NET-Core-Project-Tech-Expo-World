@@ -80,17 +80,20 @@
     <partial name="_ValidationScriptsPartial" />
 
     <script>
-        document.getElementById('add-comment-button')
+        let commentButton = document.getElementById('add-comment-button');
+        let commentArea = document.getElementById('add-comment-area');
+
+        commentButton
             .addEventListener('click', (e) => {
-                document.getElementById('add-comment-area').classList.remove('d-none');
-                document.getElementById('add-comment-button').classList.add('d-none');
+                commentArea.classList.remove('d-none');
+                commentButton.classList.add('d-none');
 
                 document.querySelector('#add-comment-area button')
                     .addEventListener('click', (e) => {
                         e.preventDefault();
 
-                        document.getElementById('add-comment-area').classList.add('d-none');
-                        document.getElementById('add-comment-button').classList.remove('d-none');
+                        commentArea.classList.add('d-none');
+                        commentButton.classList.remove('d-none');
                     });
             });
     </script>

@@ -22,7 +22,7 @@
             </div>
             <div class="mb-3">
                 <label asp-for="CategoryId" class="form-label"></label>
-                <select asp-for="CategoryId" class="form-select" readonly="@ViewBag.IsDelete">
+                <select asp-for="CategoryId" class="form-select" disabled="@ViewBag.IsDelete">
                     @foreach (var newsCategory in Model.Categories)
                     {
                         <option value="@newsCategory.Id">@newsCategory.Name</option>
@@ -32,7 +32,7 @@
             </div>
             <div class="mb-3">
                 <label asp-for="TagIds" class="form-label"></label>
-                <select asp-for="TagIds" class="form-select" multiple size="6" readonly="@ViewBag.IsDelete">
+                <select asp-for="TagIds" class="form-select" multiple size="6" disabled="@ViewBag.IsDelete">
                     @foreach (var tag in Model.Tags)
                     {
                         <option value="@tag.Id">@tag.Name</option>
@@ -43,12 +43,14 @@
 
             @if (ViewBag.IsDelete == true)
             {
-                <input type="submit" class="btn btn-danger mt-3" value="Delete" />
+                <input type="submit" class="btn btn-danger mt-2" value="Delete" />
             }
             else
             {
-                <input type="submit" class="btn btn-primary mt-3" value="Submit" />
-                <input type="reset" class="btn btn-secondary mt-3 float-end" value="Clear" />
+                <div class="d-flex justify-content-between mt-4">
+                    <input type="submit" class="btn btn-primary" value="Submit" />
+                    <input type="reset" class="btn btn-secondary" value="Clear" />
+                </div>
             }
         </form>
     </div>
