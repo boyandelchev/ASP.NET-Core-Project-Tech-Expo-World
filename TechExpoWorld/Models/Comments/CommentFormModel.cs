@@ -10,5 +10,7 @@
         [StringLength(ContentMaxLength, MinimumLength = ContentMinLength)]
         [Display(Name = DisplayAddAComment)]
         public string Content { get; init; }
+
+        public int? ParentCommentId { get; init; }
     }
 }

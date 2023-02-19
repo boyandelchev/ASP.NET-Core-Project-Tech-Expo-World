@@ -10,7 +10,7 @@
 
         public NewsArticleDetailsViewModel NewsArticle { get; init; }
 
-        public CommentFormModel Comment { get; init; }
+        public CommentFormModel CommentForm { get; init; }
 
         public IEnumerable<CommentServiceModel> Comments { get; init; }
 

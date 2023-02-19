@@ -24,14 +24,14 @@
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> Add(int id, CommentFormModel comment)
+        public async Task<IActionResult> Add(int id, CommentFormModel commentForm)
         {
             var newsArticle = await this.news.DetailsWithNoViewCountIncrement(id);
 
             var redirectToAction = RedirectToAction(
-                    nameof(NewsController.Details),
-                    ControllerNews,
-                    new { id, information = newsArticle.GetNewsArticleInformation() });
+                nameof(NewsController.Details),
+                ControllerNews,
+                new { id, information = newsArticle.GetNewsArticleInformation() });
 
             if (!ModelState.IsValid)
             {
@@ -40,9 +40,16 @@
 
             var userId = this.User.Id();
 
-            await this.comments.Create(id, comment.Content, userId);
+            var commentId = await this.comments.Create(
+                id,
+                commentForm.Content,
+                commentForm.ParentCommentId,
+                userId);
 
-            TempData[GlobalMessageKey] = CreatedComment;
+            if (commentId != 0)
+            {
+                TempData[GlobalMessageKey] = CreatedComment;
+            }
 
             return redirectToAction;
         }

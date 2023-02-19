@@ -75,7 +75,7 @@
             {
                 NewsArticleId = id,
                 NewsArticle = newsArticleData,
-                Comment = new CommentFormModel(),
+                CommentForm = new CommentFormModel(),
                 Comments = comments,
                 TotalComments = totalComments
             });

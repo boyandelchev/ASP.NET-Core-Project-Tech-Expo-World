@@ -258,6 +258,7 @@ namespace TechExpoWorld.Data.Migrations
                     LastModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
                     NewsArticleId = table.Column<int>(type: "int", nullable: true),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Depth = table.Column<int>(type: "int", nullable: false),
                     ParentCommentId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>

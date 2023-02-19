@@ -12,7 +12,7 @@ using TechExpoWorld.Data;
 namespace TechExpoWorld.Data.Migrations
 {
     [DbContext(typeof(TechExpoDbContext))]
-    [Migration("20221231042920_NewsEventsTables")]
+    [Migration("20230219155037_NewsEventsTables")]
     partial class NewsEventsTables
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -281,6 +281,9 @@ namespace TechExpoWorld.Data.Migrations
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("Depth")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("LastModifiedOn")
                         .HasColumnType("datetime2");

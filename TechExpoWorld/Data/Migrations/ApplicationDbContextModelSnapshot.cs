@@ -280,6 +280,9 @@ namespace TechExpoWorld.Data.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("Depth")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("LastModifiedOn")
                         .HasColumnType("datetime2");
 

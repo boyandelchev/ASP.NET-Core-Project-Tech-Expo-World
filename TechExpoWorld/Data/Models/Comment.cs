@@ -27,6 +27,8 @@
 
         public User User { get; set; }
 
+        public int Depth { get; init; }
+
         public int? ParentCommentId { get; init; }
 
         public Comment ParentComment { get; init; }

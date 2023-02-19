@@ -18,7 +18,7 @@
                     </p>
                     <p class="card-text text-secondary">@news.Content</p>
                     <p class="card-text text-primary">@news.CategoryName</p>
-                    <p class="card-text d-flex justify-content-evenly">
+                    <p class="card-text d-flex justify-content-evenly align-items-center">
                         <a asp-controller="News" asp-action="Details" asp-route-id="@news.Id" asp-route-information="@news.GetNewsArticleInformation()" class="btn btn-primary btn-outline-secondary text-white">Read More</a>
                         @if (ViewBag.AreMyNewsArticles == true || User.IsAdmin())
                         {

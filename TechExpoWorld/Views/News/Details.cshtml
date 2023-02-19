@@ -13,7 +13,7 @@
         </p>
         <p class="m-0">
             <span>Views: @Model.NewsArticle.ViewCount |</span>
-            <a href="#add-comment-button">Comments: @Model.TotalComments</a>
+            <a href="#comment-section">Comments: @Model.TotalComments</a>
         </p>
     </article>
     <article class="d-flex justify-content-between">
@@ -43,58 +43,55 @@
     </article>
 </section>
 
-<div class="text-center" id="add-comment-button">
-    <button class="btn btn-primary">Add a comment</button>
-</div>
+@{
+    ViewBag.NewsArticleId = Model.NewsArticleId;
+    ViewBag.CommentForm = Model.CommentForm;
+    ViewBag.Comments = Model.Comments;
+    ViewBag.Depth = 0;
+}
 
-<section class="d-none text-center mt-3" id="add-comment-area">
-    <form asp-controller="Comments" asp-action="Add" asp-route-id="@Model.NewsArticleId" method="post">
-        <div class="mb-0">
-            <label asp-for="@Model.Comment.Content" class="form-label"></label>
-            <textarea asp-for="@Model.Comment.Content" class="form-control" rows="5" placeholder="Add a comment"></textarea>
-            <span asp-validation-for="@Model.Comment.Content" class="small text-danger"></span>
-        </div>
-
-        <input type="submit" class="btn btn-primary mt-3" value="Add" />
-        <button class="btn btn-secondary mt-3 float-end">Hide</button>
-    </form>
+<section class="text-center mt-3" id="comment-section">
+    <button class="btn btn-primary">Leave a comment below</button>
+    <article class="d-none">
+        <button class="btn btn-light">Hide</button>
+        <partial name="_CommentFormPartial" />
+    </article>
 </section>
 
-<section class="mt-5">
-    @foreach (var comment in Model.Comments)
-    {
-        <div class="d-flex">
-            <div>
-                <img src="/profile-image-32x32.png" alt="profile image">
-            </div>
-            <div class="d-flex justify-content-between flex-grow-1 fw-bold ms-3">
-                <p>@comment.UserName</p>
-                <p class="text-secondary">@comment.CreatedOn</p>
-            </div>
-        </div>
-        <p>@comment.Content</p>
-    }
+<section class="mt-5" id="replies-section">
+    <partial name="_CommentsPartial" />
 </section>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 
     <script>
-        let commentButton = document.getElementById('add-comment-button');
-        let commentArea = document.getElementById('add-comment-area');
+        let commentButton = document.querySelector('#comment-section button');
+        let commentArea = document.querySelector('#comment-section article');
 
-        commentButton
-            .addEventListener('click', (e) => {
-                commentArea.classList.remove('d-none');
-                commentButton.classList.add('d-none');
+        let displayCommentForm = (commentButton, commentArea) => {
+            commentButton
+                .addEventListener('click', (e) => {
+                    commentArea.classList.remove('d-none');
+                    commentButton.classList.add('d-none');
+                });
 
-                document.querySelector('#add-comment-area button')
-                    .addEventListener('click', (e) => {
-                        e.preventDefault();
+            commentArea.querySelector('button')
+                .addEventListener('click', (e) => {
+                    commentArea.classList.add('d-none');
+                    commentButton.classList.remove('d-none');
+                });
+        };
 
-                        commentArea.classList.add('d-none');
-                        commentButton.classList.remove('d-none');
-                    });
-            });
+        displayCommentForm(commentButton, commentArea);
+
+        let replies = document.querySelectorAll('#replies-section > article');
+
+        replies.forEach(r => {
+            let replyButton = r.querySelector('section button');
+            let replyArea = r.querySelector('section article');
+
+            displayCommentForm(replyButton, replyArea);
+        });
     </script>
 }

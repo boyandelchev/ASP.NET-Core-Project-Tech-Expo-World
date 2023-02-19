@@ -8,7 +8,11 @@
     {
         Task<IEnumerable<CommentServiceModel>> CommentsOnNewsArticle(int newsArticleId);
 
-        Task<int> Create(int newsArticleId, string content, string userId);
+        Task<int> Create(
+            int newsArticleId,
+            string content,
+            int? parentCommentId,
+            string userId);
 
         Task<int> TotalCommentsOnNewsArticle(int newsArticleId);
     }
