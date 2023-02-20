@@ -1,11 +1,8 @@
 ﻿$.validator.addMethod("isDateTimeBefore", () => {
-    let startDate = new Date(document.getElementById('StartDate').value);
-    let endDate = new Date(document.getElementById('EndDate').value);
-    let isBefore = false;
+    const startDate = new Date(document.getElementById('StartDate').value);
+    const endDate = new Date(document.getElementById('EndDate').value);
 
-    startDate > endDate ? isBefore = false : isBefore = true;
-
-    return isBefore;
+    return endDate == 'Invalid Date' || startDate <= endDate;
 });
 
 $.validator.unobtrusive.adapters.addBool("isDateTimeBefore");

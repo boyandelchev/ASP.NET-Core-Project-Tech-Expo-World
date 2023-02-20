@@ -12,7 +12,7 @@
 }
 else
 {
-    <partial name="_MyPhysicalTicketsPartial" model="Model" />
+    <partial name="_MyPhysicalTicketsPartial" model="Model.MyPhysicalTickets" />
 }
 
 @if (!Model.MyVirtualTickets.Any())
@@ -21,5 +21,5 @@ else
 }
 else
 {
-    <partial name="_MyVirtualTicketsPartial" model="Model" />
+    <partial name="_MyVirtualTicketsPartial" model="Model.MyVirtualTickets" />
 }

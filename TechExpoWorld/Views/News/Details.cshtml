@@ -62,14 +62,16 @@
     <partial name="_CommentsPartial" />
 </section>
 
+<button class="scroll-to-top-button d-none" title="Back to top">Top</button>
+
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 
     <script>
-        let commentButton = document.querySelector('#comment-section button');
-        let commentArea = document.querySelector('#comment-section article');
+        const commentButton = document.querySelector('#comment-section button');
+        const commentArea = document.querySelector('#comment-section article');
 
-        let displayCommentForm = (commentButton, commentArea) => {
+        const displayCommentForm = (commentButton, commentArea) => {
             commentButton
                 .addEventListener('click', (e) => {
                     commentArea.classList.remove('d-none');
@@ -85,13 +87,32 @@
 
         displayCommentForm(commentButton, commentArea);
 
-        let replies = document.querySelectorAll('#replies-section > article');
+        const replies = document.querySelectorAll('#replies-section > article');
 
         replies.forEach(r => {
-            let replyButton = r.querySelector('section button');
-            let replyArea = r.querySelector('section article');
+            const replyButton = r.querySelector('section button');
+            const replyArea = r.querySelector('section article');
 
             displayCommentForm(replyButton, replyArea);
         });
+
+        const height = 800;
+        const scrollToTopButton = document.querySelector('.scroll-to-top-button');
+
+        window
+            .addEventListener('scroll', (e) => {
+                window.scrollY > height
+                    ? scrollToTopButton.classList.remove('d-none')
+                    : scrollToTopButton.classList.add('d-none');
+            });
+
+        scrollToTopButton
+            .addEventListener('click', (e) => {
+                window.scrollTo({
+                    top: 0,
+                    left: 0,
+                    behavior: 'smooth'
+                });
+            });
     </script>
 }

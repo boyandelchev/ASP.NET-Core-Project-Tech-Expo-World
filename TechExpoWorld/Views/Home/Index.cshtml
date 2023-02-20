@@ -31,6 +31,7 @@
         @for (int i = 0; i < Model.News.Count; i++)
         {
             var news = Model.News[i];
+
             <div class="carousel-item @(i == 0 ? "active" : string.Empty)">
                 <a asp-controller="News" asp-action="Details" asp-route-id="@news.Id" asp-route-information="@news.GetNewsArticleInformation()">
                     <article class="carousel-article-img">

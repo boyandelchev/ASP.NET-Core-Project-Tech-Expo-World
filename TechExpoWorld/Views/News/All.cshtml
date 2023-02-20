@@ -60,11 +60,11 @@ else
 
 @section Scripts {
     <script>
-        let selectCategory = document.getElementById('Category');
-        let selectTag = document.getElementById('Tag');
-        let removeAttributeSelectedCategory = () => selectCategory
+        const selectCategory = document.getElementById('Category');
+        const selectTag = document.getElementById('Tag');
+        const removeAttributeSelectedCategory = () => selectCategory
             .querySelector('option[selected]')?.removeAttribute('selected');
-        let removeAttributeSelectedTag = () => selectTag
+        const removeAttributeSelectedTag = () => selectTag
             .querySelector('option[selected]')?.removeAttribute('selected');
 
         selectCategory
