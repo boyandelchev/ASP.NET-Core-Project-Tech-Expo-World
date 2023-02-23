@@ -29,6 +29,8 @@
 
         public DbSet<Ticket> Tickets { get; init; }
 
+        public DbSet<Country> Countries { get; init; }
+
         public DbSet<JobType> JobTypes { get; init; }
 
         public DbSet<CompanyType> CompanyTypes { get; init; }

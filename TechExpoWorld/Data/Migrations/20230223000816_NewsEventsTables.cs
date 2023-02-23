@@ -71,6 +71,19 @@ namespace TechExpoWorld.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Countries",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Countries", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Events",
                 columns: table => new
                 {
@@ -145,7 +158,7 @@ namespace TechExpoWorld.Data.Migrations
                     WorkEmail = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false),
                     JobTitle = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     CompanyName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Country = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    CountryId = table.Column<int>(type: "int", nullable: false),
                     JobTypeId = table.Column<int>(type: "int", nullable: false),
                     CompanyTypeId = table.Column<int>(type: "int", nullable: false),
                     CompanySectorId = table.Column<int>(type: "int", nullable: false),
@@ -177,6 +190,12 @@ namespace TechExpoWorld.Data.Migrations
                         name: "FK_Attendees_CompanyTypes_CompanyTypeId",
                         column: x => x.CompanyTypeId,
                         principalTable: "CompanyTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Attendees_Countries_CountryId",
+                        column: x => x.CountryId,
+                        principalTable: "Countries",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -323,6 +342,11 @@ namespace TechExpoWorld.Data.Migrations
                 column: "CompanyTypeId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Attendees_CountryId",
+                table: "Attendees",
+                column: "CountryId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Attendees_JobTypeId",
                 table: "Attendees",
                 column: "JobTypeId");
@@ -422,6 +446,9 @@ namespace TechExpoWorld.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "CompanyTypes");
+
+            migrationBuilder.DropTable(
+                name: "Countries");
 
             migrationBuilder.DropTable(
                 name: "JobTypes");

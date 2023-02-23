@@ -16,12 +16,16 @@
             string workEmail,
             string jobTitle,
             string companyName,
-            string country,
+            int countryId,
             int jobTypeId,
             int companyTypeId,
             int companySectorId,
             int companySizeId,
             string userId);
+
+        Task<IEnumerable<CountryServiceModel>> Countries();
+
+        Task<bool> CountryExists(int countryId);
 
         Task<IEnumerable<JobTypeServiceModel>> JobTypes();
 

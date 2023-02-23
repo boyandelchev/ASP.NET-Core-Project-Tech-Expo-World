@@ -14,6 +14,8 @@
 
         public EventsProfile()
         {
+            this.CreateMap<Country, CountryServiceModel>();
+
             this.CreateMap<JobType, JobTypeServiceModel>();
 
             this.CreateMap<CompanyType, CompanyTypeServiceModel>();

@@ -33,9 +33,8 @@
         [Display(Name = DisplayCompanyName)]
         public string CompanyName { get; init; }
 
-        [Required]
-        [StringLength(CountryMaxLength, MinimumLength = CountryMinLength)]
-        public string Country { get; init; }
+        [Display(Name = DisplayCountry)]
+        public int CountryId { get; init; }
 
         [Display(Name = DisplayJobType)]
         public int JobTypeId { get; init; }
@@ -48,6 +47,8 @@
 
         [Display(Name = DisplayCompanySize)]
         public int CompanySizeId { get; init; }
+
+        public IEnumerable<CountryServiceModel> Countries { get; set; }
 
         public IEnumerable<JobTypeServiceModel> JobTypes { get; set; }
 

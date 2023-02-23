@@ -179,10 +179,8 @@ namespace TechExpoWorld.Data.Migrations
                     b.Property<int>("CompanyTypeId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Country")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<int>("CountryId")
+                        .HasColumnType("int");
 
                     b.Property<string>("JobTitle")
                         .IsRequired()
@@ -218,6 +216,8 @@ namespace TechExpoWorld.Data.Migrations
                     b.HasIndex("CompanySizeId");
 
                     b.HasIndex("CompanyTypeId");
+
+                    b.HasIndex("CountryId");
 
                     b.HasIndex("JobTypeId");
 
@@ -359,6 +359,24 @@ namespace TechExpoWorld.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("CompanyTypes");
+                });
+
+            modelBuilder.Entity("TechExpoWorld.Data.Models.Country", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Countries");
                 });
 
             modelBuilder.Entity("TechExpoWorld.Data.Models.Event", b =>
@@ -695,6 +713,12 @@ namespace TechExpoWorld.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("TechExpoWorld.Data.Models.Country", "Country")
+                        .WithMany("Attendees")
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("TechExpoWorld.Data.Models.JobType", "JobType")
                         .WithMany("Attendees")
                         .HasForeignKey("JobTypeId")
@@ -712,6 +736,8 @@ namespace TechExpoWorld.Data.Migrations
                     b.Navigation("CompanySize");
 
                     b.Navigation("CompanyType");
+
+                    b.Navigation("Country");
 
                     b.Navigation("JobType");
                 });
@@ -840,6 +866,11 @@ namespace TechExpoWorld.Data.Migrations
                 });
 
             modelBuilder.Entity("TechExpoWorld.Data.Models.CompanyType", b =>
+                {
+                    b.Navigation("Attendees");
+                });
+
+            modelBuilder.Entity("TechExpoWorld.Data.Models.Country", b =>
                 {
                     b.Navigation("Attendees");
                 });

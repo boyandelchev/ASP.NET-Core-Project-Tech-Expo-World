@@ -39,7 +39,7 @@
             string workEmail,
             string jobTitle,
             string companyName,
-            string country,
+            int countryId,
             int jobTypeId,
             int companyTypeId,
             int companySectorId,
@@ -53,7 +53,7 @@
                 WorkEmail = workEmail,
                 JobTitle = jobTitle,
                 CompanyName = companyName,
-                Country = country,
+                CountryId = countryId,
                 JobTypeId = jobTypeId,
                 CompanyTypeId = companyTypeId,
                 CompanySectorId = companySectorId,
@@ -66,6 +66,17 @@
 
             return attendee.Id;
         }
+
+        public async Task<IEnumerable<CountryServiceModel>> Countries()
+            => await this.data
+                .Countries
+                .ProjectTo<CountryServiceModel>(this.mapper.ConfigurationProvider)
+                .ToListAsync();
+
+        public async Task<bool> CountryExists(int countryId)
+            => await this.data
+                .Countries
+                .AnyAsync(c => c.Id == countryId);
 
         public async Task<IEnumerable<JobTypeServiceModel>> JobTypes()
             => await this.data

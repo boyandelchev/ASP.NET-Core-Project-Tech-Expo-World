@@ -15,6 +15,12 @@
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder
+                .HasOne(a => a.Country)
+                .WithMany(c => c.Attendees)
+                .HasForeignKey(a => a.CountryId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder
                 .HasOne(a => a.JobType)
                 .WithMany(jt => jt.Attendees)
                 .HasForeignKey(a => a.JobTypeId)

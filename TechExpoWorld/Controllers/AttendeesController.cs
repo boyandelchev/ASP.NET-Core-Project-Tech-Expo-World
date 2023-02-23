@@ -28,6 +28,7 @@
 
             return View(new BecomeAttendeeFormModel
             {
+                Countries = await this.attendees.Countries(),
                 JobTypes = await this.attendees.JobTypes(),
                 CompanyTypes = await this.attendees.CompanyTypes(),
                 CompanySectors = await this.attendees.CompanySectors(),
@@ -44,6 +45,11 @@
             if (await this.attendees.IsAttendee(userId) || this.User.IsAdmin())
             {
                 return BadRequest();
+            }
+
+            if (!await this.attendees.CountryExists(attendee.CountryId))
+            {
+                this.ModelState.AddModelError(nameof(attendee.CountryId), ErrorCountry);
             }
 
             if (!await this.attendees.JobTypeExists(attendee.JobTypeId))
@@ -68,6 +74,7 @@
 
             if (!ModelState.IsValid)
             {
+                attendee.Countries = await this.attendees.Countries();
                 attendee.JobTypes = await this.attendees.JobTypes();
                 attendee.CompanyTypes = await this.attendees.CompanyTypes();
                 attendee.CompanySectors = await this.attendees.CompanySectors();
@@ -82,7 +89,7 @@
                 attendee.WorkEmail,
                 attendee.JobTitle,
                 attendee.CompanyName,
-                attendee.Country,
+                attendee.CountryId,
                 attendee.JobTypeId,
                 attendee.CompanyTypeId,
                 attendee.CompanySectorId,

@@ -28,14 +28,14 @@
                 .View();
 
         [Theory]
-        [InlineData("Attendee", "+359888888888", "attendee@mail.com", "senior financial analyst", "TechPro", "United Kingdom", 0, 0, 0, 0)]
+        [InlineData("Attendee", "+359888888888", "attendee@mail.com", "senior financial analyst", "TechPro", 0, 0, 0, 0, 0)]
         public void PostBecomeAttendeeShouldBeForAuthorizedUsersAndReturnRedirectWithValidModel(
             string attendeeName,
             string phoneNumber,
             string workEmail,
             string jobTitle,
             string companyName,
-            string country,
+            int countryId,
             int jobTypeId,
             int companyTypeId,
             int companySectorId,
@@ -52,7 +52,7 @@
                         WorkEmail = workEmail,
                         JobTitle = jobTitle,
                         CompanyName = companyName,
-                        Country = country,
+                        CountryId = countryId,
                         JobTypeId = jobTypeId,
                         CompanyTypeId = companyTypeId,
                         CompanySectorId = companySectorId,
@@ -67,7 +67,7 @@
                     WorkEmail = workEmail,
                     JobTitle = jobTitle,
                     CompanyName = companyName,
-                    Country = country,
+                    CountryId = countryId,
                     JobTypeId = jobTypeId,
                     CompanyTypeId = companyTypeId,
                     CompanySectorId = companySectorId,

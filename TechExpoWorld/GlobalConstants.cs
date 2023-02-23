@@ -130,18 +130,18 @@
             public const int JobTitleMaxLength = 50;
             public const int CompanyNameMinLength = 2;
             public const int CompanyNameMaxLength = 50;
-            public const int CountryMinLength = 2;
-            public const int CountryMaxLength = 50;
 
             public const string DisplayPhoneNumber = "Phone Number";
             public const string DisplayWorkEmail = "Work Email";
             public const string DisplayJobTitle = "Job Title";
             public const string DisplayCompanyName = "Company Name";
+            public const string DisplayCountry = "Country";
             public const string DisplayJobType = "Job Type";
             public const string DisplayCompanyType = "Company Type";
             public const string DisplayCompanySector = "Company Sector";
             public const string DisplayCompanySize = "Company Size";
 
+            public const string ErrorCountry = "Country does not exist.";
             public const string ErrorJobType = "Job type does not exist.";
             public const string ErrorCompanyType = "Company type does not exist.";
             public const string ErrorCompanySector = "Company sector does not exist.";
@@ -153,6 +153,11 @@
             public const int TypeMaxLength = 20;
             public const int PricePrecision = 8;
             public const int PriceScale = 2;
+        }
+
+        public class Country
+        {
+            public const int NameMaxLength = 50;
         }
 
         public class JobType

@@ -32,9 +32,9 @@
         [MaxLength(CompanyNameMaxLength)]
         public string CompanyName { get; set; }
 
-        [Required]
-        [MaxLength(CountryMaxLength)]
-        public string Country { get; set; }
+        public int CountryId { get; set; }
+
+        public Country Country { get; set; }
 
         public int JobTypeId { get; set; }
 
