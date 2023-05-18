@@ -1,6 +1,7 @@
 ﻿namespace TechExpoWorld.Infrastructure.Extensions
 {
     using System;
+
     using Microsoft.AspNetCore.Mvc;
 
     public static class ControllerExtensions

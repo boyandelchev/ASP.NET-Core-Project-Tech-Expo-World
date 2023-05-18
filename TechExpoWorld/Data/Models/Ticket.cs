@@ -1,6 +1,7 @@
 ﻿namespace TechExpoWorld.Data.Models
 {
     using System.ComponentModel.DataAnnotations;
+
     using Microsoft.EntityFrameworkCore;
 
     using static GlobalConstants.Ticket;

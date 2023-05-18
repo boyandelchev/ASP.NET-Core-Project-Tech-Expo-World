@@ -2,7 +2,9 @@
 {
     using System.Globalization;
     using System.Linq;
+
     using AutoMapper;
+
     using TechExpoWorld.Data.Models;
     using TechExpoWorld.Models.Home;
     using TechExpoWorld.Models.News;

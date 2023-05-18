@@ -2,6 +2,7 @@
 {
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
+
     using TechExpoWorld.Data.Models;
 
     public class TechExpoDbContext : IdentityDbContext<User>

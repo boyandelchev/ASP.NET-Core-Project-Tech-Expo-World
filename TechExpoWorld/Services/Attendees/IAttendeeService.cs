@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
+
     using TechExpoWorld.Services.Attendees.Models;
 
     public interface IAttendeeService

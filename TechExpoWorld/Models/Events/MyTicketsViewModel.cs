@@ -1,6 +1,7 @@
 ﻿namespace TechExpoWorld.Models.Events
 {
     using System.Collections.Generic;
+
     using TechExpoWorld.Services.Events.Models;
 
     public class MyTicketsViewModel

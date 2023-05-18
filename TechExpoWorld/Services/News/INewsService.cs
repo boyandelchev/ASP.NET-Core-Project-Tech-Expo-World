@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using TechExpoWorld.Models.News;
+
     using TechExpoWorld.Services.News.Models;
 
     public interface INewsService

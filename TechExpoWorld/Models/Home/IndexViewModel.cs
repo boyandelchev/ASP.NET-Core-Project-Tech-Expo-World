@@ -1,6 +1,7 @@
 ﻿namespace TechExpoWorld.Models.Home
 {
     using System.Collections.Generic;
+
     using TechExpoWorld.Services.News.Models;
 
     public class IndexViewModel

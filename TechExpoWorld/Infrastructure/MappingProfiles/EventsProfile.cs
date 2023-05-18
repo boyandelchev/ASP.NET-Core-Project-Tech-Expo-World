@@ -2,7 +2,9 @@
 {
     using System;
     using System.Globalization;
+
     using AutoMapper;
+
     using TechExpoWorld.Data.Models;
     using TechExpoWorld.Models.Events;
     using TechExpoWorld.Services.Attendees.Models;

@@ -2,6 +2,7 @@
 {
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
     using TechExpoWorld.Data.Models;
 
     public class AttendeeConfiguration : IEntityTypeConfiguration<Attendee>

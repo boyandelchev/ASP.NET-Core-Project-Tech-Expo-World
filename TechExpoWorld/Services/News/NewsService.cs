@@ -4,12 +4,14 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
+
     using Microsoft.EntityFrameworkCore;
+
     using TechExpoWorld.Data;
     using TechExpoWorld.Data.Models;
-    using TechExpoWorld.Models.News;
     using TechExpoWorld.Services.News.Models;
 
     public class NewsService : INewsService

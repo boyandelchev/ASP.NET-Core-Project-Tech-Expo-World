@@ -1,11 +1,14 @@
 ﻿namespace TechExpoWorld.Test.Pipeline
 {
     using System.Collections.Generic;
+
     using MyTested.AspNetCore.Mvc;
+
     using TechExpoWorld.Controllers;
     using TechExpoWorld.Data.Models;
     using TechExpoWorld.Models.Events;
     using TechExpoWorld.Services.Events.Models;
+
     using Xunit;
 
     using static Data.Events;

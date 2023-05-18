@@ -1,4 +1,4 @@
-﻿namespace TechExpoWorld.Models.News
+﻿namespace TechExpoWorld.Services.News.Models
 {
     public enum NewsSorting
     {

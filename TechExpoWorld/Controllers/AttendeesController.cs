@@ -1,8 +1,10 @@
 ﻿namespace TechExpoWorld.Controllers
 {
     using System.Threading.Tasks;
+
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+
     using TechExpoWorld.Infrastructure.Extensions;
     using TechExpoWorld.Models.Attendees;
     using TechExpoWorld.Services.Attendees;
