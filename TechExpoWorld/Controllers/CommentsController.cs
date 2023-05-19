@@ -15,10 +15,10 @@
     public class CommentsController : Controller
     {
         private const string ControllerNews = "News";
-        private readonly ICommentService comments;
+        private readonly ICommentsService comments;
         private readonly INewsService news;
 
-        public CommentsController(ICommentService comments, INewsService news)
+        public CommentsController(ICommentsService comments, INewsService news)
         {
             this.comments = comments;
             this.news = news;
@@ -28,7 +28,7 @@
         [Authorize]
         public async Task<IActionResult> Add(int id, CommentFormModel commentForm)
         {
-            var newsArticle = await this.news.DetailsWithNoViewCountIncrement(id);
+            var newsArticle = await this.news.DetailsWithNoViewCountIncrementAsync(id);
 
             var redirectToAction = RedirectToAction(
                 nameof(NewsController.Details),
@@ -42,7 +42,7 @@
 
             var userId = this.User.Id();
 
-            var commentId = await this.comments.Create(
+            var commentId = await this.comments.CreateAsync(
                 id,
                 commentForm.Content,
                 commentForm.ParentCommentId,

@@ -14,15 +14,15 @@
     public class AuthorsController : Controller
     {
         private const string ControllerNews = "News";
-        private readonly IAuthorService authors;
+        private readonly IAuthorsService authors;
 
-        public AuthorsController(IAuthorService authors)
+        public AuthorsController(IAuthorsService authors)
             => this.authors = authors;
 
         [Authorize]
         public async Task<IActionResult> BecomeAuthor()
         {
-            if (await this.authors.IsAuthor(this.User.Id()) || this.User.IsAdmin())
+            if (await this.authors.IsAuthorAsync(this.User.Id()) || this.User.IsAdmin())
             {
                 return BadRequest();
             }
@@ -36,7 +36,7 @@
         {
             var userId = this.User.Id();
 
-            if (await this.authors.IsAuthor(userId) || this.User.IsAdmin())
+            if (await this.authors.IsAuthorAsync(userId) || this.User.IsAdmin())
             {
                 return BadRequest();
             }
@@ -46,7 +46,7 @@
                 return View(author);
             }
 
-            await this.authors.Create(
+            await this.authors.CreateAsync(
                 author.Name,
                 author.PhoneNumber,
                 author.Address,

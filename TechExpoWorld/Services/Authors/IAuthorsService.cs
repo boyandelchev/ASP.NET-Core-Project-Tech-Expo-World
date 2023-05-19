@@ -2,13 +2,13 @@
 {
     using System.Threading.Tasks;
 
-    public interface IAuthorService
+    public interface IAuthorsService
     {
-        Task<bool> IsAuthor(string userId);
+        Task<bool> IsAuthorAsync(string userId);
 
-        Task<string> AuthorId(string userId);
+        Task<string> AuthorIdAsync(string userId);
 
-        Task<string> Create(
+        Task<string> CreateAsync(
             string name,
             string phoneNumber,
             string address,

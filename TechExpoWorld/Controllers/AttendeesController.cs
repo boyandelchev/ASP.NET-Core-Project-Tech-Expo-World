@@ -15,26 +15,26 @@
     public class AttendeesController : Controller
     {
         private const string ControllerEvents = "Events";
-        private readonly IAttendeeService attendees;
+        private readonly IAttendeesService attendees;
 
-        public AttendeesController(IAttendeeService attendees)
+        public AttendeesController(IAttendeesService attendees)
             => this.attendees = attendees;
 
         [Authorize]
         public async Task<IActionResult> BecomeAttendee()
         {
-            if (await this.attendees.IsAttendee(this.User.Id()) || this.User.IsAdmin())
+            if (await this.attendees.IsAttendeeAsync(this.User.Id()) || this.User.IsAdmin())
             {
                 return BadRequest();
             }
 
             return View(new BecomeAttendeeFormModel
             {
-                Countries = await this.attendees.Countries(),
-                JobTypes = await this.attendees.JobTypes(),
-                CompanyTypes = await this.attendees.CompanyTypes(),
-                CompanySectors = await this.attendees.CompanySectors(),
-                CompanySizes = await this.attendees.CompanySizes()
+                Countries = await this.attendees.CountriesAsync(),
+                JobTypes = await this.attendees.JobTypesAsync(),
+                CompanyTypes = await this.attendees.CompanyTypesAsync(),
+                CompanySectors = await this.attendees.CompanySectorsAsync(),
+                CompanySizes = await this.attendees.CompanySizesAsync()
             });
         }
 
@@ -44,48 +44,48 @@
         {
             var userId = this.User.Id();
 
-            if (await this.attendees.IsAttendee(userId) || this.User.IsAdmin())
+            if (await this.attendees.IsAttendeeAsync(userId) || this.User.IsAdmin())
             {
                 return BadRequest();
             }
 
-            if (!await this.attendees.CountryExists(attendee.CountryId))
+            if (!await this.attendees.CountryExistsAsync(attendee.CountryId))
             {
                 this.ModelState.AddModelError(nameof(attendee.CountryId), ErrorCountry);
             }
 
-            if (!await this.attendees.JobTypeExists(attendee.JobTypeId))
+            if (!await this.attendees.JobTypeExistsAsync(attendee.JobTypeId))
             {
                 this.ModelState.AddModelError(nameof(attendee.JobTypeId), ErrorJobType);
             }
 
-            if (!await this.attendees.CompanyTypeExists(attendee.CompanyTypeId))
+            if (!await this.attendees.CompanyTypeExistsAsync(attendee.CompanyTypeId))
             {
                 this.ModelState.AddModelError(nameof(attendee.CompanyTypeId), ErrorCompanyType);
             }
 
-            if (!await this.attendees.CompanySectorExists(attendee.CompanySectorId))
+            if (!await this.attendees.CompanySectorExistsAsync(attendee.CompanySectorId))
             {
                 this.ModelState.AddModelError(nameof(attendee.CompanySectorId), ErrorCompanySector);
             }
 
-            if (!await this.attendees.CompanySizeExists(attendee.CompanySizeId))
+            if (!await this.attendees.CompanySizeExistsAsync(attendee.CompanySizeId))
             {
                 this.ModelState.AddModelError(nameof(attendee.CompanySizeId), ErrorCompanySize);
             }
 
             if (!ModelState.IsValid)
             {
-                attendee.Countries = await this.attendees.Countries();
-                attendee.JobTypes = await this.attendees.JobTypes();
-                attendee.CompanyTypes = await this.attendees.CompanyTypes();
-                attendee.CompanySectors = await this.attendees.CompanySectors();
-                attendee.CompanySizes = await this.attendees.CompanySizes();
+                attendee.Countries = await this.attendees.CountriesAsync();
+                attendee.JobTypes = await this.attendees.JobTypesAsync();
+                attendee.CompanyTypes = await this.attendees.CompanyTypesAsync();
+                attendee.CompanySectors = await this.attendees.CompanySectorsAsync();
+                attendee.CompanySizes = await this.attendees.CompanySizesAsync();
 
                 return View(attendee);
             }
 
-            await this.attendees.Create(
+            await this.attendees.CreateAsync(
                 attendee.Name,
                 attendee.PhoneNumber,
                 attendee.WorkEmail,

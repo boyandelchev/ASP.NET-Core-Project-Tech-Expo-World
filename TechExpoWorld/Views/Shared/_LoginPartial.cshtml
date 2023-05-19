@@ -2,16 +2,16 @@
 @using TechExpoWorld.Data.Models
 @inject SignInManager<User> SignInManager
 @inject UserManager<User> UserManager
-@inject IAttendeeService Attendee
-@inject IAuthorService Authors
+@inject IAttendeesService Attendee
+@inject IAuthorsService Authors
 
 <ul class="navbar-nav">
     @if (SignInManager.IsSignedIn(User))
     {
         var userId = User.Id();
         var isAdmin = User.IsAdmin();
-        var isAttendee = await Attendee.IsAttendee(userId);
-        var isAuthor = await Authors.IsAuthor(userId);
+        var isAttendee = await Attendee.IsAttendeeAsync(userId);
+        var isAuthor = await Authors.IsAuthorAsync(userId);
 
         if (isAuthor && !isAdmin)
         {

@@ -21,14 +21,14 @@
     {
         private const string ControllerAuthors = "Authors";
         private readonly INewsService news;
-        private readonly IAuthorService authors;
-        private readonly ICommentService comments;
+        private readonly IAuthorsService authors;
+        private readonly ICommentsService comments;
         private readonly IMapper mapper;
 
         public NewsController(
             INewsService news,
-            IAuthorService authors,
-            ICommentService comments,
+            IAuthorsService authors,
+            ICommentsService comments,
             IMapper mapper)
         {
             this.news = news;
@@ -39,7 +39,7 @@
 
         public async Task<IActionResult> All([FromQuery] AllNewsQueryModel query)
         {
-            var newsQueryResult = await this.news.All(
+            var newsQueryResult = await this.news.AllAsync(
                 query.Category,
                 query.Tag,
                 query.SearchTerm,
@@ -47,8 +47,8 @@
                 query.CurrentPage,
                 AllNewsQueryModel.NewsArticlesPerPage);
 
-            query.Categories = await this.news.CategoryNames();
-            query.Tags = await this.news.TagNames();
+            query.Categories = await this.news.CategoryNamesAsync();
+            query.Tags = await this.news.TagNamesAsync();
             query.TotalNewsArticles = newsQueryResult.TotalNewsArticles;
             query.News = newsQueryResult.News;
 
@@ -57,7 +57,7 @@
 
         public async Task<IActionResult> Details(int id, string information)
         {
-            var newsArticle = await this.news.Details(id);
+            var newsArticle = await this.news.DetailsAsync(id);
 
             if (newsArticle == null)
             {
@@ -71,8 +71,8 @@
 
             var newsArticleData = this.mapper.Map<NewsArticleDetailsViewModel>(newsArticle);
 
-            var comments = await this.comments.CommentsOnNewsArticle(id);
-            var totalComments = await this.comments.TotalCommentsOnNewsArticle(id);
+            var comments = await this.comments.CommentsOnNewsArticleAsync(id);
+            var totalComments = await this.comments.TotalCommentsOnNewsArticleAsync(id);
 
             return View(new NewsArticleWithCommentsViewModel
             {
@@ -92,9 +92,9 @@
                 return BadRequest();
             }
 
-            var authorId = await this.authors.AuthorId(this.User.Id());
+            var authorId = await this.authors.AuthorIdAsync(this.User.Id());
 
-            var myNewsArticles = await this.news.NewsArticlesByAuthor(authorId);
+            var myNewsArticles = await this.news.NewsArticlesByAuthorAsync(authorId);
 
             return View(myNewsArticles);
         }
@@ -107,15 +107,15 @@
                 return BadRequest();
             }
 
-            if (!await this.authors.IsAuthor(this.User.Id()))
+            if (!await this.authors.IsAuthorAsync(this.User.Id()))
             {
                 return RedirectToAction(nameof(AuthorsController.BecomeAuthor), ControllerAuthors);
             }
 
             return View(new NewsArticleFormModel
             {
-                Categories = await this.news.Categories(),
-                Tags = await this.news.Tags()
+                Categories = await this.news.CategoriesAsync(),
+                Tags = await this.news.TagsAsync()
             });
         }
 
@@ -128,14 +128,14 @@
                 return BadRequest();
             }
 
-            var authorId = await this.authors.AuthorId(this.User.Id());
+            var authorId = await this.authors.AuthorIdAsync(this.User.Id());
 
             if (authorId == null)
             {
                 return RedirectToAction(nameof(AuthorsController.BecomeAuthor), ControllerAuthors);
             }
 
-            if (!await this.news.CategoryExists(newsArticle.CategoryId))
+            if (!await this.news.CategoryExistsAsync(newsArticle.CategoryId))
             {
                 this.ModelState.AddModelError(nameof(newsArticle.CategoryId), ErrorCategory);
             }
@@ -147,13 +147,13 @@
 
             if (!ModelState.IsValid)
             {
-                newsArticle.Categories = await this.news.Categories();
-                newsArticle.Tags = await this.news.Tags();
+                newsArticle.Categories = await this.news.CategoriesAsync();
+                newsArticle.Tags = await this.news.TagsAsync();
 
                 return View(newsArticle);
             }
 
-            var newsArticleId = await this.news.Create(
+            var newsArticleId = await this.news.CreateAsync(
                 newsArticle.Title,
                 newsArticle.Content,
                 newsArticle.ImageUrl,
@@ -171,14 +171,14 @@
         [Authorize]
         public async Task<IActionResult> Edit(int id)
         {
-            var authorId = await this.authors.AuthorId(this.User.Id());
+            var authorId = await this.authors.AuthorIdAsync(this.User.Id());
 
             if (authorId == null && !this.User.IsAdmin())
             {
                 return RedirectToAction(nameof(AuthorsController.BecomeAuthor), ControllerAuthors);
             }
 
-            var newsArticle = await this.news.DetailsWithNoViewCountIncrement(id);
+            var newsArticle = await this.news.DetailsWithNoViewCountIncrementAsync(id);
 
             if (newsArticle == null)
             {
@@ -192,8 +192,8 @@
 
             var newsArticleData = this.mapper.Map<NewsArticleFormModel>(newsArticle);
 
-            newsArticleData.Categories = await this.news.Categories();
-            newsArticleData.Tags = await this.news.Tags();
+            newsArticleData.Categories = await this.news.CategoriesAsync();
+            newsArticleData.Tags = await this.news.TagsAsync();
 
             return View(newsArticleData);
         }
@@ -202,19 +202,19 @@
         [Authorize]
         public async Task<IActionResult> Edit(int id, NewsArticleFormModel newsArticle)
         {
-            var authorId = await this.authors.AuthorId(this.User.Id());
+            var authorId = await this.authors.AuthorIdAsync(this.User.Id());
 
             if (authorId == null && !this.User.IsAdmin())
             {
                 return RedirectToAction(nameof(AuthorsController.BecomeAuthor), ControllerAuthors);
             }
 
-            if (!await this.news.IsByAuthor(id, authorId) && !this.User.IsAdmin())
+            if (!await this.news.IsByAuthorAsync(id, authorId) && !this.User.IsAdmin())
             {
                 return Unauthorized();
             }
 
-            if (!await this.news.CategoryExists(newsArticle.CategoryId))
+            if (!await this.news.CategoryExistsAsync(newsArticle.CategoryId))
             {
                 this.ModelState.AddModelError(nameof(newsArticle.CategoryId), ErrorCategory);
             }
@@ -226,13 +226,13 @@
 
             if (!ModelState.IsValid)
             {
-                newsArticle.Categories = await this.news.Categories();
-                newsArticle.Tags = await this.news.Tags();
+                newsArticle.Categories = await this.news.CategoriesAsync();
+                newsArticle.Tags = await this.news.TagsAsync();
 
                 return View(newsArticle);
             }
 
-            await this.news.Edit(
+            await this.news.EditAsync(
                 id,
                 newsArticle.Title,
                 newsArticle.Content,
@@ -255,19 +255,19 @@
         [Authorize]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var authorId = await this.authors.AuthorId(this.User.Id());
+            var authorId = await this.authors.AuthorIdAsync(this.User.Id());
 
             if (authorId == null && !this.User.IsAdmin())
             {
                 return RedirectToAction(nameof(AuthorsController.BecomeAuthor), ControllerAuthors);
             }
 
-            if (!await this.news.IsByAuthor(id, authorId) && !this.User.IsAdmin())
+            if (!await this.news.IsByAuthorAsync(id, authorId) && !this.User.IsAdmin())
             {
                 return Unauthorized();
             }
 
-            await this.news.Delete(id);
+            await this.news.DeleteAsync(id);
 
             TempData[GlobalMessageKey] = DeletedNewsArticle;
 

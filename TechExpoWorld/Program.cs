@@ -56,10 +56,10 @@ namespace TechExpoWorld
                 options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
             });
 
-            services.AddTransient<IAttendeeService, AttendeeService>();
-            services.AddTransient<IAuthorService, AuthorService>();
-            services.AddTransient<ICommentService, CommentService>();
-            services.AddTransient<IEventService, EventService>();
+            services.AddTransient<IAttendeesService, AttendeesService>();
+            services.AddTransient<IAuthorsService, AuthorsService>();
+            services.AddTransient<ICommentsService, CommentsService>();
+            services.AddTransient<IEventsService, EventsService>();
             services.AddTransient<INewsService, NewsService>();
             services.AddTransient<IStatisticsService, StatisticsService>();
 

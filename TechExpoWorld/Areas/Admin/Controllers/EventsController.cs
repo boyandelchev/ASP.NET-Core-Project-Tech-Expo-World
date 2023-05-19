@@ -15,10 +15,10 @@
     public class EventsController : AdminController
     {
         private const string ControllerEvents = "Events";
-        private readonly IEventService events;
+        private readonly IEventsService events;
         private readonly IMapper mapper;
 
-        public EventsController(IEventService events, IMapper mapper)
+        public EventsController(IEventsService events, IMapper mapper)
         {
             this.events = events;
             this.mapper = mapper;
@@ -36,7 +36,7 @@
 
             var userId = this.User.Id();
 
-            await this.events.CreateEventWithTickets(
+            await this.events.CreateEventWithTicketsAsync(
                 eventData.Title,
                 eventData.Content,
                 eventData.Location,
@@ -58,7 +58,7 @@
 
         public async Task<IActionResult> Edit(int id)
         {
-            var eventData = await this.events.Details(id);
+            var eventData = await this.events.DetailsAsync(id);
 
             if (eventData == null)
             {
@@ -78,7 +78,7 @@
                 return View(eventData);
             }
 
-            await this.events.Edit(
+            await this.events.EditAsync(
                  id,
                  eventData.Title,
                  eventData.Content,
@@ -104,7 +104,7 @@
         [HttpPost]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            await this.events.Delete(id);
+            await this.events.DeleteAsync(id);
 
             TempData[GlobalMessageKey] = DeletedEvent;
 

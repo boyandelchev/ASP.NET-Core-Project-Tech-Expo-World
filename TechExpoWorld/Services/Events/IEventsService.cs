@@ -6,17 +6,17 @@
 
     using TechExpoWorld.Services.Events.Models;
 
-    public interface IEventService
+    public interface IEventsService
     {
-        Task<IEnumerable<EventServiceModel>> All();
+        Task<IEnumerable<EventServiceModel>> AllAsync();
 
-        Task<EventDetailsServiceModel> Details(int eventId);
+        Task<EventDetailsServiceModel> DetailsAsync(int eventId);
 
-        Task<IEnumerable<MyTicketServiceModel>> MyPhysicalTickets(string attendeeId);
+        Task<IEnumerable<MyTicketServiceModel>> MyPhysicalTicketsAsync(string attendeeId);
 
-        Task<IEnumerable<MyTicketServiceModel>> MyVirtualTickets(string attendeeId);
+        Task<IEnumerable<MyTicketServiceModel>> MyVirtualTicketsAsync(string attendeeId);
 
-        Task<int> CreateEventWithTickets(
+        Task<int> CreateEventWithTicketsAsync(
             string title,
             string content,
             string location,
@@ -28,7 +28,7 @@
             decimal virtualTicketPrice,
             string userId);
 
-        Task<bool> Edit(
+        Task<bool> EditAsync(
             int eventId,
             string title,
             string content,
@@ -40,16 +40,16 @@
             int totalVirtualTickets,
             decimal virtualTicketPrice);
 
-        Task<bool> Delete(int eventId);
+        Task<bool> DeleteAsync(int eventId);
 
-        Task<bool> BookPhysicalTicket(int eventId, string attendeeId);
+        Task<bool> BookPhysicalTicketAsync(int eventId, string attendeeId);
 
-        Task<bool> BookVirtualTicket(int eventId, string attendeeId);
+        Task<bool> BookVirtualTicketAsync(int eventId, string attendeeId);
 
-        Task<bool> CancelTicket(int eventId, int ticketId, string attendeeId);
+        Task<bool> CancelTicketAsync(int eventId, int ticketId, string attendeeId);
 
-        Task<int> TotalAvailablePhysicalTickets(int eventId);
+        Task<int> TotalAvailablePhysicalTicketsAsync(int eventId);
 
-        Task<int> TotalAvailableVirtualTickets(int eventId);
+        Task<int> TotalAvailableVirtualTicketsAsync(int eventId);
     }
 }

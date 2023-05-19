@@ -13,19 +13,19 @@
     using TechExpoWorld.Data.Models;
     using TechExpoWorld.Services.Comments.Models;
 
-    public class CommentService : ICommentService
+    public class CommentsService : ICommentsService
     {
         private const int CommentMaxDepth = 5;
         private readonly TechExpoDbContext data;
         private readonly IMapper mapper;
 
-        public CommentService(TechExpoDbContext data, IMapper mapper)
+        public CommentsService(TechExpoDbContext data, IMapper mapper)
         {
             this.data = data;
             this.mapper = mapper;
         }
 
-        public async Task<IEnumerable<CommentServiceModel>> CommentsOnNewsArticle(int newsArticleId)
+        public async Task<IEnumerable<CommentServiceModel>> CommentsOnNewsArticleAsync(int newsArticleId)
         {
             var commentsById = await this.data
                 .Comments
@@ -54,13 +54,13 @@
             return comments;
         }
 
-        public async Task<int> Create(
+        public async Task<int> CreateAsync(
             int newsArticleId,
             string content,
             int? parentCommentId,
             string userId)
         {
-            var parentComment = await this.Comment(parentCommentId);
+            var parentComment = await this.CommentAsync(parentCommentId);
 
             if (parentCommentId != null && parentComment == null)
             {
@@ -98,13 +98,13 @@
             return comment.Id;
         }
 
-        public async Task<int> TotalCommentsOnNewsArticle(int newsArticleId)
+        public async Task<int> TotalCommentsOnNewsArticleAsync(int newsArticleId)
             => await this.data
                 .Comments
                 .Where(c => c.NewsArticleId == newsArticleId)
                 .CountAsync();
 
-        private async Task<Comment> Comment(int? commentId)
+        private async Task<Comment> CommentAsync(int? commentId)
             => await this.data
                 .Comments
                 .FindAsync(commentId);

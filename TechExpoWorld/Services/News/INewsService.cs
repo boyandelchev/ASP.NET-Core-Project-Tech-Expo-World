@@ -7,7 +7,7 @@
 
     public interface INewsService
     {
-        Task<NewsArticlesQueryServiceModel> All(
+        Task<NewsArticlesQueryServiceModel> AllAsync(
             string category,
             string tag,
             string searchTerm,
@@ -15,15 +15,15 @@
             int currentPage,
             int newsArticlesPerPage);
 
-        Task<IEnumerable<NewsArticleServiceModel>> NewsArticlesByAuthor(string authorId);
+        Task<IEnumerable<NewsArticleServiceModel>> NewsArticlesByAuthorAsync(string authorId);
 
-        Task<IList<LatestNewsArticleServiceModel>> LatestNewsArticles();
+        Task<IList<LatestNewsArticleServiceModel>> LatestNewsArticlesAsync();
 
-        Task<NewsArticleDetailsServiceModel> Details(int newsArticleId);
+        Task<NewsArticleDetailsServiceModel> DetailsAsync(int newsArticleId);
 
-        Task<NewsArticleDetailsServiceModel> DetailsWithNoViewCountIncrement(int newsArticleId);
+        Task<NewsArticleDetailsServiceModel> DetailsWithNoViewCountIncrementAsync(int newsArticleId);
 
-        Task<int> Create(
+        Task<int> CreateAsync(
             string title,
             string content,
             string imageUrl,
@@ -31,7 +31,7 @@
             IEnumerable<int> tagIds,
             string authorId);
 
-        Task<bool> Edit(
+        Task<bool> EditAsync(
             int newsArticleId,
             string title,
             string content,
@@ -39,19 +39,19 @@
             int categoryId,
             IEnumerable<int> tagIds);
 
-        Task<bool> Delete(int newsArticleId);
+        Task<bool> DeleteAsync(int newsArticleId);
 
-        Task<bool> IsByAuthor(int newsArticleId, string authorId);
+        Task<bool> IsByAuthorAsync(int newsArticleId, string authorId);
 
-        Task<IEnumerable<CategoryServiceModel>> Categories();
+        Task<IEnumerable<CategoryServiceModel>> CategoriesAsync();
 
-        Task<IEnumerable<string>> CategoryNames();
+        Task<IEnumerable<string>> CategoryNamesAsync();
 
-        Task<bool> CategoryExists(int categoryId);
+        Task<bool> CategoryExistsAsync(int categoryId);
 
-        Task<IEnumerable<TagServiceModel>> Tags();
+        Task<IEnumerable<TagServiceModel>> TagsAsync();
 
-        Task<IEnumerable<string>> TagNames();
+        Task<IEnumerable<string>> TagNamesAsync();
 
         bool TagsExist(IEnumerable<int> tagIds);
     }

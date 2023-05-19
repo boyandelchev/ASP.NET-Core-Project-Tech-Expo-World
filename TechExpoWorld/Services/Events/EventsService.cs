@@ -14,27 +14,27 @@
     using TechExpoWorld.Data.Models;
     using TechExpoWorld.Services.Events.Models;
 
-    public class EventService : IEventService
+    public class EventsService : IEventsService
     {
         private const string PhysicalTicketType = "Physical";
         private const string VirtualTicketType = "Virtual";
         private readonly TechExpoDbContext data;
         private readonly IMapper mapper;
 
-        public EventService(TechExpoDbContext data, IMapper mapper)
+        public EventsService(TechExpoDbContext data, IMapper mapper)
         {
             this.data = data;
             this.mapper = mapper;
         }
 
-        public async Task<IEnumerable<EventServiceModel>> All()
+        public async Task<IEnumerable<EventServiceModel>> AllAsync()
             => await this.data
                 .Events
                 .OrderByDescending(e => e.Id)
                 .ProjectTo<EventServiceModel>(this.mapper.ConfigurationProvider)
                 .ToListAsync();
 
-        public async Task<EventDetailsServiceModel> Details(int eventId)
+        public async Task<EventDetailsServiceModel> DetailsAsync(int eventId)
         {
             var eventData = await this.data
                 .Events
@@ -47,19 +47,19 @@
                 return null;
             }
 
-            eventData.PhysicalTicketPrice = await TicketPrice(eventId, PhysicalTicketType);
-            eventData.VirtualTicketPrice = await TicketPrice(eventId, VirtualTicketType);
+            eventData.PhysicalTicketPrice = await TicketPriceAsync(eventId, PhysicalTicketType);
+            eventData.VirtualTicketPrice = await TicketPriceAsync(eventId, VirtualTicketType);
 
             return eventData;
         }
 
-        public async Task<IEnumerable<MyTicketServiceModel>> MyPhysicalTickets(string attendeeId)
-            => await MyTickets(attendeeId, PhysicalTicketType);
+        public async Task<IEnumerable<MyTicketServiceModel>> MyPhysicalTicketsAsync(string attendeeId)
+            => await MyTicketsAsync(attendeeId, PhysicalTicketType);
 
-        public async Task<IEnumerable<MyTicketServiceModel>> MyVirtualTickets(string attendeeId)
-            => await MyTickets(attendeeId, VirtualTicketType);
+        public async Task<IEnumerable<MyTicketServiceModel>> MyVirtualTicketsAsync(string attendeeId)
+            => await MyTicketsAsync(attendeeId, VirtualTicketType);
 
-        public async Task<int> CreateEventWithTickets(
+        public async Task<int> CreateEventWithTicketsAsync(
             string title,
             string content,
             string location,
@@ -95,7 +95,7 @@
             return eventData.Id;
         }
 
-        public async Task<bool> Edit(
+        public async Task<bool> EditAsync(
             int eventId,
             string title,
             string content,
@@ -149,7 +149,7 @@
             return true;
         }
 
-        public async Task<bool> Delete(int eventId)
+        public async Task<bool> DeleteAsync(int eventId)
         {
             var eventData = await this.data
                 .Events
@@ -169,13 +169,13 @@
             return true;
         }
 
-        public async Task<bool> BookPhysicalTicket(int eventId, string attendeeId)
-            => await BookTicket(eventId, attendeeId, PhysicalTicketType);
+        public async Task<bool> BookPhysicalTicketAsync(int eventId, string attendeeId)
+            => await BookTicketAsync(eventId, attendeeId, PhysicalTicketType);
 
-        public async Task<bool> BookVirtualTicket(int eventId, string attendeeId)
-            => await BookTicket(eventId, attendeeId, VirtualTicketType);
+        public async Task<bool> BookVirtualTicketAsync(int eventId, string attendeeId)
+            => await BookTicketAsync(eventId, attendeeId, VirtualTicketType);
 
-        public async Task<bool> CancelTicket(int eventId, int ticketId, string attendeeId)
+        public async Task<bool> CancelTicketAsync(int eventId, int ticketId, string attendeeId)
         {
             var ticket = await this.data
                 .Tickets
@@ -197,11 +197,11 @@
             return true;
         }
 
-        public async Task<int> TotalAvailablePhysicalTickets(int eventId)
-            => await TotalAvailableOfTypeTickets(eventId, PhysicalTicketType);
+        public async Task<int> TotalAvailablePhysicalTicketsAsync(int eventId)
+            => await TotalAvailableOfTypeTicketsAsync(eventId, PhysicalTicketType);
 
-        public async Task<int> TotalAvailableVirtualTickets(int eventId)
-            => await TotalAvailableOfTypeTickets(eventId, VirtualTicketType);
+        public async Task<int> TotalAvailableVirtualTicketsAsync(int eventId)
+            => await TotalAvailableOfTypeTicketsAsync(eventId, VirtualTicketType);
 
         private static IEnumerable<Ticket> CreateAllTickets(
             int totalPhysicalTickets,
@@ -255,18 +255,18 @@
             }
         }
 
-        private async Task<decimal> TicketPrice(int eventId, string ticketType)
+        private async Task<decimal> TicketPriceAsync(int eventId, string ticketType)
             => await this.data
                 .Tickets
                 .Where(t => t.EventId == eventId && t.Type == ticketType)
                 .Select(t => t.Price)
                 .FirstOrDefaultAsync();
 
-        private async Task<int> TotalAvailableOfTypeTickets(int eventId, string ticketType)
+        private async Task<int> TotalAvailableOfTypeTicketsAsync(int eventId, string ticketType)
             => await AvailableOfTypeTicketsQuery(eventId, ticketType)
                 .CountAsync();
 
-        private async Task<bool> BookTicket(int eventId, string attendeeId, string ticketType)
+        private async Task<bool> BookTicketAsync(int eventId, string attendeeId, string ticketType)
         {
             var ticket = await AvailableOfTypeTicketsQuery(eventId, ticketType)
                 .FirstOrDefaultAsync();
@@ -284,7 +284,7 @@
             return true;
         }
 
-        private async Task<IEnumerable<MyTicketServiceModel>> MyTickets(string attendeeId, string ticketType)
+        private async Task<IEnumerable<MyTicketServiceModel>> MyTicketsAsync(string attendeeId, string ticketType)
             => await this.data
                 .Attendees
                 .Where(a => a.Id == attendeeId)

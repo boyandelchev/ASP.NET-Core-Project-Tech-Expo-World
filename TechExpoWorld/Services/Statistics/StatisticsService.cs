@@ -15,7 +15,7 @@
         public StatisticsService(TechExpoDbContext data)
             => this.data = data;
 
-        public async Task<StatisticsServiceModel> Total()
+        public async Task<StatisticsServiceModel> TotalAsync()
         {
             var totalNewsArticles = await this.data.NewsArticles.CountAsync();
             var totalUsers = await this.data.Users.CountAsync();

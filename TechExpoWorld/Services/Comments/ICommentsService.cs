@@ -5,16 +5,16 @@
 
     using TechExpoWorld.Services.Comments.Models;
 
-    public interface ICommentService
+    public interface ICommentsService
     {
-        Task<IEnumerable<CommentServiceModel>> CommentsOnNewsArticle(int newsArticleId);
+        Task<IEnumerable<CommentServiceModel>> CommentsOnNewsArticleAsync(int newsArticleId);
 
-        Task<int> Create(
+        Task<int> CreateAsync(
             int newsArticleId,
             string content,
             int? parentCommentId,
             string userId);
 
-        Task<int> TotalCommentsOnNewsArticle(int newsArticleId);
+        Task<int> TotalCommentsOnNewsArticleAsync(int newsArticleId);
     }
 }

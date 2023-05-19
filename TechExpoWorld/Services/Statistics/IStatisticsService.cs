@@ -6,6 +6,6 @@
 
     public interface IStatisticsService
     {
-        Task<StatisticsServiceModel> Total();
+        Task<StatisticsServiceModel> TotalAsync();
     }
 }

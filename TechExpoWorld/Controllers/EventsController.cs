@@ -16,10 +16,10 @@
     public class EventsController : Controller
     {
         private const string ControllerAttendees = "Attendees";
-        private readonly IEventService events;
-        private readonly IAttendeeService attendees;
+        private readonly IEventsService events;
+        private readonly IAttendeesService attendees;
 
-        public EventsController(IEventService events, IAttendeeService attendees)
+        public EventsController(IEventsService events, IAttendeesService attendees)
         {
             this.events = events;
             this.attendees = attendees;
@@ -27,14 +27,14 @@
 
         public async Task<IActionResult> All()
         {
-            var eventsAll = await this.events.All();
+            var eventsAll = await this.events.AllAsync();
 
             return View(eventsAll);
         }
 
         public async Task<IActionResult> Details(int id, string information)
         {
-            var eventData = await this.events.Details(id);
+            var eventData = await this.events.DetailsAsync(id);
 
             if (eventData == null)
             {
@@ -46,8 +46,8 @@
                 return BadRequest();
             }
 
-            var totalAvailablePhysicalTickets = await this.events.TotalAvailablePhysicalTickets(id);
-            var totalAvailableVirtualTickets = await this.events.TotalAvailableVirtualTickets(id);
+            var totalAvailablePhysicalTickets = await this.events.TotalAvailablePhysicalTicketsAsync(id);
+            var totalAvailableVirtualTickets = await this.events.TotalAvailableVirtualTicketsAsync(id);
 
             return View(new EventDetailsViewModel
             {
@@ -66,8 +66,8 @@
 
             return View(new MyTicketsViewModel
             {
-                MyPhysicalTickets = await this.events.MyPhysicalTickets(attendeeId),
-                MyVirtualTickets = await this.events.MyVirtualTickets(attendeeId)
+                MyPhysicalTickets = await this.events.MyPhysicalTicketsAsync(attendeeId),
+                MyVirtualTickets = await this.events.MyVirtualTicketsAsync(attendeeId)
             });
         }
 
@@ -78,7 +78,7 @@
             string attendeeId;
             attendeeId = this.HttpContext.Items[nameof(attendeeId)] as string;
 
-            await this.events.BookPhysicalTicket(id, attendeeId);
+            await this.events.BookPhysicalTicketAsync(id, attendeeId);
 
             TempData[GlobalMessageKey] = BookedTicket;
 
@@ -92,7 +92,7 @@
             string attendeeId;
             attendeeId = this.HttpContext.Items[nameof(attendeeId)] as string;
 
-            await this.events.BookVirtualTicket(id, attendeeId);
+            await this.events.BookVirtualTicketAsync(id, attendeeId);
 
             TempData[GlobalMessageKey] = BookedTicket;
 
@@ -106,7 +106,7 @@
             string attendeeId;
             attendeeId = this.HttpContext.Items[nameof(attendeeId)] as string;
 
-            var isCancelled = await this.events.CancelTicket(id, ticketId, attendeeId);
+            var isCancelled = await this.events.CancelTicketAsync(id, ticketId, attendeeId);
 
             if (!isCancelled)
             {

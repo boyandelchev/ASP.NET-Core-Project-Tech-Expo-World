@@ -39,11 +39,11 @@
 
             if (indexData == null)
             {
-                var totalStatistics = await this.statistics.Total();
+                var totalStatistics = await this.statistics.TotalAsync();
 
                 indexData = this.mapper.Map<IndexViewModel>(totalStatistics);
 
-                indexData.News = await this.news.LatestNewsArticles();
+                indexData.News = await this.news.LatestNewsArticlesAsync();
 
                 var cacheOptions = new MemoryCacheEntryOptions()
                     .SetAbsoluteExpiration(TimeSpan.FromSeconds(1));

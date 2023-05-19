@@ -12,9 +12,9 @@
     public class IsAttendeeFilter : IAsyncActionFilter
     {
         private const string ControllerAttendees = "Attendees";
-        private readonly IAttendeeService attendees;
+        private readonly IAttendeesService attendees;
 
-        public IsAttendeeFilter(IAttendeeService attendees)
+        public IsAttendeeFilter(IAttendeesService attendees)
             => this.attendees = attendees;
 
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
@@ -25,7 +25,7 @@
                 return;
             }
 
-            var attendeeId = await this.attendees.AttendeeId(context.HttpContext.User.Id());
+            var attendeeId = await this.attendees.AttendeeIdAsync(context.HttpContext.User.Id());
 
             if (attendeeId == null)
             {
