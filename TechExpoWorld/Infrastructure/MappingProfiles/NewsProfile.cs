@@ -25,18 +25,15 @@
 
             this.CreateMap<NewsArticle, NewsArticleServiceModel>()
                 .ForMember(na => na.Content, cfg => cfg.MapFrom(na => na.Content.Substring(0, 200) + Ellipsis))
-                .ForMember(na => na.CreatedOn, cfg => cfg.MapFrom(na => na.CreatedOn.ToString(DateTimeFormat, CultureInfo.InvariantCulture)))
-                .ForMember(na => na.CategoryName, cfg => cfg.MapFrom(na => na.NewsCategory.Name));
+                .ForMember(na => na.CreatedOn, cfg => cfg.MapFrom(na => na.CreatedOn.ToString(DateTimeFormat, CultureInfo.InvariantCulture)));
 
             this.CreateMap<NewsArticle, NewsArticleDetailsServiceModel>()
                 .ForMember(na => na.CreatedOn, cfg => cfg.MapFrom(na => na.CreatedOn.ToString(DateTimeFormat, CultureInfo.InvariantCulture)))
                 .ForMember(na => na.LastModifiedOn, cfg => cfg.MapFrom(na => na.LastModifiedOn.Value.ToString(DateTimeFormat, CultureInfo.InvariantCulture)))
-                .ForMember(na => na.CategoryId, cfg => cfg.MapFrom(na => na.NewsCategoryId))
-                .ForMember(na => na.CategoryName, cfg => cfg.MapFrom(na => na.NewsCategory.Name))
                 .ForMember(na => na.TagIds, cfg => cfg.MapFrom(na => na.NewsArticleTags.Select(nat => nat.TagId)))
                 .ForMember(na => na.TagNames, cfg => cfg.MapFrom(na => na.NewsArticleTags.Select(nat => nat.Tag.Name)));
 
-            this.CreateMap<NewsCategory, CategoryServiceModel>();
+            this.CreateMap<Category, CategoryServiceModel>();
 
             this.CreateMap<Tag, TagServiceModel>();
 

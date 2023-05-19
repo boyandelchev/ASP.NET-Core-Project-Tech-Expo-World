@@ -12,7 +12,7 @@ using TechExpoWorld.Data;
 namespace TechExpoWorld.Data.Migrations
 {
     [DbContext(typeof(TechExpoDbContext))]
-    [Migration("20230223000816_NewsEventsTables")]
+    [Migration("20230519102758_NewsEventsTables")]
     partial class NewsEventsTables
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -266,6 +266,24 @@ namespace TechExpoWorld.Data.Migrations
                     b.ToTable("Authors");
                 });
 
+            modelBuilder.Entity("TechExpoWorld.Data.Models.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categories");
+                });
+
             modelBuilder.Entity("TechExpoWorld.Data.Models.Comment", b =>
                 {
                     b.Property<int>("Id")
@@ -458,6 +476,9 @@ namespace TechExpoWorld.Data.Migrations
                         .HasMaxLength(36)
                         .HasColumnType("nvarchar(36)");
 
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasMaxLength(50000)
@@ -473,9 +494,6 @@ namespace TechExpoWorld.Data.Migrations
                     b.Property<DateTime?>("LastModifiedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("NewsCategoryId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -488,7 +506,7 @@ namespace TechExpoWorld.Data.Migrations
 
                     b.HasIndex("AuthorId");
 
-                    b.HasIndex("NewsCategoryId");
+                    b.HasIndex("CategoryId");
 
                     b.ToTable("NewsArticles");
                 });
@@ -506,24 +524,6 @@ namespace TechExpoWorld.Data.Migrations
                     b.HasIndex("TagId");
 
                     b.ToTable("NewsArticleTags");
-                });
-
-            modelBuilder.Entity("TechExpoWorld.Data.Models.NewsCategory", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("NewsCategories");
                 });
 
             modelBuilder.Entity("TechExpoWorld.Data.Models.Tag", b =>
@@ -796,15 +796,15 @@ namespace TechExpoWorld.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("TechExpoWorld.Data.Models.NewsCategory", "NewsCategory")
+                    b.HasOne("TechExpoWorld.Data.Models.Category", "Category")
                         .WithMany("NewsArticles")
-                        .HasForeignKey("NewsCategoryId")
+                        .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Author");
 
-                    b.Navigation("NewsCategory");
+                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("TechExpoWorld.Data.Models.NewsArticleTag", b =>
@@ -852,6 +852,11 @@ namespace TechExpoWorld.Data.Migrations
                     b.Navigation("NewsArticles");
                 });
 
+            modelBuilder.Entity("TechExpoWorld.Data.Models.Category", b =>
+                {
+                    b.Navigation("NewsArticles");
+                });
+
             modelBuilder.Entity("TechExpoWorld.Data.Models.Comment", b =>
                 {
                     b.Navigation("ChildrenComments");
@@ -892,11 +897,6 @@ namespace TechExpoWorld.Data.Migrations
                     b.Navigation("Comments");
 
                     b.Navigation("NewsArticleTags");
-                });
-
-            modelBuilder.Entity("TechExpoWorld.Data.Models.NewsCategory", b =>
-                {
-                    b.Navigation("NewsArticles");
                 });
 
             modelBuilder.Entity("TechExpoWorld.Data.Models.Tag", b =>

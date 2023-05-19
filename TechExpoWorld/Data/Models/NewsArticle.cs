@@ -27,9 +27,9 @@
 
         public int ViewCount { get; set; }
 
-        public int NewsCategoryId { get; set; }
+        public int CategoryId { get; set; }
 
-        public NewsCategory NewsCategory { get; set; }
+        public Category Category { get; set; }
 
         [Required]
         [MaxLength(AuthorIdLength)]

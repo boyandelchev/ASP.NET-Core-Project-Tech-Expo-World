@@ -61,7 +61,7 @@
             public const string ErrorTag = "Tag option does not exist.";
         }
 
-        public class NewsCategory
+        public class Category
         {
             public const int NameMaxLength = 50;
         }

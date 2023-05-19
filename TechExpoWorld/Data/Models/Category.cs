@@ -3,9 +3,9 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
-    using static GlobalConstants.NewsCategory;
+    using static GlobalConstants.Category;
 
-    public class NewsCategory
+    public class Category
     {
         public int Id { get; init; }
 

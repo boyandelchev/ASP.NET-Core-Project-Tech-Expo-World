@@ -38,7 +38,7 @@
             if (!string.IsNullOrWhiteSpace(category))
             {
                 newsQuery = newsQuery
-                    .Where(na => na.NewsCategory.Name == category);
+                    .Where(na => na.Category.Name == category);
             }
 
             if (!string.IsNullOrWhiteSpace(tag))
@@ -124,7 +124,7 @@
                 Title = title,
                 Content = content,
                 ImageUrl = imageUrl,
-                NewsCategoryId = categoryId,
+                CategoryId = categoryId,
                 NewsArticleTags = CreateNewsArticleTags(tagIds),
                 AuthorId = authorId
             };
@@ -157,7 +157,7 @@
             newsArticle.Content = content;
             newsArticle.ImageUrl = imageUrl;
             newsArticle.LastModifiedOn = DateTime.UtcNow;
-            newsArticle.NewsCategoryId = categoryId;
+            newsArticle.CategoryId = categoryId;
             newsArticle.NewsArticleTags = CreateNewsArticleTags(tagIds);
 
             await this.data.SaveChangesAsync();
@@ -194,20 +194,20 @@
 
         public async Task<IEnumerable<CategoryServiceModel>> Categories()
             => await this.data
-                .NewsCategories
+                .Categories
                 .ProjectTo<CategoryServiceModel>(this.mapper.ConfigurationProvider)
                 .ToListAsync();
 
         public async Task<IEnumerable<string>> CategoryNames()
             => await this.data
-                .NewsCategories
-                .Select(nc => nc.Name)
+                .Categories
+                .Select(c => c.Name)
                 .ToListAsync();
 
         public async Task<bool> CategoryExists(int categoryId)
             => await this.data
-                .NewsCategories
-                .AnyAsync(nc => nc.Id == categoryId);
+                .Categories
+                .AnyAsync(c => c.Id == categoryId);
 
         public async Task<IEnumerable<TagServiceModel>> Tags()
             => await this.data

@@ -14,7 +14,7 @@
 
         public DbSet<NewsArticle> NewsArticles { get; init; }
 
-        public DbSet<NewsCategory> NewsCategories { get; init; }
+        public DbSet<Category> Categories { get; init; }
 
         public DbSet<Tag> Tags { get; init; }
 
@@ -44,9 +44,9 @@
         {
             builder
                 .Entity<NewsArticle>()
-                .HasOne(na => na.NewsCategory)
-                .WithMany(nc => nc.NewsArticles)
-                .HasForeignKey(na => na.NewsCategoryId)
+                .HasOne(na => na.Category)
+                .WithMany(c => c.NewsArticles)
+                .HasForeignKey(na => na.CategoryId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder

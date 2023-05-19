@@ -24,8 +24,8 @@
                 CreatedOn = DateTime.UtcNow,
                 LastModifiedOn = DateTime.UtcNow,
                 ViewCount = 0,
-                NewsCategoryId = 1,
-                NewsCategory = new NewsCategory { Id = 1, Name = "AI" },
+                CategoryId = 1,
+                Category = new Category { Id = 1, Name = "AI" },
                 AuthorId = "1",
                 Author = new Author { Id = "1" }
             };

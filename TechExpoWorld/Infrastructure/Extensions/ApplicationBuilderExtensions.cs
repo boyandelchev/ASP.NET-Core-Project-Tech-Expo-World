@@ -78,23 +78,23 @@
         {
             var data = serviceProvider.GetRequiredService<TechExpoDbContext>();
 
-            if (data.NewsCategories.Any())
+            if (data.Categories.Any())
             {
                 return;
             }
 
-            data.NewsCategories.AddRange(new[]
+            data.Categories.AddRange(new[]
             {
-                new NewsCategory { Name = "AI" },
-                new NewsCategory { Name = "Big Data" },
-                new NewsCategory { Name = "Blockchain" },
-                new NewsCategory { Name = "Cloud Computing" },
-                new NewsCategory { Name = "Cybersecurity" },
-                new NewsCategory { Name = "Healthcare" },
-                new NewsCategory { Name = "IoT" },
-                new NewsCategory { Name = "Machine Learning" },
-                new NewsCategory { Name = "Smart Cities" },
-                new NewsCategory { Name = "Transportation" },
+                new Category { Name = "AI" },
+                new Category { Name = "Big Data" },
+                new Category { Name = "Blockchain" },
+                new Category { Name = "Cloud Computing" },
+                new Category { Name = "Cybersecurity" },
+                new Category { Name = "Healthcare" },
+                new Category { Name = "IoT" },
+                new Category { Name = "Machine Learning" },
+                new Category { Name = "Smart Cities" },
+                new Category { Name = "Transportation" },
             });
 
             data.SaveChanges();
