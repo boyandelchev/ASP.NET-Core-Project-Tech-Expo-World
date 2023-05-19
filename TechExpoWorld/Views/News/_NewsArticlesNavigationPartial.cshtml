@@ -1,4 +1,5 @@
-﻿@model AllNewsQueryModel
+﻿@using TechExpoWorld.Models.News
+@model AllNewsQueryModel
 
 @{
     var previousPage = Model.CurrentPage - 1;
@@ -67,15 +68,15 @@
         @for (int i = firstPage; i <= lastPage; i++)
         {
             <li class="page-item @(Model.CurrentPage == i ? "active" : null)"
-            aria-current="@(Model.CurrentPage == i ? "page" : null)">
+                aria-current="@(Model.CurrentPage == i ? "page" : null)">
                 <a class="page-link"
-               asp-controller="News"
-               asp-action="All"
-               asp-route-currentPage="@i"
-               asp-route-category="@Model.Category"
-               asp-route-tag="@Model.Tag"
-               asp-route-searchTerm="@Model.SearchTerm"
-               asp-route-sorting="@((int)Model.Sorting)">
+                   asp-controller="News"
+                   asp-action="All"
+                   asp-route-currentPage="@i"
+                   asp-route-category="@Model.Category"
+                   asp-route-tag="@Model.Tag"
+                   asp-route-searchTerm="@Model.SearchTerm"
+                   asp-route-sorting="@((int)Model.Sorting)">
                     @i
                 </a>
             </li>
