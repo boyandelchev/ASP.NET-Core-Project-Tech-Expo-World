@@ -46,14 +46,11 @@
                 return BadRequest();
             }
 
-            var totalAvailablePhysicalTickets = await this.events.TotalAvailablePhysicalTicketsAsync(id);
-            var totalAvailableVirtualTickets = await this.events.TotalAvailableVirtualTicketsAsync(id);
-
             return View(new EventDetailsViewModel
             {
                 EventDetails = eventData,
-                TotalAvailablePhysicalTickets = totalAvailablePhysicalTickets,
-                TotalAvailableVirtualTickets = totalAvailableVirtualTickets
+                TotalAvailablePhysicalTickets = await this.events.TotalAvailablePhysicalTicketsAsync(id),
+                TotalAvailableVirtualTickets = await this.events.TotalAvailableVirtualTicketsAsync(id)
             });
         }
 
@@ -61,8 +58,7 @@
         [TypeFilter(typeof(IsAttendeeFilter))]
         public async Task<IActionResult> MyTickets()
         {
-            string attendeeId;
-            attendeeId = this.HttpContext.Items[nameof(attendeeId)] as string;
+            string attendeeId = this.HttpContext.Items[nameof(attendeeId)] as string;
 
             return View(new MyTicketsViewModel
             {
@@ -75,8 +71,7 @@
         [TypeFilter(typeof(IsAttendeeFilter))]
         public async Task<IActionResult> BookPhysicalTicket(int id)
         {
-            string attendeeId;
-            attendeeId = this.HttpContext.Items[nameof(attendeeId)] as string;
+            string attendeeId = this.HttpContext.Items[nameof(attendeeId)] as string;
 
             await this.events.BookPhysicalTicketAsync(id, attendeeId);
 
@@ -89,8 +84,7 @@
         [TypeFilter(typeof(IsAttendeeFilter))]
         public async Task<IActionResult> BookVirtualTicket(int id)
         {
-            string attendeeId;
-            attendeeId = this.HttpContext.Items[nameof(attendeeId)] as string;
+            string attendeeId = this.HttpContext.Items[nameof(attendeeId)] as string;
 
             await this.events.BookVirtualTicketAsync(id, attendeeId);
 
@@ -103,8 +97,7 @@
         [TypeFilter(typeof(IsAttendeeFilter))]
         public async Task<IActionResult> CancelTicket(int id, int ticketId)
         {
-            string attendeeId;
-            attendeeId = this.HttpContext.Items[nameof(attendeeId)] as string;
+            string attendeeId = this.HttpContext.Items[nameof(attendeeId)] as string;
 
             var isCancelled = await this.events.CancelTicketAsync(id, ticketId, attendeeId);
 

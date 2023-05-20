@@ -24,7 +24,7 @@
                     .WithModelOfType<IndexViewModel>()
                     .Passing(model =>
                     {
-                        Assert.Equal(3, model.News.Count);
+                        Assert.Equal(3, model.LatestNewsArticles.Count);
                     }));
 
         [Fact]

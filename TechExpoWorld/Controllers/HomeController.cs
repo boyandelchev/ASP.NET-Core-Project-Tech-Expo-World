@@ -3,8 +3,6 @@
     using System;
     using System.Threading.Tasks;
 
-    using AutoMapper;
-
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Caching.Memory;
 
@@ -18,18 +16,15 @@
     {
         private readonly INewsService news;
         private readonly IStatisticsService statistics;
-        private readonly IMapper mapper;
         private readonly IMemoryCache cache;
 
         public HomeController(
             INewsService news,
             IStatisticsService statistics,
-            IMapper mapper,
             IMemoryCache cache)
         {
             this.news = news;
             this.statistics = statistics;
-            this.mapper = mapper;
             this.cache = cache;
         }
 
@@ -39,11 +34,11 @@
 
             if (indexData == null)
             {
-                var totalStatistics = await this.statistics.TotalAsync();
-
-                indexData = this.mapper.Map<IndexViewModel>(totalStatistics);
-
-                indexData.News = await this.news.LatestNewsArticlesAsync();
+                indexData = new IndexViewModel
+                {
+                    Statistics = await this.statistics.TotalAsync(),
+                    LatestNewsArticles = await this.news.LatestNewsArticlesAsync()
+                };
 
                 var cacheOptions = new MemoryCacheEntryOptions()
                     .SetAbsoluteExpiration(TimeSpan.FromSeconds(1));

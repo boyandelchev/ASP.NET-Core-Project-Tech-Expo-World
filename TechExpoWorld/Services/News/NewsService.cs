@@ -111,6 +111,13 @@
                 .ProjectTo<NewsArticleDetailsServiceModel>(this.mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync();
 
+        public async Task<NewsArticleFormServiceModel> NewsArticleFormData(int newsArticleId)
+            => await this.data
+                .NewsArticles
+                .Where(na => na.Id == newsArticleId)
+                .ProjectTo<NewsArticleFormServiceModel>(this.mapper.ConfigurationProvider)
+                .FirstOrDefaultAsync();
+
         public async Task<int> CreateAsync(
             string title,
             string content,

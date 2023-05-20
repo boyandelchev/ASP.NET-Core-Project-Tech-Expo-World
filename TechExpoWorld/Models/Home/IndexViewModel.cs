@@ -3,21 +3,12 @@
     using System.Collections.Generic;
 
     using TechExpoWorld.Services.News.Models;
+    using TechExpoWorld.Services.Statistics.Models;
 
     public class IndexViewModel
     {
-        public int TotalNewsArticles { get; init; }
+        public StatisticsServiceModel Statistics { get; init; }
 
-        public int TotalUsers { get; init; }
-
-        public int TotalAuthors { get; init; }
-
-        public int TotalAttendees { get; init; }
-
-        public int TotalEvents { get; init; }
-
-        public int TotalLocations { get; init; }
-
-        public IList<LatestNewsArticleServiceModel> News { get; set; }
+        public IList<LatestNewsArticleServiceModel> LatestNewsArticles { get; init; }
     }
 }

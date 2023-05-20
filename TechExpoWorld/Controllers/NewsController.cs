@@ -69,15 +69,12 @@
                 return BadRequest();
             }
 
-            var newsArticleData = this.mapper.Map<NewsArticleDetailsViewModel>(newsArticle);
-
             var comments = await this.comments.CommentsOnNewsArticleAsync(id);
             var totalComments = await this.comments.TotalCommentsOnNewsArticleAsync(id);
 
             return View(new NewsArticleWithCommentsViewModel
             {
-                NewsArticleId = id,
-                NewsArticle = newsArticleData,
+                NewsArticle = newsArticle,
                 CommentForm = new CommentFormModel(),
                 Comments = comments,
                 TotalComments = totalComments
@@ -178,7 +175,7 @@
                 return RedirectToAction(nameof(AuthorsController.BecomeAuthor), ControllerAuthors);
             }
 
-            var newsArticle = await this.news.DetailsWithNoViewCountIncrementAsync(id);
+            var newsArticle = await this.news.NewsArticleFormData(id);
 
             if (newsArticle == null)
             {

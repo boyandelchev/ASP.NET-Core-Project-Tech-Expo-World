@@ -16,16 +16,6 @@
 
         public EventsProfile()
         {
-            this.CreateMap<Country, CountryServiceModel>();
-
-            this.CreateMap<JobType, JobTypeServiceModel>();
-
-            this.CreateMap<CompanyType, CompanyTypeServiceModel>();
-
-            this.CreateMap<CompanySector, CompanySectorServiceModel>();
-
-            this.CreateMap<CompanySize, CompanySizeServiceModel>();
-
             this.CreateMap<Event, EventServiceModel>()
                 .ForMember(e => e.StartDate, cfg => cfg.MapFrom(e => e.StartDate.ToString(DateTimeFormat, CultureInfo.InvariantCulture)))
                 .ForMember(e => e.EndDate, cfg => cfg.MapFrom(e => e.EndDate.ToString(DateTimeFormat, CultureInfo.InvariantCulture)));
@@ -40,6 +30,16 @@
 
             this.CreateMap<Ticket, MyTicketServiceModel>()
                 .ForMember(t => t.TicketId, cfg => cfg.MapFrom(t => t.Id));
+
+            this.CreateMap<Country, CountryServiceModel>();
+
+            this.CreateMap<JobType, JobTypeServiceModel>();
+
+            this.CreateMap<CompanyType, CompanyTypeServiceModel>();
+
+            this.CreateMap<CompanySector, CompanySectorServiceModel>();
+
+            this.CreateMap<CompanySize, CompanySizeServiceModel>();
         }
     }
 }

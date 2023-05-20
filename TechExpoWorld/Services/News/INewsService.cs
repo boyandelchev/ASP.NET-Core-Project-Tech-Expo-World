@@ -23,6 +23,8 @@
 
         Task<NewsArticleDetailsServiceModel> DetailsWithNoViewCountIncrementAsync(int newsArticleId);
 
+        Task<NewsArticleFormServiceModel> NewsArticleFormData(int newsArticleId);
+
         Task<int> CreateAsync(
             string title,
             string content,
