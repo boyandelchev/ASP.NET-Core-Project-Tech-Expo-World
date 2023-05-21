@@ -2,9 +2,9 @@
 {
     using System.Diagnostics;
 
-    using TechExpoWorld.Web.ViewModels;
-
     using Microsoft.AspNetCore.Mvc;
+
+    using TechExpoWorld.Web.ViewModels;
 
     public class HomeController : BaseController
     {

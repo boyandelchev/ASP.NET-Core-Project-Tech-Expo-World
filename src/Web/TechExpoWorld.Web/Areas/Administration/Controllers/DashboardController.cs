@@ -1,9 +1,9 @@
 ﻿namespace TechExpoWorld.Web.Areas.Administration.Controllers
 {
+    using Microsoft.AspNetCore.Mvc;
+
     using TechExpoWorld.Services.Data;
     using TechExpoWorld.Web.ViewModels.Administration.Dashboard;
-
-    using Microsoft.AspNetCore.Mvc;
 
     public class DashboardController : AdministrationController
     {

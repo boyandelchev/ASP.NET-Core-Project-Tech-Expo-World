@@ -3,9 +3,9 @@ namespace TechExpoWorld.Data.Models
 {
     using System;
 
-    using TechExpoWorld.Data.Common.Models;
-
     using Microsoft.AspNetCore.Identity;
+
+    using TechExpoWorld.Data.Common.Models;
 
     public class ApplicationRole : IdentityRole, IAuditInfo, IDeletableEntity
     {

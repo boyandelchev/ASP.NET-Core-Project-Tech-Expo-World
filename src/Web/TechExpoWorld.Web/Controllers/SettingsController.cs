@@ -3,12 +3,12 @@
     using System;
     using System.Threading.Tasks;
 
+    using Microsoft.AspNetCore.Mvc;
+
     using TechExpoWorld.Data.Common.Repositories;
     using TechExpoWorld.Data.Models;
     using TechExpoWorld.Services.Data;
     using TechExpoWorld.Web.ViewModels.Settings;
-
-    using Microsoft.AspNetCore.Mvc;
 
     public class SettingsController : BaseController
     {

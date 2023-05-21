@@ -3,9 +3,9 @@
     using System;
     using System.Threading.Tasks;
 
-    using TechExpoWorld.Data.Common;
-
     using Microsoft.EntityFrameworkCore;
+
+    using TechExpoWorld.Data.Common;
 
     public class DbQueryRunner : IDbQueryRunner
     {

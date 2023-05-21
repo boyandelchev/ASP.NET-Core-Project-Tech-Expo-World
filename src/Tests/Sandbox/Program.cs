@@ -5,6 +5,13 @@
     using System.IO;
     using System.Threading.Tasks;
 
+    using CommandLine;
+
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging;
+
     using TechExpoWorld.Data;
     using TechExpoWorld.Data.Common;
     using TechExpoWorld.Data.Common.Repositories;
@@ -13,13 +20,6 @@
     using TechExpoWorld.Data.Seeding;
     using TechExpoWorld.Services.Data;
     using TechExpoWorld.Services.Messaging;
-
-    using CommandLine;
-
-    using Microsoft.EntityFrameworkCore;
-    using Microsoft.Extensions.Configuration;
-    using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Logging;
 
     public static class Program
     {

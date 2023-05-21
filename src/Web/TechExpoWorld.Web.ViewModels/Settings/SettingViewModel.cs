@@ -1,9 +1,9 @@
 ﻿namespace TechExpoWorld.Web.ViewModels.Settings
 {
+    using AutoMapper;
+
     using TechExpoWorld.Data.Models;
     using TechExpoWorld.Services.Mapping;
-
-    using AutoMapper;
 
     public class SettingViewModel : IMapFrom<Setting>, IHaveCustomMappings
     {
