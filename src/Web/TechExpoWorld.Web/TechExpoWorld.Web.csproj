@@ -1,31 +1,28 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
     <TargetFramework>net7.0</TargetFramework>
+    <UserSecretsId>aspnet-TechExpoWorld-BBB373B5-EF3F-4DBB-B8AA-7152CEC275BF</UserSecretsId>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup>
     <CodeAnalysisRuleSet>..\..\Rules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-  <ItemGroup>
-    <AdditionalFiles Include="..\..\stylecop.json" />
-  </ItemGroup>
+	<ItemGroup>
+		<AdditionalFiles Include="..\..\stylecop.json" />
+	</ItemGroup>
+	
+	<ItemGroup>
+		<InternalsVisibleTo Include="TechExpoWorld.Web.Tests" />
+	</ItemGroup>
 
   <ItemGroup>
-    <Content Include="appsettings.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="CommandLineParser" Version="2.9.1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="7.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="7.0.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="7.0.3" />
+    <PackageReference Include="BuildBundlerMinifier" Version="3.2.449" />
+    <PackageReference Include="Microsoft.Web.LibraryManager.Build" Version="2.1.175" />
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="7.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="7.0.3" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.435" PrivateAssets="all">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
@@ -34,13 +31,13 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\TechExpoWorld.Common\TechExpoWorld.Common.csproj" />
-    <ProjectReference Include="..\..\Data\TechExpoWorld.Data.Common\TechExpoWorld.Data.Common.csproj" />
     <ProjectReference Include="..\..\Data\TechExpoWorld.Data.Models\TechExpoWorld.Data.Models.csproj" />
     <ProjectReference Include="..\..\Data\TechExpoWorld.Data\TechExpoWorld.Data.csproj" />
     <ProjectReference Include="..\..\Services\TechExpoWorld.Services.Data\TechExpoWorld.Services.Data.csproj" />
     <ProjectReference Include="..\..\Services\TechExpoWorld.Services.Mapping\TechExpoWorld.Services.Mapping.csproj" />
     <ProjectReference Include="..\..\Services\TechExpoWorld.Services.Messaging\TechExpoWorld.Services.Messaging.csproj" />
     <ProjectReference Include="..\..\Services\TechExpoWorld.Services\TechExpoWorld.Services.csproj" />
+    <ProjectReference Include="..\TechExpoWorld.Web.Infrastructure\TechExpoWorld.Web.Infrastructure.csproj" />
+    <ProjectReference Include="..\TechExpoWorld.Web.ViewModels\TechExpoWorld.Web.ViewModels.csproj" />
   </ItemGroup>
-
 </Project>

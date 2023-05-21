@@ -5,14 +5,14 @@
     using System.IO;
     using System.Threading.Tasks;
 
-    using AspNetCoreTemplate.Data;
-    using AspNetCoreTemplate.Data.Common;
-    using AspNetCoreTemplate.Data.Common.Repositories;
-    using AspNetCoreTemplate.Data.Models;
-    using AspNetCoreTemplate.Data.Repositories;
-    using AspNetCoreTemplate.Data.Seeding;
-    using AspNetCoreTemplate.Services.Data;
-    using AspNetCoreTemplate.Services.Messaging;
+    using TechExpoWorld.Data;
+    using TechExpoWorld.Data.Common;
+    using TechExpoWorld.Data.Common.Repositories;
+    using TechExpoWorld.Data.Models;
+    using TechExpoWorld.Data.Repositories;
+    using TechExpoWorld.Data.Seeding;
+    using TechExpoWorld.Services.Data;
+    using TechExpoWorld.Services.Messaging;
 
     using CommandLine;
 
