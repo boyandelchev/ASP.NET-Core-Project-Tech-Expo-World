@@ -33,5 +33,9 @@ namespace TechExpoWorld.Data.Models
         public virtual ICollection<IdentityUserClaim<string>> Claims { get; set; }
 
         public virtual ICollection<IdentityUserLogin<string>> Logins { get; set; }
+
+        public IEnumerable<Comment> Comments { get; set; } = new List<Comment>();
+
+        public IEnumerable<Event> Events { get; set; } = new List<Event>();
     }
 }

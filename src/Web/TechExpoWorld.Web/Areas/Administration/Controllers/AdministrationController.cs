@@ -3,11 +3,12 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
-    using TechExpoWorld.Common;
     using TechExpoWorld.Web.Controllers;
 
-    [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
-    [Area("Administration")]
+    using static TechExpoWorld.Common.GlobalConstants.Admin;
+
+    [Authorize(Roles = AdministratorRoleName)]
+    [Area(AreaName)]
     public class AdministrationController : BaseController
     {
     }

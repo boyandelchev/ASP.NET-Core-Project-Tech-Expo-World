@@ -26,6 +26,34 @@
 
         public DbSet<Setting> Settings { get; set; }
 
+        public DbSet<NewsArticle> NewsArticles { get; init; }
+
+        public DbSet<Category> Categories { get; init; }
+
+        public DbSet<Tag> Tags { get; init; }
+
+        public DbSet<NewsArticleTag> NewsArticleTags { get; init; }
+
+        public DbSet<Author> Authors { get; init; }
+
+        public DbSet<Comment> Comments { get; init; }
+
+        public DbSet<Event> Events { get; init; }
+
+        public DbSet<Attendee> Attendees { get; init; }
+
+        public DbSet<Ticket> Tickets { get; init; }
+
+        public DbSet<Country> Countries { get; init; }
+
+        public DbSet<JobType> JobTypes { get; init; }
+
+        public DbSet<CompanyType> CompanyTypes { get; init; }
+
+        public DbSet<CompanySector> CompanySectors { get; init; }
+
+        public DbSet<CompanySize> CompanySizes { get; init; }
+
         public override int SaveChanges() => this.SaveChanges(true);
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
@@ -47,6 +75,18 @@
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder
+                .Entity<Author>()
+                .HasOne<ApplicationUser>()
+                .WithOne()
+                .HasForeignKey<Author>(a => a.ApplicationUserId);
+
+            builder
+                .Entity<Attendee>()
+                .HasOne<ApplicationUser>()
+                .WithOne()
+                .HasForeignKey<Attendee>(a => a.ApplicationUserId);
+
             // Needed for Identity models configuration
             base.OnModelCreating(builder);
 
