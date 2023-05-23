@@ -1,0 +1,116 @@
+﻿@model TechExpoWorld.Web.ViewModels.News.NewsArticleWithCommentsViewModel
+
+@{
+    ViewBag.Title = Model.NewsArticle.Title;
+}
+
+<section>
+    <h2>@Model.NewsArticle.Title</h2>
+    <article class="d-flex justify-content-between">
+        <p class="m-0">
+            <span class="text-info">@Model.NewsArticle.AuthorName - </span>
+            <span class="text-dark">@Model.NewsArticle.CreatedOn</span>
+        </p>
+        <p class="m-0">
+            <span>Views: @Model.NewsArticle.ViewCount |</span>
+            <a href="#comment-section">Comments: @Model.TotalComments</a>
+        </p>
+    </article>
+    <article class="d-flex justify-content-between">
+        <p>
+            @if (Model.NewsArticle.LastModifiedOn != null)
+            {
+                <span>Last Edit: @Model.NewsArticle.LastModifiedOn</span>
+            }
+        </p>
+        <p class="text-end">
+            Category:
+            <a asp-controller="News" asp-action="All" asp-route-category="@Model.NewsArticle.CategoryName" class="fw-bold">
+                @Model.NewsArticle.CategoryName
+            </a>
+        </p>
+    </article>
+    <article>
+        <article class="article-img">
+            <img src="@Model.NewsArticle.ImageUrl" alt="@Model.NewsArticle.Title (@Model.NewsArticle.CategoryName)" class="img-fluid w-100" />
+        </article>
+        <p class="p-3">@Model.NewsArticle.Content</p>
+        <span>Tags:</span>
+        @foreach (var tag in Model.NewsArticle.TagNames)
+        {
+            <a asp-controller="News" asp-action="All" asp-route-tag="@tag" class="fst-italic">@tag/</a>
+        }
+    </article>
+</section>
+
+@{
+    ViewBag.NewsArticleId = Model.NewsArticle.Id;
+    ViewBag.CommentForm = Model.CommentForm;
+    ViewBag.Comments = Model.Comments;
+    ViewBag.Depth = 0;
+}
+
+<section class="text-center mt-3" id="comment-section">
+    <button class="btn btn-primary">Leave a comment below</button>
+    <article class="d-none">
+        <button class="btn btn-light">Hide</button>
+        <partial name="_CommentFormPartial" />
+    </article>
+</section>
+
+<section class="mt-5" id="replies-section">
+    <partial name="_CommentsPartial" />
+</section>
+
+<button class="scroll-to-top-button d-none" title="Back to top">Top</button>
+
+@section Scripts {
+    <script>
+        const commentButton = document.querySelector('#comment-section button');
+        const commentArea = document.querySelector('#comment-section article');
+
+        const displayCommentForm = (commentButton, commentArea) => {
+            commentButton
+                .addEventListener('click', (e) => {
+                    commentArea.classList.remove('d-none');
+                    commentButton.classList.add('d-none');
+                });
+
+            commentArea.querySelector('button')
+                .addEventListener('click', (e) => {
+                    commentArea.classList.add('d-none');
+                    commentButton.classList.remove('d-none');
+                });
+        };
+
+        displayCommentForm(commentButton, commentArea);
+
+        const replies = document.querySelectorAll('#replies-section > article');
+
+        replies.forEach(r => {
+            const replyButton = r.querySelector('section button');
+            const replyArea = r.querySelector('section article');
+
+            displayCommentForm(replyButton, replyArea);
+        });
+
+        const height = 800;
+        const scrollToTopButton = document.querySelector('.scroll-to-top-button');
+
+        window
+            .addEventListener('scroll', (e) => {
+                window.scrollY > height
+                    ? scrollToTopButton.classList.remove('d-none')
+                    : scrollToTopButton.classList.add('d-none');
+            });
+
+        scrollToTopButton
+            .addEventListener('click', (e) => {
+                window.scrollTo({
+                    top: 0,
+                    left: 0,
+                    behavior: 'smooth'
+                });
+            });
+    </script>
+}

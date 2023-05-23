@@ -1,0 +1,31 @@
+﻿@foreach (var comment in ViewBag.Comments)
+{
+    ViewBag.CommentId = comment.Id;
+    ViewBag.Comments = comment.ChildrenComments;
+
+    <article class="border-bottom border-start border-2 p-3" style="margin-left:@ViewBag.Depth.ToString()px;">
+        <div class="d-flex">
+            <div>
+                <img src="/profile-image-32x32.png" alt="profile image">
+            </div>
+            <div class="d-flex justify-content-between flex-grow-1 fw-bold ms-3">
+                <p>@comment.UserName</p>
+                <p class="text-secondary">@comment.CreatedOn</p>
+            </div>
+        </div>
+        <p>@comment.Content</p>
+        <section class="@(ViewBag.Depth == 5 * 40 ? "d-none" : null)">
+            <button class="rounded-pill px-3">Reply</button>
+            <article class="d-none">
+                <button class="btn btn-light">Hide</button>
+                <partial name="_CommentFormPartial" />
+            </article>
+        </section>
+    </article>
+
+    ViewBag.Depth += 40;
+
+    <partial name="_CommentsPartial" />
+
+    ViewBag.Depth -= 40;
+}

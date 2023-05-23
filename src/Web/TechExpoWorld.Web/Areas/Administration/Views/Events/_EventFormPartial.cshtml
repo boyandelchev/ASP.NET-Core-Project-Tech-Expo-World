@@ -1,0 +1,73 @@
+﻿@model TechExpoWorld.Web.ViewModels.Events.EventFormModel
+
+<div class="row">
+    <div class="col-sm-12 offset-md-1 col-md-10 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
+        <h2 class="text-center">@ViewBag.Title</h2>
+
+        <form method="post">
+            <div class="mb-3">
+                <label asp-for="Title" class="form-label"></label>
+                <input asp-for="Title" class="form-control" readonly="@ViewBag.IsDelete" placeholder="AI and Big Data Expo...">
+                <span asp-validation-for="Title" class="small text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Content" class="form-label"></label>
+                <textarea asp-for="Content" class="form-control" rows="10" readonly="@ViewBag.IsDelete" placeholder="The leading Artificial Intelligence..."></textarea>
+                <span asp-validation-for="Content" class="small text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Location" class="form-label"></label>
+                <input asp-for="Location" class="form-control" readonly="@ViewBag.IsDelete" placeholder="London, UK...">
+                <span asp-validation-for="Location" class="small text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="StartDate" class="form-label"></label>
+                <input asp-for="StartDate" type="datetime-local" class="form-control" readonly="@ViewBag.IsDelete">
+                <span asp-validation-for="StartDate" class="small text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="EndDate" class="form-label"></label>
+                <input asp-for="EndDate" type="datetime-local" class="form-control" readonly="@ViewBag.IsDelete">
+                <span asp-validation-for="EndDate" class="small text-danger"></span>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="TotalPhysicalTickets" class="form-label"></label>
+                        <input asp-for="TotalPhysicalTickets" class="form-control" readonly="@ViewBag.IsDelete" placeholder="Count e.g. 245">
+                        <span asp-validation-for="TotalPhysicalTickets" class="small text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="PhysicalTicketPrice" class="form-label"></label>
+                        <input asp-for="PhysicalTicketPrice" class="form-control" readonly="@ViewBag.IsDelete" placeholder="e.g. 400.00">
+                        <span asp-validation-for="PhysicalTicketPrice" class="small text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label asp-for="TotalVirtualTickets" class="form-label"></label>
+                        <input asp-for="TotalVirtualTickets" class="form-control" readonly="@ViewBag.IsDelete" placeholder="Count e.g. 245">
+                        <span asp-validation-for="TotalVirtualTickets" class="small text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="VirtualTicketPrice" class="form-label"></label>
+                        <input asp-for="VirtualTicketPrice" class="form-control" readonly="@ViewBag.IsDelete" placeholder="e.g. 400.00">
+                        <span asp-validation-for="VirtualTicketPrice" class="small text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            @if (ViewBag.IsDelete == true)
+            {
+                <input type="submit" class="btn btn-danger mt-3" value="Delete" />
+            }
+            else
+            {
+                <div class="d-flex justify-content-between mt-3">
+                    <input type="submit" class="btn btn-primary" value="Submit" />
+                    <input type="reset" class="btn btn-secondary" value="Clear" />
+                </div>
+            }
+        </form>
+    </div>
+</div>

@@ -1,0 +1,57 @@
+﻿@model TechExpoWorld.Web.ViewModels.News.NewsArticleFormModel
+
+<div class="row">
+    <div class="col-sm-12 offset-md-1 col-md-10 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
+        <h2 class="text-center">@ViewBag.Title</h2>
+
+        <form method="post">
+            <div class="mb-3">
+                <label asp-for="Title" class="form-label"></label>
+                <input asp-for="Title" class="form-control" readonly="@ViewBag.IsDelete" placeholder="The potential of IoT and Cloud Computing...">
+                <span asp-validation-for="Title" class="small text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Content" class="form-label"></label>
+                <textarea asp-for="Content" class="form-control" rows="10" readonly="@ViewBag.IsDelete" placeholder="The Internet of Things (IoT) and Cloud Computing are quite the rage these days in the world of information..."></textarea>
+                <span asp-validation-for="Content" class="small text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="ImageUrl" class="form-label"></label>
+                <input asp-for="ImageUrl" class="form-control" readonly="@ViewBag.IsDelete" placeholder="Add a URL for picture here...">
+                <span asp-validation-for="ImageUrl" class="small text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="CategoryId" class="form-label"></label>
+                <select asp-for="CategoryId" class="form-select" disabled="@ViewBag.IsDelete">
+                    @foreach (var newsCategory in Model.Categories)
+                    {
+                        <option value="@newsCategory.Id">@newsCategory.Name</option>
+                    }
+                </select>
+                <span asp-validation-for="CategoryId" class="small text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="TagIds" class="form-label"></label>
+                <select asp-for="TagIds" class="form-select" multiple size="6" disabled="@ViewBag.IsDelete">
+                    @foreach (var tag in Model.Tags)
+                    {
+                        <option value="@tag.Id">@tag.Name</option>
+                    }
+                </select>
+                <span asp-validation-for="TagIds" class="small text-danger"></span>
+            </div>
+
+            @if (ViewBag.IsDelete == true)
+            {
+                <input type="submit" class="btn btn-danger mt-2" value="Delete" />
+            }
+            else
+            {
+                <div class="d-flex justify-content-between mt-4">
+                    <input type="submit" class="btn btn-primary" value="Submit" />
+                    <input type="reset" class="btn btn-secondary" value="Clear" />
+                </div>
+            }
+        </form>
+    </div>
+</div>

@@ -1,0 +1,23 @@
+﻿@model TechExpoWorld.Web.ViewModels.News.NewsArticleFormModel
+
+@{
+    ViewBag.Title = "Edit this News Article";
+}
+
+<partial name="_NewsArticleFormPartial" model="Model" />
+
+@section Scripts {
+    <script>
+        document.querySelector('input[type="reset"]')
+            .addEventListener('click', (e) => {
+                e.preventDefault();
+
+                document.getElementById('Title').value = '';
+                document.getElementById('Content').value = '';
+                document.getElementById('ImageUrl').value = '';
+                document.getElementById('CategoryId')
+                    .querySelector('option[selected]')?.removeAttribute('selected');
+                document.getElementById('TagIds').value = '';
+            });
+    </script>
+}

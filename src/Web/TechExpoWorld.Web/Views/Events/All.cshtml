@@ -1,0 +1,43 @@
+﻿@using TechExpoWorld.Web.ViewModels.Events
+@model IEnumerable<EventServiceModel>
+
+@{
+    ViewBag.Title = "All Events";
+}
+
+@if (!Model.Any())
+{
+    <h2 class="text-center">No event announcements!</h2>
+}
+
+<div class="row row-cols-1 row-cols-md-4 g-4 text-center mt-3">
+    @foreach (var eventData in Model)
+    {
+        <div class="col">
+            <div class="card h-100">
+                <a asp-controller="Events" asp-action="Details" asp-route-id="@eventData.Id" asp-route-information="@eventData.GetEventInformation()">
+                    <img src="/event-image.jpg" class="card-img-top" alt="event image">
+                </a>
+                <div class="card-body">
+                    <h5 class="card-title">@eventData.Title</h5>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">@eventData.Location</li>
+                    <li class="list-group-item fst-italic">@eventData.StartDate - @eventData.EndDate</li>
+                    <li class="list-group-item">
+                        <a asp-controller="Events" asp-action="Details" asp-route-id="@eventData.Id" asp-route-information="@eventData.GetEventInformation()">
+                            See available tickets and information about the event
+                        </a>
+                    </li>
+                    @if (User.IsAdmin())
+                    {
+                        <li class="list-group-item d-flex justify-content-evenly">
+                            <a asp-area="Admin" asp-controller="Events" asp-action="Edit" asp-route-id="@eventData.Id" class="btn btn-info btn-outline-warning">Edit</a>
+                            <a asp-area="Admin" asp-controller="Events" asp-action="Delete" asp-route-id="@eventData.Id" class="btn btn-danger btn-outline-dark">Delete</a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    }
+</div>

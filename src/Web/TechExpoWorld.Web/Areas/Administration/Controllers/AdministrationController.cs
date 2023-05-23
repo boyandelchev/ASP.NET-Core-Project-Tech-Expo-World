@@ -7,7 +7,7 @@
 
     using static TechExpoWorld.Common.GlobalConstants.Admin;
 
-    [Authorize(Roles = AdministratorRoleName)]
+    [Authorize(Roles = RoleName)]
     [Area(AreaName)]
     public class AdministrationController : BaseController
     {

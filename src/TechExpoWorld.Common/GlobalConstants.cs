@@ -2,7 +2,23 @@
 {
     public static class GlobalConstants
     {
-        public const string SystemName = "TechExpoWorld";
+        public static class System
+        {
+            public const string Name = "TechExpoWorld";
+        }
+
+        public static class Admin
+        {
+            public const string AreaName = "Administration";
+            public const string RoleName = "Administrator";
+            public const string Email = "admin@tew.com";
+            public const string Password = "admin1";
+        }
+
+        public static class Cache
+        {
+            public const string LatestStatisticsAndNewsArticlesCacheKey = nameof(LatestStatisticsAndNewsArticlesCacheKey);
+        }
 
         public static class TempData
         {
@@ -24,25 +40,6 @@
 
             public const string BookedTicket = "You have booked a ticket successfully!";
             public const string CancelledTicket = "You have cancelled a ticket successfully!";
-        }
-
-        public static class Cache
-        {
-            public const string LatestStatisticsAndNewsArticlesCacheKey = nameof(LatestStatisticsAndNewsArticlesCacheKey);
-        }
-
-        public static class User
-        {
-            public const int PasswordMinLength = 6;
-            public const int PasswordMaxLength = 100;
-        }
-
-        public static class Admin
-        {
-            public const string AreaName = "Administration";
-            public const string AdministratorRoleName = "Administrator";
-            public const string AdminEmail = "admin@tew.com";
-            public const string AdminPassword = "admin1";
         }
 
         public static class NewsArticle
@@ -73,6 +70,15 @@
             public const int NameMaxLength = 50;
         }
 
+        public static class Comment
+        {
+            public const int ContentMinLength = 2;
+            public const int ContentMaxLength = 500;
+            public const int ApplicationUserIdMaxLength = 68;
+
+            public const string DisplayAddAComment = "Add a comment";
+        }
+
         public static class Author
         {
             public const int NameMinLength = 2;
@@ -85,15 +91,6 @@
 
             public const string DisplayPhoneNumber = "Phone Number";
             public const string DisplayPhotoUrl = "Photo URL";
-        }
-
-        public static class Comment
-        {
-            public const int ContentMinLength = 2;
-            public const int ContentMaxLength = 500;
-            public const int ApplicationUserIdMaxLength = 68;
-
-            public const string DisplayAddAComment = "Add a comment";
         }
 
         public static class Event
@@ -119,6 +116,15 @@
             public const string DisplayPriceVirtual = "Price - Virtual";
 
             public const string DisplayFormatDateTime = "{0:yyyy-MM-dd HH:mm}";
+        }
+
+        public static class Ticket
+        {
+            public const int TypeMaxLength = 20;
+            public const int AttendeeIdMaxLength = 68;
+
+            public const int PricePrecision = 8;
+            public const int PriceScale = 2;
         }
 
         public static class Attendee
@@ -150,15 +156,6 @@
             public const string ErrorCompanyType = "Company type does not exist.";
             public const string ErrorCompanySector = "Company sector does not exist.";
             public const string ErrorCompanySize = "Company size does not exist.";
-        }
-
-        public static class Ticket
-        {
-            public const int TypeMaxLength = 20;
-            public const int AttendeeIdMaxLength = 68;
-
-            public const int PricePrecision = 8;
-            public const int PriceScale = 2;
         }
 
         public static class Country

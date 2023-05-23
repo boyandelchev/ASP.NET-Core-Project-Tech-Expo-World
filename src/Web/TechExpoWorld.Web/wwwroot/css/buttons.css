@@ -1,0 +1,15 @@
+﻿.scroll-to-top-button {
+    position: sticky;
+    bottom: 3%;
+    left: 90%;
+    background-color: rgb(110, 190, 75, 0.50);
+    color: white;
+    font-size: 20px;
+    padding: 10px;
+    border: none;
+    border-radius: 20px;
+}
+
+    .scroll-to-top-button:hover {
+        background-color: rgb(150, 180, 80, 0.50);
+    }
