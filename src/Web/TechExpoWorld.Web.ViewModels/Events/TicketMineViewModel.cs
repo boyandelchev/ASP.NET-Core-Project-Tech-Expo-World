@@ -1,6 +1,6 @@
 ﻿namespace TechExpoWorld.Web.ViewModels.Events
 {
-    public class MyTicketViewModel
+    public class TicketMineViewModel
     {
         public int EventId { get; init; }
 

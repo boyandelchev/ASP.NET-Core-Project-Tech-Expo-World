@@ -1,0 +1,25 @@
+﻿@model TechExpoWorld.Web.ViewModels.Events.TicketsMineViewModel
+
+@{
+    ViewBag.Title = "My Tickets";
+    ViewBag.CountPhysicalTickets = 1;
+    ViewBag.CountVirtualTickets = 1;
+}
+
+@if (!Model.PhysicalTicketsMine.Any())
+{
+    <h2 class="text-center">You have no physical tickets!</h2>
+}
+else
+{
+    <partial name="_PhysicalTicketsMinePartial" model="Model.PhysicalTicketsMine" />
+}
+
+@if (!Model.VirtualTicketsMine.Any())
+{
+    <h2 class="text-center">You have no virtual tickets!</h2>
+}
+else
+{
+    <partial name="_VirtualTicketsMinePartial" model="Model.VirtualTicketsMine" />
+}

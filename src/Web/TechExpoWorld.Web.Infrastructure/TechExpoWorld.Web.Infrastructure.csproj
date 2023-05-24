@@ -20,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\TechExpoWorld.Common\TechExpoWorld.Common.csproj" />
+    <ProjectReference Include="..\TechExpoWorld.Web.ViewModels\TechExpoWorld.Web.ViewModels.csproj" />
   </ItemGroup>
 
 </Project>

@@ -45,7 +45,7 @@
 
 @{
     ViewBag.NewsArticleId = Model.NewsArticle.Id;
-    ViewBag.CommentForm = Model.CommentForm;
+    ViewBag.CommentInput = Model.CommentInput;
     ViewBag.Comments = Model.Comments;
     ViewBag.Depth = 0;
 }
@@ -54,7 +54,7 @@
     <button class="btn btn-primary">Leave a comment below</button>
     <article class="d-none">
         <button class="btn btn-light">Hide</button>
-        <partial name="_CommentFormPartial" />
+        <partial name="_CommentInputPartial" />
     </article>
 </section>
 

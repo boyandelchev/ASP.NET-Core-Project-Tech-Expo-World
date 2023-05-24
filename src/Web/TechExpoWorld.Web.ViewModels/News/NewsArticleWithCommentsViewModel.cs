@@ -8,7 +8,7 @@
     {
         public NewsArticleDetailsViewModel NewsArticle { get; init; }
 
-        public CommentInputModel CommentForm { get; init; }
+        public CommentInputModel CommentInput { get; init; }
 
         public IEnumerable<CommentViewModel> Comments { get; init; }
 
