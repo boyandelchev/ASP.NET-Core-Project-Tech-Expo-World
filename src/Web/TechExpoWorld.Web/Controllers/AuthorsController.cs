@@ -11,18 +11,18 @@
 
     using static TechExpoWorld.Common.GlobalConstants.TempData;
 
-    public class AuthorsController : Controller
+    public class AuthorsController : BaseController
     {
         private const string ControllerNews = "News";
-        private readonly IAuthorsService authors;
+        private readonly IAuthorsService authorsService;
 
-        public AuthorsController(IAuthorsService authors)
-            => this.authors = authors;
+        public AuthorsController(IAuthorsService authorsService)
+            => this.authorsService = authorsService;
 
         [Authorize]
         public async Task<IActionResult> BecomeAuthor()
         {
-            if (await this.authors.IsAuthorAsync(this.User.Id()) || this.User.IsAdmin())
+            if (await this.authorsService.IsAuthorAsync(this.User.Id()) || this.User.IsAdmin())
             {
                 return this.BadRequest();
             }
@@ -32,25 +32,25 @@
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> BecomeAuthor(BecomeAuthorInputModel author)
+        public async Task<IActionResult> BecomeAuthor(BecomeAuthorInputModel input)
         {
             var userId = this.User.Id();
 
-            if (await this.authors.IsAuthorAsync(userId) || this.User.IsAdmin())
+            if (await this.authorsService.IsAuthorAsync(userId) || this.User.IsAdmin())
             {
                 return this.BadRequest();
             }
 
             if (!this.ModelState.IsValid)
             {
-                return this.View(author);
+                return this.View(input);
             }
 
-            await this.authors.CreateAsync(
-                author.Name,
-                author.PhoneNumber,
-                author.Address,
-                author.PhotoUrl,
+            await this.authorsService.CreateAsync(
+                input.Name,
+                input.PhoneNumber,
+                input.Address,
+                input.PhotoUrl,
                 userId);
 
             this.TempData[GlobalMessageKey] = CreatedAuthor;
