@@ -1,4 +1,4 @@
-﻿namespace TechExpoWorld.Infrastructure.Extensions
+﻿namespace TechExpoWorld.Web.Infrastructure.Extensions
 {
     using System.Security.Claims;
 
