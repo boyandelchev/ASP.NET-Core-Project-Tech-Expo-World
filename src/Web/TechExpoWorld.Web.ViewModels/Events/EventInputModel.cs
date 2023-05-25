@@ -40,10 +40,10 @@
 
         [Range(TicketPriceMinRange, TicketPriceMaxRange)]
         [Display(Name = DisplayPricePhysical)]
-        public decimal PhysicalTicketPrice { get; init; }
+        public decimal PhysicalTicketPrice { get; set; }
 
         [Range(TicketPriceMinRange, TicketPriceMaxRange)]
         [Display(Name = DisplayPriceVirtual)]
-        public decimal VirtualTicketPrice { get; init; }
+        public decimal VirtualTicketPrice { get; set; }
     }
 }

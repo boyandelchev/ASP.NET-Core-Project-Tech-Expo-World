@@ -16,9 +16,15 @@
             this.endDate = endDate;
         }
 
+        public void AddValidation(ClientModelValidationContext context)
+        {
+            this.MergeAttribute(context.Attributes, "data-val", "true");
+            this.MergeAttribute(context.Attributes, "data-val-isdatetimebefore", Error);
+        }
+
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            var endDateProperty = validationContext.ObjectType.GetProperty(endDate);
+            var endDateProperty = validationContext.ObjectType.GetProperty(this.endDate);
 
             if (endDateProperty == null)
             {
@@ -33,12 +39,6 @@
             }
 
             return ValidationResult.Success;
-        }
-
-        public void AddValidation(ClientModelValidationContext context)
-        {
-            MergeAttribute(context.Attributes, "data-val", "true");
-            MergeAttribute(context.Attributes, "data-val-isdatetimebefore", Error);
         }
 
         private bool MergeAttribute(IDictionary<string, string> attributes, string key, string value)

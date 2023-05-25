@@ -8,9 +8,9 @@
 
         public int TotalVirtualTickets { get; init; }
 
-        public int TotalAvailablePhysicalTickets { get; init; }
+        public int TotalAvailablePhysicalTickets { get; set; }
 
-        public int TotalAvailableVirtualTickets { get; init; }
+        public int TotalAvailableVirtualTickets { get; set; }
 
         public decimal PhysicalTicketPrice { get; set; }
 
