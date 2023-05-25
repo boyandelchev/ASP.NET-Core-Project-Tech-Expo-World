@@ -5,6 +5,8 @@
         public static class System
         {
             public const string Name = "TechExpoWorld";
+            public const string Ellipsis = "...";
+            public const string DateTimeFormat = "dd.MM.yyyy HH:mm";
         }
 
         public static class Admin

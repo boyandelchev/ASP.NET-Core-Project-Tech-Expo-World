@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Data\TechExpoWorld.Data.Models\TechExpoWorld.Data.Models.csproj" />
+    <ProjectReference Include="..\..\Services\TechExpoWorld.Services.Data\TechExpoWorld.Services.Data.csproj" />
     <ProjectReference Include="..\..\Services\TechExpoWorld.Services.Mapping\TechExpoWorld.Services.Mapping.csproj" />
   </ItemGroup>
 

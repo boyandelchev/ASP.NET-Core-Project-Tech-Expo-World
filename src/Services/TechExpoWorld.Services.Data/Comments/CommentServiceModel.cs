@@ -1,8 +1,8 @@
-﻿namespace TechExpoWorld.Web.ViewModels.Comments
+﻿namespace TechExpoWorld.Services.Data.Comments
 {
     using System.Collections.Generic;
 
-    public class CommentViewModel
+    public class CommentServiceModel
     {
         public int Id { get; init; }
 
@@ -14,6 +14,6 @@
 
         public int? ParentCommentId { get; init; }
 
-        public IEnumerable<CommentViewModel> ChildrenComments { get; set; } = new List<CommentViewModel>();
+        public IEnumerable<CommentServiceModel> ChildrenComments { get; set; } = new List<CommentServiceModel>();
     }
 }

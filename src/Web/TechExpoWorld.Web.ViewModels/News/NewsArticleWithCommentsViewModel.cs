@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
 
+    using TechExpoWorld.Services.Data.Comments;
     using TechExpoWorld.Web.ViewModels.Comments;
 
     public class NewsArticleWithCommentsViewModel
@@ -10,7 +11,7 @@
 
         public CommentInputModel CommentInput { get; init; }
 
-        public IEnumerable<CommentViewModel> Comments { get; init; }
+        public IEnumerable<CommentServiceModel> Comments { get; init; }
 
         public int TotalComments { get; init; }
     }
