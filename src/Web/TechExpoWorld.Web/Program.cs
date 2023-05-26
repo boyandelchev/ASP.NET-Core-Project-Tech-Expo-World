@@ -17,6 +17,12 @@
     using TechExpoWorld.Data.Repositories;
     using TechExpoWorld.Data.Seeding;
     using TechExpoWorld.Services.Data;
+    using TechExpoWorld.Services.Data.Attendees;
+    using TechExpoWorld.Services.Data.Authors;
+    using TechExpoWorld.Services.Data.Comments;
+    using TechExpoWorld.Services.Data.Events;
+    using TechExpoWorld.Services.Data.News;
+    using TechExpoWorld.Services.Data.Statistics;
     using TechExpoWorld.Services.Mapping;
     using TechExpoWorld.Services.Messaging;
     using TechExpoWorld.Web.ViewModels;
@@ -55,6 +61,8 @@
             services.AddRazorPages();
             services.AddDatabaseDeveloperPageExceptionFilter();
 
+            services.AddMemoryCache();
+
             services.AddSingleton(configuration);
 
             // Data repositories
@@ -65,6 +73,12 @@
             // Application services
             services.AddTransient<IEmailSender, NullMessageSender>();
             services.AddTransient<ISettingsService, SettingsService>();
+            services.AddTransient<IAttendeesService, AttendeesService>();
+            services.AddTransient<IAuthorsService, AuthorsService>();
+            services.AddTransient<ICommentsService, CommentsService>();
+            services.AddTransient<IEventsService, EventsService>();
+            services.AddTransient<INewsService, NewsService>();
+            services.AddTransient<IStatisticsService, StatisticsService>();
         }
 
         private static void Configure(WebApplication app)
@@ -100,6 +114,8 @@
             app.UseAuthorization();
 
             app.MapControllerRoute("areaRoute", "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+            app.MapControllerRoute("newsEventDetails", "{controller=Home}/{action=Index}/{id?}/{information?}");
+            app.MapControllerRoute("cancelTicket", "{controller=Home}/{action=Index}/{id?}/{ticketId?}");
             app.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
             app.MapRazorPages();
         }

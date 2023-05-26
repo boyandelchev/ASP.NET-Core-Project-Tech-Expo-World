@@ -38,12 +38,12 @@
         public async Task<bool> IsAttendeeAsync(string userId)
             => await this.attendeesRepository
                 .All()
-                .AnyAsync(a => a.ApplicationUserId == userId);
+                .AnyAsync(a => a.UserId == userId);
 
         public async Task<string> AttendeeIdAsync(string userId)
             => await this.attendeesRepository
                 .All()
-                .Where(a => a.ApplicationUserId == userId)
+                .Where(a => a.UserId == userId)
                 .Select(a => a.Id)
                 .FirstOrDefaultAsync();
 
@@ -72,7 +72,7 @@
                 CompanyTypeId = companyTypeId,
                 CompanySectorId = companySectorId,
                 CompanySizeId = companySizeId,
-                ApplicationUserId = userId,
+                UserId = userId,
             };
 
             await this.attendeesRepository.AddAsync(attendee);

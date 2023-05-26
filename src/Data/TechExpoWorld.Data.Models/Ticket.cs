@@ -23,7 +23,6 @@
 
         public Event Event { get; set; }
 
-        [MaxLength(AttendeeIdMaxLength)]
         public string AttendeeId { get; set; }
 
         public Attendee Attendee { get; set; }

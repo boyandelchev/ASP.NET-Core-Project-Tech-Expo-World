@@ -1,6 +1,9 @@
 ﻿namespace TechExpoWorld.Web.ViewModels.News
 {
-    public class CategoryViewModel
+    using TechExpoWorld.Data.Models;
+    using TechExpoWorld.Services.Mapping;
+
+    public class CategoryViewModel : IMapFrom<Category>
     {
         public int Id { get; init; }
 

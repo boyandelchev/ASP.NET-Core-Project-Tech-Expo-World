@@ -18,10 +18,9 @@
         public NewsArticle NewsArticle { get; init; }
 
         [Required]
-        [MaxLength(ApplicationUserIdMaxLength)]
-        public string ApplicationUserId { get; set; }
+        public string UserId { get; set; }
 
-        public ApplicationUser ApplicationUser { get; set; }
+        public ApplicationUser User { get; set; }
 
         public int Depth { get; init; }
 

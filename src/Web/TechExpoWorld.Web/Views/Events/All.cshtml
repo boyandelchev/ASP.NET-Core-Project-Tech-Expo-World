@@ -32,8 +32,8 @@
                     @if (User.IsAdmin())
                     {
                         <li class="list-group-item d-flex justify-content-evenly">
-                            <a asp-area="Admin" asp-controller="Events" asp-action="Edit" asp-route-id="@eventData.Id" class="btn btn-info btn-outline-warning">Edit</a>
-                            <a asp-area="Admin" asp-controller="Events" asp-action="Delete" asp-route-id="@eventData.Id" class="btn btn-danger btn-outline-dark">Delete</a>
+                            <a asp-area="Administration" asp-controller="Events" asp-action="Edit" asp-route-id="@eventData.Id" class="btn btn-info btn-outline-warning">Edit</a>
+                            <a asp-area="Administration" asp-controller="Events" asp-action="Delete" asp-route-id="@eventData.Id" class="btn btn-danger btn-outline-dark">Delete</a>
                         </li>
                     }
                 </ul>

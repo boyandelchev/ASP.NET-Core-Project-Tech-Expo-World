@@ -70,7 +70,7 @@
                 EndDate = endDate.Value,
                 TotalPhysicalTickets = totalPhysicalTickets,
                 TotalVirtualTickets = totalVirtualTickets,
-                ApplicationUserId = userId,
+                UserId = userId,
             };
 
             eventData.Tickets = CreateAllTickets(

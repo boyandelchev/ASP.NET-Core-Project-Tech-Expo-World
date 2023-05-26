@@ -31,7 +31,7 @@
                     Id = c.Id,
                     Content = c.Content,
                     CreatedOn = c.CreatedOn.ToString(DateTimeFormat, CultureInfo.InvariantCulture),
-                    UserName = c.ApplicationUser.UserName,
+                    UserName = c.User.UserName,
                     ParentCommentId = c.ParentCommentId,
                     ChildrenComments = c.ChildrenComments as IEnumerable<CommentServiceModel>,
                 })
@@ -92,7 +92,7 @@
                 Content = content,
                 Depth = depth,
                 ParentCommentId = parentCommentId,
-                ApplicationUserId = userId,
+                UserId = userId,
             };
 
             await this.commentsRepository.AddAsync(comment);

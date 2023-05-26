@@ -1,6 +1,9 @@
 ﻿namespace TechExpoWorld.Web.ViewModels.News
 {
-    public class TagViewModel
+    using TechExpoWorld.Data.Models;
+    using TechExpoWorld.Services.Mapping;
+
+    public class TagViewModel : IMapFrom<Tag>
     {
         public int Id { get; init; }
 

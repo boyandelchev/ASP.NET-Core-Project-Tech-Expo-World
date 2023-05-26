@@ -18,12 +18,12 @@
         public async Task<bool> IsAuthorAsync(string userId)
             => await this.authorsRepository
                 .All()
-                .AnyAsync(a => a.ApplicationUserId == userId);
+                .AnyAsync(a => a.UserId == userId);
 
         public async Task<string> AuthorIdAsync(string userId)
             => await this.authorsRepository
                 .All()
-                .Where(a => a.ApplicationUserId == userId)
+                .Where(a => a.UserId == userId)
                 .Select(a => a.Id)
                 .FirstOrDefaultAsync();
 
@@ -40,7 +40,7 @@
                 PhoneNumber = phoneNumber,
                 Address = address,
                 PhotoUrl = photoUrl,
-                ApplicationUserId = userId,
+                UserId = userId,
             };
 
             await this.authorsRepository.AddAsync(author);

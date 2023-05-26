@@ -31,10 +31,9 @@
         public int TotalVirtualTickets { get; set; }
 
         [Required]
-        [MaxLength(ApplicationUserIdMaxLength)]
-        public string ApplicationUserId { get; set; }
+        public string UserId { get; set; }
 
-        public ApplicationUser ApplicationUser { get; set; }
+        public ApplicationUser User { get; set; }
 
         public IEnumerable<Ticket> Tickets { get; set; } = new List<Ticket>();
     }

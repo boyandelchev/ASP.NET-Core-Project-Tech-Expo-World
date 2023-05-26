@@ -79,13 +79,13 @@
                 .Entity<Author>()
                 .HasOne<ApplicationUser>()
                 .WithOne()
-                .HasForeignKey<Author>(a => a.ApplicationUserId);
+                .HasForeignKey<Author>(a => a.UserId);
 
             builder
                 .Entity<Attendee>()
                 .HasOne<ApplicationUser>()
                 .WithOne()
-                .HasForeignKey<Attendee>(a => a.ApplicationUserId);
+                .HasForeignKey<Attendee>(a => a.UserId);
 
             // Needed for Identity models configuration
             base.OnModelCreating(builder);

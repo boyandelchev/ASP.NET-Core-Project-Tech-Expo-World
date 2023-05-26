@@ -3,9 +3,12 @@
     using System;
     using System.ComponentModel.DataAnnotations;
 
+    using TechExpoWorld.Data.Models;
+    using TechExpoWorld.Services.Mapping;
+
     using static TechExpoWorld.Common.GlobalConstants.Event;
 
-    public class EventInputModel
+    public class EventInputModel : IMapFrom<Event>
     {
         [Required]
         [StringLength(TitleMaxLength, MinimumLength = TitleMinLength)]

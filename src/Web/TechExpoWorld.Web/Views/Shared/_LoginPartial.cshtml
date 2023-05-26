@@ -16,7 +16,7 @@
         if (isAuthor && !isAdmin)
         {
             <li class="nav-item">
-                <a class="nav-link text-light" asp-area="" asp-controller="News" asp-action="MyNewsArticles">My News Articles</a>
+                <a class="nav-link text-light" asp-area="" asp-controller="News" asp-action="NewsArticlesMine">My News Articles</a>
             </li>
         }
         else if (!isAdmin)
@@ -28,7 +28,7 @@
         if (isAttendee && !isAdmin)
         {
             <li class="nav-item">
-                <a class="nav-link text-light" asp-area="" asp-controller="Events" asp-action="MyTickets">My Tickets</a>
+                <a class="nav-link text-light" asp-area="" asp-controller="Events" asp-action="TicketsMine">My Tickets</a>
             </li>
         }
         else if (!isAdmin)

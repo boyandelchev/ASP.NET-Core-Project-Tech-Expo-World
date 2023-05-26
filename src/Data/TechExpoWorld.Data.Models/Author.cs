@@ -1,5 +1,6 @@
 ﻿namespace TechExpoWorld.Data.Models
 {
+    using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
@@ -9,6 +10,11 @@
 
     public class Author : BaseDeletableModel<string>
     {
+        public Author()
+        {
+            this.Id = Guid.NewGuid().ToString();
+        }
+
         [Required]
         [MaxLength(NameMaxLength)]
         public string Name { get; set; }
@@ -25,8 +31,7 @@
         public string PhotoUrl { get; set; }
 
         [Required]
-        [MaxLength(ApplicationUserIdMaxLength)]
-        public string ApplicationUserId { get; set; }
+        public string UserId { get; set; }
 
         public IEnumerable<NewsArticle> NewsArticles { get; init; } = new List<NewsArticle>();
     }

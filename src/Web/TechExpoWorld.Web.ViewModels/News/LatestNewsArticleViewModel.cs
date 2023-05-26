@@ -1,6 +1,9 @@
 ﻿namespace TechExpoWorld.Web.ViewModels.News
 {
-    public class LatestNewsArticleViewModel : INewsArticleModel
+    using TechExpoWorld.Data.Models;
+    using TechExpoWorld.Services.Mapping;
+
+    public class LatestNewsArticleViewModel : INewsArticleModel, IMapFrom<NewsArticle>
     {
         public int Id { get; init; }
 

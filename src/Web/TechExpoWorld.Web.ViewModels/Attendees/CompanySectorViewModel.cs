@@ -1,6 +1,9 @@
 ﻿namespace TechExpoWorld.Web.ViewModels.Attendees
 {
-    public class CompanySectorViewModel : AttendeeWorkDetailsModel
+    using TechExpoWorld.Data.Models;
+    using TechExpoWorld.Services.Mapping;
+
+    public class CompanySectorViewModel : AttendeeWorkDetailsModel, IMapFrom<CompanySector>
     {
     }
 }

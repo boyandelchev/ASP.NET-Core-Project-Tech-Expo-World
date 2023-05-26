@@ -2,10 +2,16 @@
 {
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using System.Linq;
+
+    using AutoMapper;
+
+    using TechExpoWorld.Data.Models;
+    using TechExpoWorld.Services.Mapping;
 
     using static TechExpoWorld.Common.GlobalConstants.NewsArticle;
 
-    public class NewsArticleInputModel : INewsArticleModel
+    public class NewsArticleInputModel : INewsArticleModel, IMapFrom<NewsArticle>, IHaveCustomMappings
     {
         [Required]
         [StringLength(TitleMaxLength, MinimumLength = TitleMinLength)]
@@ -29,5 +35,13 @@
         public IEnumerable<CategoryViewModel> Categories { get; set; }
 
         public IEnumerable<TagViewModel> Tags { get; set; }
+
+        public void CreateMappings(IProfileExpression configuration)
+        {
+            configuration.CreateMap<NewsArticle, NewsArticleInputModel>()
+                .ForMember(
+                    m => m.TagIds,
+                    opt => opt.MapFrom(na => na.NewsArticleTags.Select(nat => nat.TagId)));
+        }
     }
 }

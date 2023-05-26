@@ -50,7 +50,6 @@
             public const int TitleMaxLength = 100;
             public const int ContentMinLength = 10;
             public const int ContentMaxLength = 50000;
-            public const int AuthorIdMaxLength = 68;
 
             public const string DisplaySearchByText = "Search by text";
             public const string DisplaySortByDate = "Sort by date";
@@ -76,7 +75,6 @@
         {
             public const int ContentMinLength = 2;
             public const int ContentMaxLength = 500;
-            public const int ApplicationUserIdMaxLength = 68;
 
             public const string DisplayAddAComment = "Add a comment";
         }
@@ -89,7 +87,6 @@
             public const int PhoneNumberMaxLength = 30;
             public const int AddressMinLength = 10;
             public const int AddressMaxLength = 80;
-            public const int ApplicationUserIdMaxLength = 68;
 
             public const string DisplayPhoneNumber = "Phone Number";
             public const string DisplayPhotoUrl = "Photo URL";
@@ -103,7 +100,6 @@
             public const int ContentMaxLength = 50000;
             public const int LocationMinLength = 2;
             public const int LocationMaxLength = 100;
-            public const int ApplicationUserIdMaxLength = 68;
 
             public const int TicketCountMinRange = 1;
             public const int TicketCountMaxRange = 2000;
@@ -123,8 +119,6 @@
         public static class Ticket
         {
             public const int TypeMaxLength = 20;
-            public const int AttendeeIdMaxLength = 68;
-
             public const int PricePrecision = 8;
             public const int PriceScale = 2;
         }
@@ -141,7 +135,6 @@
             public const int JobTitleMaxLength = 50;
             public const int CompanyNameMinLength = 2;
             public const int CompanyNameMaxLength = 50;
-            public const int ApplicationUserIdMaxLength = 68;
 
             public const string DisplayPhoneNumber = "Phone Number";
             public const string DisplayWorkEmail = "Work Email";

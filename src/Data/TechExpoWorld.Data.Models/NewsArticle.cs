@@ -27,7 +27,6 @@
         public Category Category { get; set; }
 
         [Required]
-        [MaxLength(AuthorIdMaxLength)]
         public string AuthorId { get; init; }
 
         public Author Author { get; init; }
