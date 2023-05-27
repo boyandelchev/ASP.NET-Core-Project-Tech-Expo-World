@@ -31,9 +31,9 @@
         public int TotalVirtualTickets { get; set; }
 
         [Required]
-        public string UserId { get; set; }
+        public string UserId { get; init; }
 
-        public ApplicationUser User { get; set; }
+        public ApplicationUser User { get; init; }
 
         public IEnumerable<Ticket> Tickets { get; set; } = new List<Ticket>();
     }

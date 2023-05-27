@@ -18,8 +18,8 @@
 
         public void AddValidation(ClientModelValidationContext context)
         {
-            this.MergeAttribute(context.Attributes, "data-val", "true");
-            this.MergeAttribute(context.Attributes, "data-val-isdatetimebefore", Error);
+            MergeAttribute(context.Attributes, "data-val", "true");
+            MergeAttribute(context.Attributes, "data-val-isdatetimebefore", Error);
         }
 
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
@@ -41,7 +41,7 @@
             return ValidationResult.Success;
         }
 
-        private bool MergeAttribute(IDictionary<string, string> attributes, string key, string value)
+        private static bool MergeAttribute(IDictionary<string, string> attributes, string key, string value)
         {
             if (attributes.ContainsKey(key))
             {

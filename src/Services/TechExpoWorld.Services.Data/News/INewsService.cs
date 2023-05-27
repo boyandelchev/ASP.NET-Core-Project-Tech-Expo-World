@@ -5,7 +5,7 @@
 
     public interface INewsService
     {
-        Task<ICollection<T>> AllAsync<T>(
+        Task<(IEnumerable<T> NewsArticles, int TotalNewsArticles)> AllAsync<T>(
             string category,
             string tag,
             string searchTerm,

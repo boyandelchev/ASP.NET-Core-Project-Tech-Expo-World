@@ -5,7 +5,7 @@
 
     public interface ICommentsService
     {
-        Task<IEnumerable<CommentServiceModel>> CommentsOnNewsArticleAsync(int newsArticleId);
+        Task<IEnumerable<CommentServiceModel>> CommentsOfNewsArticleAsync(int newsArticleId);
 
         Task<int> CreateAsync(
             int newsArticleId,
@@ -13,6 +13,6 @@
             int? parentCommentId,
             string userId);
 
-        Task<int> TotalCommentsOnNewsArticleAsync(int newsArticleId);
+        Task<int> TotalCommentsOfNewsArticleAsync(int newsArticleId);
     }
 }

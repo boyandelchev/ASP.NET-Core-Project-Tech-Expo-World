@@ -17,47 +17,47 @@
 
         [Required]
         [MaxLength(NameMaxLength)]
-        public string Name { get; set; }
+        public string Name { get; init; }
 
         [Required]
         [MaxLength(PhoneNumberMaxLength)]
-        public string PhoneNumber { get; set; }
+        public string PhoneNumber { get; init; }
 
         [Required]
         [MaxLength(WorkEmailMaxLength)]
-        public string WorkEmail { get; set; }
+        public string WorkEmail { get; init; }
 
         [Required]
         [MaxLength(JobTitleMaxLength)]
-        public string JobTitle { get; set; }
+        public string JobTitle { get; init; }
 
         [Required]
         [MaxLength(CompanyNameMaxLength)]
-        public string CompanyName { get; set; }
+        public string CompanyName { get; init; }
 
-        public int CountryId { get; set; }
+        public int CountryId { get; init; }
 
-        public Country Country { get; set; }
+        public Country Country { get; init; }
 
-        public int JobTypeId { get; set; }
+        public int JobTypeId { get; init; }
 
-        public JobType JobType { get; set; }
+        public JobType JobType { get; init; }
 
-        public int CompanyTypeId { get; set; }
+        public int CompanyTypeId { get; init; }
 
-        public CompanyType CompanyType { get; set; }
+        public CompanyType CompanyType { get; init; }
 
-        public int CompanySectorId { get; set; }
+        public int CompanySectorId { get; init; }
 
-        public CompanySector CompanySector { get; set; }
+        public CompanySector CompanySector { get; init; }
 
-        public int CompanySizeId { get; set; }
+        public int CompanySizeId { get; init; }
 
-        public CompanySize CompanySize { get; set; }
+        public CompanySize CompanySize { get; init; }
 
         [Required]
-        public string UserId { get; set; }
+        public string UserId { get; init; }
 
-        public IEnumerable<Ticket> Tickets { get; set; } = new List<Ticket>();
+        public IEnumerable<Ticket> Tickets { get; init; } = new List<Ticket>();
     }
 }

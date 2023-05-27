@@ -11,16 +11,16 @@
     {
         [Required]
         [MaxLength(ContentMaxLength)]
-        public string Content { get; set; }
+        public string Content { get; init; }
 
         public int? NewsArticleId { get; init; }
 
         public NewsArticle NewsArticle { get; init; }
 
         [Required]
-        public string UserId { get; set; }
+        public string UserId { get; init; }
 
-        public ApplicationUser User { get; set; }
+        public ApplicationUser User { get; init; }
 
         public int Depth { get; init; }
 

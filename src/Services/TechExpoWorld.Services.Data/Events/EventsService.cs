@@ -71,13 +71,12 @@
                 TotalPhysicalTickets = totalPhysicalTickets,
                 TotalVirtualTickets = totalVirtualTickets,
                 UserId = userId,
+                Tickets = CreateAllTickets(
+                    totalPhysicalTickets,
+                    physicalTicketPrice,
+                    totalVirtualTickets,
+                    virtualTicketPrice),
             };
-
-            eventData.Tickets = CreateAllTickets(
-                totalPhysicalTickets,
-                physicalTicketPrice,
-                totalVirtualTickets,
-                virtualTicketPrice);
 
             await this.eventsRepository.AddAsync(eventData);
             await this.eventsRepository.SaveChangesAsync();

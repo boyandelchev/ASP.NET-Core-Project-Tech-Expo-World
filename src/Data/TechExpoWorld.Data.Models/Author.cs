@@ -17,21 +17,21 @@
 
         [Required]
         [MaxLength(NameMaxLength)]
-        public string Name { get; set; }
+        public string Name { get; init; }
 
         [Required]
         [MaxLength(PhoneNumberMaxLength)]
-        public string PhoneNumber { get; set; }
+        public string PhoneNumber { get; init; }
 
         [Required]
         [MaxLength(AddressMaxLength)]
-        public string Address { get; set; }
+        public string Address { get; init; }
 
         [Required]
-        public string PhotoUrl { get; set; }
+        public string PhotoUrl { get; init; }
 
         [Required]
-        public string UserId { get; set; }
+        public string UserId { get; init; }
 
         public IEnumerable<NewsArticle> NewsArticles { get; init; } = new List<NewsArticle>();
     }

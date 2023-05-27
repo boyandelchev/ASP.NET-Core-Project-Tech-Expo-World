@@ -91,7 +91,9 @@
                 new ApplicationDbContextSeeder().SeedAsync(dbContext, serviceScope.ServiceProvider).GetAwaiter().GetResult();
             }
 
-            AutoMapperConfig.RegisterMappings(typeof(ErrorViewModel).GetTypeInfo().Assembly);
+            AutoMapperConfig.RegisterMappings(
+                typeof(ErrorViewModel).GetTypeInfo().Assembly,
+                typeof(ISettingsService).GetTypeInfo().Assembly);
 
             if (app.Environment.IsDevelopment())
             {
@@ -114,8 +116,11 @@
             app.UseAuthorization();
 
             app.MapControllerRoute("areaRoute", "{area:exists}/{controller=Home}/{action=Index}/{id?}");
-            app.MapControllerRoute("newsEventDetails", "{controller=Home}/{action=Index}/{id?}/{information?}");
-            app.MapControllerRoute("cancelTicket", "{controller=Home}/{action=Index}/{id?}/{ticketId?}");
+            app.MapControllerRoute(
+                "cancelTicket",
+                "Events/CancelTicket/{id}/{ticketId}",
+                new { controller = "Events", action = "CancelTicket" });
+            app.MapControllerRoute("newsEventDetails", "{controller=Home}/{action=Index}/{id}/{information}");
             app.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
             app.MapRazorPages();
         }

@@ -9,13 +9,13 @@
     [PrimaryKey(nameof(NewsArticleId), nameof(TagId))]
     public class NewsArticleTag : IAuditInfo, IDeletableEntity
     {
-        public int NewsArticleId { get; set; }
+        public int NewsArticleId { get; init; }
 
-        public NewsArticle NewsArticle { get; set; }
+        public NewsArticle NewsArticle { get; init; }
 
-        public int TagId { get; set; }
+        public int TagId { get; init; }
 
-        public Tag Tag { get; set; }
+        public Tag Tag { get; init; }
 
         public DateTime CreatedOn { get; set; }
 

@@ -12,7 +12,7 @@ using TechExpoWorld.Data;
 namespace TechExpoWorld.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230526171350_NewsEventsTables")]
+    [Migration("20230527123427_NewsEventsTables")]
     partial class NewsEventsTables
     {
         /// <inheritdoc />

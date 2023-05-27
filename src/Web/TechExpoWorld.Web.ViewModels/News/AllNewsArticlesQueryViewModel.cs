@@ -5,7 +5,7 @@
 
     using static TechExpoWorld.Common.GlobalConstants.NewsArticle;
 
-    public class AllNewsQueryViewModel
+    public class AllNewsArticlesQueryViewModel
     {
         public const int NewsArticlesPerPage = 3;
 
@@ -27,6 +27,6 @@
 
         public IEnumerable<string> Tags { get; set; }
 
-        public IEnumerable<NewsArticleViewModel> News { get; set; }
+        public IEnumerable<NewsArticleViewModel> NewsArticles { get; set; }
     }
 }

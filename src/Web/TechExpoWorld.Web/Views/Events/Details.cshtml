@@ -16,7 +16,7 @@
                     <div class="card-header text-uppercase">Physical Tickets - @Model.TotalAvailablePhysicalTickets/@Model.TotalPhysicalTickets available</div>
                     @if (Model.TotalAvailablePhysicalTickets > 0)
                     {
-                        <div class="card-body btn-outline-dark">
+                        <div class="card-body btn btn-outline-dark border-0">
                             <a asp-controller="Events" asp-action="BookPhysicalTicket" asp-route-id="@Model.Id" class="text-white">
                                 <h5 class="card-title">Book a Ticket</h5>
                                 <p class="card-text">£@Model.PhysicalTicketPrice</p>
@@ -31,7 +31,7 @@
                     <div class="card-header text-uppercase">Virtual Tickets - @Model.TotalAvailableVirtualTickets/@Model.TotalVirtualTickets available</div>
                     @if (Model.TotalAvailableVirtualTickets > 0)
                     {
-                        <div class="card-body btn-outline-dark">
+                        <div class="card-body btn btn-outline-dark border-0">
                             <a asp-controller="Events" asp-action="BookVirtualTicket" asp-route-id="@Model.Id" class="text-white">
                                 <h5 class="card-title">Book a Ticket</h5>
                                 <p class="card-text">£@Model.VirtualTicketPrice</p>

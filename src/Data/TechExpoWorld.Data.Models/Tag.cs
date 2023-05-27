@@ -11,7 +11,7 @@
     {
         [Required]
         [MaxLength(NameMaxLength)]
-        public string Name { get; set; }
+        public string Name { get; init; }
 
         public IEnumerable<NewsArticleTag> NewsArticleTags { get; init; } = new List<NewsArticleTag>();
     }

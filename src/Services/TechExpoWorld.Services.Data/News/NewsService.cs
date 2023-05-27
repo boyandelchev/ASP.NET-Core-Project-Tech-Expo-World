@@ -27,7 +27,7 @@
             this.tagsRepository = tagsRepository;
         }
 
-        public async Task<ICollection<T>> AllAsync<T>(
+        public async Task<(IEnumerable<T> NewsArticles, int TotalNewsArticles)> AllAsync<T>(
             string category,
             string tag,
             string searchTerm,
@@ -65,15 +65,17 @@
                 NewsSorting.Descending or _ => newsQuery.OrderByDescending(na => na.Id),
             };
 
-            var news = await this.GetNewsArticlesAsync<T>(newsQuery
+            var totalNewsArticles = await newsQuery.CountAsync();
+
+            var newsArticles = await GetNewsArticlesAsync<T>(newsQuery
                 .Skip((currentPage - 1) * newsArticlesPerPage)
                 .Take(newsArticlesPerPage));
 
-            return news;
+            return (newsArticles, totalNewsArticles);
         }
 
         public async Task<IEnumerable<T>> NewsArticlesByAuthorAsync<T>(string authorId)
-            => await this.GetNewsArticlesAsync<T>(this.newsArticlesRepository
+            => await GetNewsArticlesAsync<T>(this.newsArticlesRepository
                 .All()
                 .Where(na => na.AuthorId == authorId)
                 .OrderByDescending(na => na.Id));
@@ -219,6 +221,11 @@
         public bool TagsExist(IEnumerable<int> tagIds)
             => tagIds.All(tagId => this.TagExistsAsync(tagId).GetAwaiter().GetResult());
 
+        private static async Task<IEnumerable<T>> GetNewsArticlesAsync<T>(IQueryable<NewsArticle> newsQuery)
+            => await newsQuery
+                .To<T>()
+                .ToListAsync();
+
         private static IEnumerable<NewsArticleTag> CreateNewsArticleTags(IEnumerable<int> tagIds)
         {
             var newsArticleTags = new List<NewsArticleTag>();
@@ -235,11 +242,6 @@
             => await this.tagsRepository
                 .All()
                 .AnyAsync(t => t.Id == tagId);
-
-        private async Task<ICollection<T>> GetNewsArticlesAsync<T>(IQueryable<NewsArticle> newsQuery)
-            => await newsQuery
-                .To<T>()
-                .ToListAsync();
 
         private async Task<bool> ViewCountIncrementAsync(int newsArticleId)
         {

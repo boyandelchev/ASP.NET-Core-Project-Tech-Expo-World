@@ -21,10 +21,10 @@
 
         public int? EventId { get; set; }
 
-        public Event Event { get; set; }
+        public Event Event { get; init; }
 
         public string AttendeeId { get; set; }
 
-        public Attendee Attendee { get; set; }
+        public Attendee Attendee { get; init; }
     }
 }

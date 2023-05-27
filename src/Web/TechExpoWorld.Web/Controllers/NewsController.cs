@@ -32,20 +32,20 @@
             this.commentsService = commentsService;
         }
 
-        public async Task<IActionResult> All([FromQuery] AllNewsQueryViewModel query)
+        public async Task<IActionResult> All(AllNewsArticlesQueryViewModel query)
         {
-            var newsQueryResult = await this.newsService.AllAsync<NewsArticleViewModel>(
+            var (newsArticles, totalNewsArticles) = await this.newsService.AllAsync<NewsArticleViewModel>(
                 query.Category,
                 query.Tag,
                 query.SearchTerm,
                 (int)query.Sorting,
                 query.CurrentPage,
-                AllNewsQueryViewModel.NewsArticlesPerPage);
+                AllNewsArticlesQueryViewModel.NewsArticlesPerPage);
 
             query.Categories = await this.newsService.CategoryNamesAsync();
             query.Tags = await this.newsService.TagNamesAsync();
-            query.TotalNewsArticles = newsQueryResult.Count;
-            query.News = newsQueryResult;
+            query.TotalNewsArticles = totalNewsArticles;
+            query.NewsArticles = newsArticles;
 
             return this.View(query);
         }
@@ -64,8 +64,8 @@
                 return this.BadRequest();
             }
 
-            var comments = await this.commentsService.CommentsOnNewsArticleAsync(id);
-            var totalComments = await this.commentsService.TotalCommentsOnNewsArticleAsync(id);
+            var comments = await this.commentsService.CommentsOfNewsArticleAsync(id);
+            var totalComments = await this.commentsService.TotalCommentsOfNewsArticleAsync(id);
 
             return this.View(new NewsArticleWithCommentsViewModel
             {

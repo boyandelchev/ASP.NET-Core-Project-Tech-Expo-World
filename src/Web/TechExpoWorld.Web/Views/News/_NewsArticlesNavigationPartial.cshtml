@@ -1,5 +1,5 @@
 ﻿@using TechExpoWorld.Web.ViewModels.News
-@model AllNewsQueryViewModel
+@model AllNewsArticlesQueryViewModel
 
 @{
     var previousPage = Model.CurrentPage - 1;
@@ -9,9 +9,9 @@
         previousPage = 1;
     }
 
-    var maxPage = (int)Math.Ceiling((double)Model.TotalNewsArticles / AllNewsQueryViewModel.NewsArticlesPerPage);
+    var maxPage = (int)Math.Ceiling((double)Model.TotalNewsArticles / AllNewsArticlesQueryViewModel.NewsArticlesPerPage);
 
-    var isNextButtonDisabled = Model.CurrentPage == maxPage || !Model.News.Any();
+    var isNextButtonDisabled = Model.CurrentPage == maxPage || !Model.NewsArticles.Any();
 
     var firstPage = Model.CurrentPage - 3;
     var lastPage = Model.CurrentPage + 3;

@@ -1,7 +1,6 @@
 ﻿namespace TechExpoWorld.Services.Data.Comments
 {
     using System.Collections.Generic;
-    using System.Globalization;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -9,8 +8,7 @@
 
     using TechExpoWorld.Data.Common.Repositories;
     using TechExpoWorld.Data.Models;
-
-    using static TechExpoWorld.Common.GlobalConstants.System;
+    using TechExpoWorld.Services.Mapping;
 
     public class CommentsService : ICommentsService
     {
@@ -20,41 +18,34 @@
         public CommentsService(IDeletableEntityRepository<Comment> commentsRepository)
             => this.commentsRepository = commentsRepository;
 
-        public async Task<IEnumerable<CommentServiceModel>> CommentsOnNewsArticleAsync(int newsArticleId)
+        public async Task<IEnumerable<CommentServiceModel>> CommentsOfNewsArticleAsync(int newsArticleId)
         {
-            var commentsById = await this.commentsRepository
+            var comments = await this.commentsRepository
                 .All()
                 .Where(c => c.NewsArticleId == newsArticleId)
-                .OrderByDescending(c => c.Id)
-                .Select(c => new CommentServiceModel
-                {
-                    Id = c.Id,
-                    Content = c.Content,
-                    CreatedOn = c.CreatedOn.ToString(DateTimeFormat, CultureInfo.InvariantCulture),
-                    UserName = c.User.UserName,
-                    ParentCommentId = c.ParentCommentId,
-                    ChildrenComments = c.ChildrenComments as IEnumerable<CommentServiceModel>,
-                })
-                .ToDictionaryAsync(c => c.Id, c => c);
+                .To<CommentServiceModel>()
+                .ToListAsync();
 
-            var childrenCommentsById = commentsById
-                .ToDictionary(kvp => kvp.Key, kvp => kvp.Value.ChildrenComments
+            var childrenCommentsById = comments
+                .ToDictionary(c => c.Id, c => c.ChildrenComments
                     .OrderByDescending(c => c.Id)
                     .AsEnumerable());
 
-            var comments = commentsById.Values.Where(c => c.ParentCommentId == null);
+            var parentComments = comments
+                .Where(c => c.ParentCommentId == null)
+                .OrderByDescending(c => c.Id);
 
-            foreach (var c in comments)
+            foreach (var c in parentComments)
             {
                 c.ChildrenComments = childrenCommentsById[c.Id];
             }
 
-            foreach (var c in comments)
+            foreach (var c in parentComments)
             {
                 AddChildrenComments(c, childrenCommentsById);
             }
 
-            return comments;
+            return parentComments;
         }
 
         public async Task<int> CreateAsync(
@@ -101,7 +92,7 @@
             return comment.Id;
         }
 
-        public async Task<int> TotalCommentsOnNewsArticleAsync(int newsArticleId)
+        public async Task<int> TotalCommentsOfNewsArticleAsync(int newsArticleId)
             => await this.commentsRepository
                 .All()
                 .Where(c => c.NewsArticleId == newsArticleId)

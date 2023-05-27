@@ -1,4 +1,4 @@
-﻿@model TechExpoWorld.Web.ViewModels.News.AllNewsQueryViewModel
+﻿@model TechExpoWorld.Web.ViewModels.News.AllNewsArticlesQueryViewModel
 
 @{
     ViewBag.Title = "All News";
@@ -48,13 +48,13 @@
     </div>
 </form>
 
-@if (!Model.News.Any())
+@if (!Model.NewsArticles.Any())
 {
     <h2 class="text-center">No news articles found by the given criteria!</h2>
 }
 else
 {
-    <partial name="_NewsArticlesPartial" model="Model.News" />
+    <partial name="_NewsArticlesPartial" model="Model.NewsArticles" />
     <partial name="_NewsArticlesNavigationPartial" model="Model" />
 }
 

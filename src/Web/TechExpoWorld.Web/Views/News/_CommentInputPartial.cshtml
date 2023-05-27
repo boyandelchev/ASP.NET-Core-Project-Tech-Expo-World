@@ -1,19 +1,19 @@
 ﻿@using TechExpoWorld.Web.ViewModels.Comments
 
 @{
-    var commentInput = ViewBag.CommentInput as CommentInputModel;
+    var input = ViewBag.CommentInput as CommentInputModel;
 }
 
 <form asp-controller="Comments" asp-action="Add" asp-route-id="@ViewBag.NewsArticleId" method="post">
     <div class="mb-3">
-        <label asp-for="@commentInput.Content" class="form-label"></label>
-        <textarea asp-for="@commentInput.Content" class="form-control" rows="5" placeholder="Add a comment"></textarea>
-        <span asp-validation-for="@commentInput.Content" class="small text-danger"></span>
+        <label asp-for="@input.Content" class="form-label"></label>
+        <textarea asp-for="@input.Content" class="form-control" rows="5" placeholder="Add a comment"></textarea>
+        <span asp-validation-for="@input.Content" class="small text-danger"></span>
     </div>
     <div class="mb-3" hidden>
-        <label asp-for="@commentInput.ParentCommentId" class="form-label"></label>
-        <input asp-for="@commentInput.ParentCommentId" class="form-control" value="@ViewBag.CommentId" />
-        <span asp-validation-for="@commentInput.ParentCommentId" class="small text-danger"></span>
+        <label asp-for="@input.ParentCommentId" class="form-label"></label>
+        <input asp-for="@input.ParentCommentId" class="form-control" value="@ViewBag.CommentId" />
+        <span asp-validation-for="@input.ParentCommentId" class="small text-danger"></span>
     </div>
 
     <div class="d-flex justify-content-between mt-3">
